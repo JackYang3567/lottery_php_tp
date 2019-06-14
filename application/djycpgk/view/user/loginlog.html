@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style type="text/css">
+        .sort{
+        cursor: pointer;
+        }
+        </style>
+        
+        <script type="text/javascript">
+        $(document).ready(function(){
+        
+        
+        });
+        </script>
+    </head>
+    <body>
+        
+        <div class="rightinfo">
+            
+            <div class="tools">
+                <ul class="toolbar">
+                    <!--  <li class="click"><span><img src="/static/admin/images/t01.png" /></span>发送消息</li> -->
+                </ul>
+                
+                <ul class="seachform" >
+                    <form action="{:url('djycpgk/user/loginlog')}" method="GET">
+                        <li>用户名：<input name="keywords" type="text" class="scinput"  {if isset($keywords)}value="{$keywords}"{/if} placeholder="请输入用户名" /></li>
+                        <li>IP地址：<input type="text"  class="scinput" name="ip"  {if isset($ip)}value="{$ip}"{/if}/></li>
+                        <li>日期：<input type="date"  name="start_time"  class="scinput" {if isset($start_time)}value="{$start_time}"{/if}/>&nbsp;-&nbsp;<input type="date" name="end_time" class="scinput" {if isset($end_time)}value="{$end_time}"{/if}></li>
+                        <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+                    </form>
+                    
+                    <li>删除&nbsp;&nbsp;<input type="text"  class="scinput" name="days"  value="30"/>&nbsp;&nbsp;天前数据</li>
+                    <li><input name="" type="submit" class="scbtn dellog" value="删除" style="margin-top: -1px;" size="5" /></li>
+                </ul>
+                
+            </div>
+            
+            
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <th>用户名</th>
+                        <th>IP地址</th>
+                        <th>IP归属地</th>
+                        <th>登录时间</th>
+                        <th>系统信息</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {if !$list->isEmpty()}
+                    {volist name="list" id='vo'}
+                    <tr>
+                        <td>{$vo.user_name}</td>
+                        <td>{$vo.ip}</td>
+                        <td>{$vo.ip_address}</td>
+                        <td>{$vo.create_time|date='Y-m-d H:i:s'}</td>
+                        <td> <a href="javascript:;" class="browser" data-browser="{$vo.browser}"><u>查看用户系统详情</u></a></td>
+                    </tr>
+                    {/volist}
+                    {/if}
+                </tbody>	
+            </table>
+            
+            
+            <div class="pagin">
+                <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+                
+                {if !$list->isEmpty()} {$list|raw}{/if}
+                
+            </div>
+            
+            
+        </div>
+        
+        <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+        $('.browser').click(function(){
+        var browser = $(this).attr('data-browser');
+        layer.tips(browser, $(this), {
+        tips: [4, '#106BA4']
+        });
+        })
+        
+        $('.dellog').click(function(){
+        var days = $(this).parent().prev().children().val();
+        if(days == ''){
+        layer.msg("请输入天数");
+        return;
+        }
+        layer.confirm('确定删除该时间段的日志吗?', {
+        btn: ['是','否'] //按钮
+        }, function(){
+        $.ajax({
+        url:"{:url('djycpgk/user/dellog')}",//这里指向的就不再是页面了，而是一个方法。
+        data:{days:days},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        if(data.error == 0){
+        layer.msg(data.msg,{icon:1,time:1000},function(){
+        self.location.reload(); // 父页面刷新
+        self.layer.close();
+        });
+        }else{
+        layer.msg(data.msg, {icon: 5,time:2000});
+        }
+        }
+        })
+        }, function(){
+        
+        });
+        })
+        </script>
+    </body>
+</html>

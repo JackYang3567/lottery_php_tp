@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Welcome</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="../lh/static/css/style.css?14" rel="stylesheet" type="text/css" />
+    <link href="./static/css/skin.css" rel="stylesheet" type="text/css" />
+    <link href="./static/css/balls.css" rel="stylesheet" type="text/css" />
+    <link href="./static/css/margin.css" rel="stylesheet" type="text/css" />
+    <link href="./static/css/center.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="./static/lib/jquery/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="./static/lib/jquery.cookie.js"></script>
+    <script type="text/javascript" src="./static/js/countUp.js"></script>
+</head>
+
+<body>
+    <style>
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    body {
+        /* background: url(./static/egame/tiger/beauty/mobile/gameBg.png) !important; */
+    }
+
+    .tigerBack {
+        position: absolute;
+        top: 3%;
+        lefT: 5%;
+        width: 4%;
+    }
+
+    .tigerHelp {
+        position: absolute;
+        width: 9%;
+        top: 1.8%;
+        right: 8%;
+        z-index: 99999;
+    }
+    </style>
+    <div class="tigerContainer">
+        <audio class="bgMusic" loop></audio>
+        <audio class="hoverMusic"></audio>
+        <audio class="clickMusic"></audio>
+        <audio class="playMusic"></audio>
+        <audio class="openPrizeMusic"></audio>
+        <audio class="winMusic"></audio>
+        <audio class="xyjMusic"></audio>
+        <audio class="dyjMusic"></audio>
+        <audio class="dmgMusic"></audio>
+        <audio class="countDownMusic"></audio>
+        <!-- <img src="./static/egame/tiger/fruit/flower.png" alt="" class="flower"> -->
+        <img src="./static/egame/tiger/ninja/mobile/gameBg.jpg" alt="" class="pcBg">
+        <div class="gameStage"></div>
+        <!-- <div class="jackpot">
+                    <span>奖池</span>
+                    <span class="jackpotTxt NumColor">123123</span>
+             </div> -->
+        <div class="winNum">
+            <span>赢得奖金</span>
+            <span class="NumColor" id="winNumTxt">0.00</span>
+        </div>
+        <div class="luckToYou">
+            <span>
+                <img src="./static/egame/tiger/ninja/mobile/goodLuck.png" alt="">
+            </span>
+        </div>
+        <!-- <img class="tigerBack" src="./static/egame/tiger/fruit/mobile/back.png"> -->
+        <!-- <img class="tigerHelp hoverPlayMusic helpBtn" src="./static/egame/tiger/fruit/mobile/helpBtn.png"> -->
+        <!-- <a href="javascript:;" class="tigerHelp hoverPlayMusic"></a> -->
+        <!-- 帮助 -->
+        <!-- <div class="todayNum">
+            <span>当日局数</span>
+            <span class="NumColor todayNumTxt"></span>
+        </div> -->
+        <img class="coinShowArea" src="./static/egame/tiger/ninja/mobile/coin.png" alt="">
+        <span class="coinText todayWinTxt"></span>
+        <img class="todayNum" src="./static/egame/tiger/ninja/mobile/todayNum.png">
+        <span class="todayNumTxt todayNumText">5</span>
+        <!-- <div class="todayWin coinText">
+            <span>账户余额(元)</span>
+            <span class="NumColor todayWinTxt"></span>
+        </div> -->
+        <img class="startTigerBtn" src="./static/egame/tiger/ninja/mobile/start.png">
+        <span class="startTigerGame">开始</span>
+        <span class="startAuto hoverPlayMusic autoStartTigerGame">自动开始</span>
+        <span class="stopAuto hoverPlayMusic stopAutoStartTigerGame" style="display: none;">停止</span>
+        <!-- 下周一继续 <div class="lineMultiple">
+            <span>押线</span>
+            <span class="NumColor lineMultipleTxt">20</span>
+        </div>
+        <div class="totalPay">
+            <span>总押注(元)</span>
+            <span class="NumColor totalPayTxt">5</span>
+        </div> -->
+        <!-- <a href="javascript:;" class="startTigerGame hoverPlayMusic">开始</a>
+        <a href="javascript:;" class="countDownTime"></a>
+        <a href="javascript:;" class="startAuto hoverPlayMusic">自动开始</a>
+        <a href="javascript:;" class="stopAuto hoverPlayMusic">暂停</a> -->
+        <div class="lineMultiple betLine">
+            <div>押线</div>
+            <span class="lineMultipleTxt">20</span>
+        </div>
+        <img class="minBtn hoverPlayMusic minBetBtn" src="./static/egame/tiger/ninja/min.png">
+        <div class="linePay choseBet">
+            <div>押注</div>
+            <span class="NumColor linePayTxt">0.25</span>
+        </div>
+        <img class="plusBtn hoverPlayMusic plusBetBtn" src="./static/egame/tiger/ninja/plus.png">
+        <div class="totalPay betAll">
+            <div>总押注(元)</div>
+            <span class="NumColor totalPayTxt">5</span>
+        </div>
+        <!-- 下周 <img src="./static/egame/tiger/fruit/middleArea.png" class="middleArea">
+
+        <img src="./static/egame/tiger/fruit/min.png" class="minBtn hoverPlayMusic">
+        <div class="linePay">
+            <span>押注</span>
+            <span class="NumColor linePayTxt">0.25</span>
+        </div>
+        <img src="./static/egame/tiger/fruit/plus.png" class="plusBtn hoverPlayMusic">
+        <div class="winnerBox">
+            <img src="./static/egame/tiger/fruit/xyj.png" class="winImg">
+        </div> -->
+    </div>
+    <script>
+    'use strict';
+
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
+    }
+
+    function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+    var Tiger = function() {
+        function Tiger() {
+            _classCallCheck(this, Tiger);
+
+            this.resultData = {};
+            this.numData = {};
+            this.card = {};
+            this.columnNum = 5;
+            this.rowNum = 3;
+            this.cardWidth = 180;
+            this.playTime = 0;
+            this.state = false; //避免重复请求(第一次限制)
+            this.lineTimeout = null;
+            this.gameInterval = null;
+            this.countDownInterval = null;
+            this.countUpOptions = {
+                useEasing: true,
+                useGrouping: true,
+                separator: ',',
+                decimal: '.',
+            };
+            //连线规则
+            this.lineType = {
+                '1': [0, 3, 6, 9, 12],
+                '2': [1, 4, 7, 10, 13],
+                '3': [2, 5, 8, 11, 14],
+                '4': [0, 4, 8, 10, 12],
+                '5': [2, 4, 6, 10, 14],
+                '6': [0, 4, 6, 10, 12],
+                '7': [1, 3, 7, 9, 13],
+                '8': [1, 5, 7, 11, 13],
+                '9': [2, 4, 8, 10, 14],
+                '10': [1, 3, 6, 9, 13],
+                '11': [0, 4, 7, 10, 12],
+                '12': [2, 4, 7, 10, 14],
+                '13': [1, 5, 8, 11, 13],
+                '14': [0, 3, 8, 9, 12],
+                '15': [2, 5, 6, 11, 14],
+                '16': [1, 4, 6, 10, 13],
+                '17': [1, 4, 8, 10, 13],
+                '18': [0, 5, 6, 11, 12],
+                '19': [2, 3, 8, 9, 14],
+                '20': [1, 3, 7, 11, 13]
+            };
+            this.init();
+        }
+        Tiger.prototype.level = 0;
+        Tiger.prototype.linesCount = 20;
+        Tiger.prototype.levelMoney = 0;
+        Tiger.prototype.betStep = 0.05;
+        Tiger.prototype.minMul = 100;
+        Tiger.prototype.maxMul = 10;
+        Tiger.prototype.defMul = 20;
+
+        //初始化
+        Tiger.prototype.init = function init() {
+            var _this = this;
+
+            this.initColumn();
+            this.tigerInitData();
+            sessionStorage.removeItem('isGetResult');
+
+            $('.startTigerGame').click(function() {
+                if (!_this.state) {
+                    _this.state = true;
+                    _this.tigerBet(_this.numData);
+                }
+            });
+
+            $('.startAuto').click(function() {
+                if (!_this.state) {
+                    _this.autoStart(_this.numData);
+                }
+            });
+
+            $('.stopAuto').click(function() {
+                _this.stopAuto();
+            });
+            // +
+            $('.plusBtn').click(function() {
+                var multiple = $('.linePayTxt').text();
+                if (multiple == accMul(_this.levelMoney, 1 / _this.maxMul)) {
+                    return false;
+                }
+                var n = accAdd(parseFloat(multiple), 0.05);
+                $('.linePayTxt').text(n);
+                $('.totalPayTxt').text(accMul(n, $('.lineMultipleTxt').text()));
+            });
+
+            // -
+            $('.minBtn').click(function() {
+                var multiple = $('.linePayTxt').text();
+                if (multiple == accMul(_this.levelMoney, 1 / _this.minMul)) {
+                    return false;
+                }
+                var n = accSub(parseFloat(multiple), 0.05);
+                $('.linePayTxt').text(n);
+                $('.totalPayTxt').text(accMul(n, $('.lineMultipleTxt').text()));
+            });
+
+            //音乐
+            $('.bgMusic').attr('src', '../lh/static/egame/tiger/fruit/sounds/game2Bg.mp3');
+
+            $(document).click(function() {
+                $('.bgMusic')[0].play()
+            });
+            var bgMusic = document.querySelector(".bgMusic");
+            bgMusic.volume = 0.5;
+            $('.playMusic').attr('src', '../lh/static/egame/tiger/fruit/sounds/game2.mp3');
+            // $('.hoverMusic').attr('src', './static/egame/tiger/fruit/sounds/jiajian.mp3');
+            // $('.clickMusic').attr('src', 'data:audio/ogg;base64,' + sounds[2].data);
+            $('.openPrizeMusic').attr('src', '../lh/static/egame/tiger/fruit/sounds/gege.mp3');
+            $('.winMusic').attr('src', '../lh/static/egame/tiger/fruit/sounds/win1.mp3');
+            $('.xyjMusic').attr('src', '../lh/static/egame/tiger/fruit/sounds/xyj1.mp3');
+            $('.dyjMusic').attr('src', '../lh/static/egame/tiger/fruit/sounds/dyj1.mp3');
+            $('.dmgMusic').attr('src', '../lh/static/egame/tiger/fruit/sounds/dmg.mp3');
+            $('.countDownMusic').attr('src', '../lh/static/egame/tiger/fruit/sounds/djs.mp3');
+            var countDownMusic = document.querySelector(".countDownMusic");
+            countDownMusic.volume = 0.3;
+
+            var isMusicLoad = false;
+
+            $(document).click(function() {
+                if (isMusicLoad) {
+                    return;
+                }
+                isMusicLoad = true;
+                $('.bgMusic')[0].play();
+
+                $('.playMusic')[0].play();
+                $('.playMusic')[0].pause();
+
+                $('.openPrizeMusic')[0].play();
+                $('.openPrizeMusic')[0].pause();
+
+                $('.winMusic')[0].play();
+                $('.winMusic')[0].pause();
+
+                $('.xyjMusic')[0].play();
+                $('.xyjMusic')[0].pause();
+
+                $('.dyjMusic')[0].play();
+                $('.dyjMusic')[0].pause();
+
+                $('.dmgMusic')[0].play();
+                $('.dmgMusic')[0].pause();
+
+                $('.countDownMusic')[0].play();
+                $('.countDownMusic')[0].pause();
+            });
+
+            $('.hoverPlayMusic').mouseover(function(params) {
+                $('.hoverMusic')[0].play();
+            });
+            // $('.hoverPlayMusic').click(function(params) {
+            //     $('.clickMusic')[0].pause();
+            //     $('.clickMusic')[0].currentTime = 0;
+            //     $('.clickMusic')[0].play();
+            // });
+
+            setTimeout(function() {
+                _this.initWinLine();
+            }, 2000);
+        };
+
+        //初始化绘制连线，只绘制一次
+        Tiger.prototype.initWinLine = function initWinLine() {
+            //每个点的坐标
+
+            var cardItemHeight = window.getComputedStyle(document.querySelector(".cardItem")).height;
+            var cardItemWidth = window.getComputedStyle(document.querySelector(".cardItem")).width;
+            var cardItemHeightNum = parseFloat((cardItemHeight.split("px"))[0]);
+            var cardItemWidthNum = parseFloat((cardItemWidth.split("px"))[0]);
+            var initBaseNum = 40;
+            var lineH = ((cardItemHeightNum * 3) - cardItemHeightNum + 10);
+            $('head').append('<style>@keyframes rowup' +
+                '{' +
+                '0% {' +
+                '-webkit-transform: translate3d(0, 0, 0);' +
+                'transform: translate3d(0, 0, 0);' +
+                '}' +
+
+                '100% {' +
+                '-webkit-transform: translate3d(0,-' + cardItemHeightNum * initBaseNum + 'px' + ' , 0);' +
+                'transform: translate3d(0,-' + cardItemHeightNum * initBaseNum + 'px' + ', 0);' +
+                '}' +
+                '}' +
+
+                '@-moz-keyframes rowup' + /* Firefox */
+                '{' +
+                '0% {' +
+                '-webkit-transform: translate3d(0, 0, 0);' +
+                'transform: translate3d(0, 0, 0);' +
+                '}' +
+
+                '100% {' +
+                '-webkit-transform: translate3d(0,-' + cardItemHeightNum * initBaseNum + 'px' + ' , 0);' +
+                'transform: translate3d(0,-' + cardItemHeightNum * initBaseNum + 'px' + ', 0);' +
+                '}' +
+                '}' +
+
+                '@-webkit-keyframes rowup' + /* Safari and Chrome */
+                '{' +
+                '0% {' +
+                '-webkit-transform: translate3d(0, 0, 0);' +
+                'transform: translate3d(0, 0, 0);' +
+                '}' +
+
+                '100% {' +
+                '-webkit-transform: translate3d(0,-' + cardItemHeightNum * initBaseNum + 'px' + ' , 0);' +
+                'transform: translate3d(0,-' + cardItemHeightNum * initBaseNum + 'px' + ', 0);' +
+                '}' +
+                '}' +
+
+                '@-o-keyframes rowup' + /* Opera */
+                '{' +
+                '0% {' +
+                '-webkit-transform: translate3d(0, 0, 0);' +
+                'transform: translate3d(0, 0, 0);' +
+                '}' +
+
+                '100% {' +
+                '-webkit-transform: translate3d(0,-' + cardItemHeightNum * initBaseNum + 'px' + ' , 0);' +
+                'transform: translate3d(0,-' + cardItemHeightNum * initBaseNum + 'px' + ', 0);' +
+                '}' +
+                '}</style>');
+
+
+            this.axis = {
+                '0': {
+                    x: 0,
+                    y: 0 + 5
+                },
+                '1': {
+                    x: 0,
+                    y: cardItemHeightNum + 5
+                },
+                '2': {
+                    x: 0,
+                    y: cardItemHeightNum * 2 + 5
+                },
+
+                '3': {
+                    x: cardItemWidthNum * 1.1,
+                    y: 0 + 5
+                },
+                '4': {
+                    x: cardItemWidthNum * 1.1,
+                    y: cardItemHeightNum + 5
+                },
+                '5': {
+                    x: cardItemWidthNum * 1.1,
+                    y: cardItemHeightNum * 2 + 5
+                },
+
+                '6': {
+                    x: cardItemWidthNum * 2.15,
+                    y: 0 + 5
+                },
+                '7': {
+                    x: cardItemWidthNum * 2.15,
+                    y: cardItemHeightNum + 5
+                },
+                '8': {
+                    x: cardItemWidthNum * 2.15,
+                    y: cardItemHeightNum * 2 + 5
+                },
+
+                '9': {
+                    x: cardItemWidthNum * 3.25,
+                    y: 0 + 5
+                },
+                '10': {
+                    x: cardItemWidthNum * 3.25,
+                    y: cardItemHeightNum + 5
+                },
+                '11': {
+                    x: cardItemWidthNum * 3.25,
+                    y: cardItemHeightNum * 2 + 5
+                },
+
+                '12': {
+                    x: cardItemWidthNum * 4.3,
+                    y: 0 + 5
+                },
+                '13': {
+                    x: cardItemWidthNum * 4.3,
+                    y: cardItemHeightNum + 5
+                },
+                '14': {
+                    x: cardItemWidthNum * 4.3,
+                    y: cardItemHeightNum * 2 + 5
+                }
+            };
+
+            var lineDrawAxisArr = [];
+            for (var i in this.lineType) {
+                if (!lineDrawAxisArr['line' + i]) {
+                    lineDrawAxisArr['line' + i] = [];
+                }
+                for (var k in this.lineType[i]) {
+                    lineDrawAxisArr['line' + i].push(this.axis[this.lineType[i][k]]);
+                }
+            }
+            var lineDrawAxisStrArr = [];
+            for (var _i in lineDrawAxisArr) {
+                //每条线的坐标
+                lineDrawAxisStrArr[_i] = '';
+                for (var _k in lineDrawAxisArr[_i]) {
+                    //每条线每个点的坐标
+                    for (var _j in lineDrawAxisArr[_i][_k]) {
+                        //每条线每个点的具体坐标
+                        if (_k == 0 && _j == 'x') {
+                            lineDrawAxisStrArr[_i] += lineDrawAxisArr[_i][_k][_j] + ',';
+                        } else if (_k == 4 && _j == 'y') {
+                            lineDrawAxisStrArr[_i] += lineDrawAxisArr[_i][_k][_j];
+                        } else if (_j == 'x') {
+                            lineDrawAxisStrArr[_i] += lineDrawAxisArr[_i][_k][_j] + ',';
+                        } else {
+                            lineDrawAxisStrArr[_i] += lineDrawAxisArr[_i][_k][_j] + ' ';
+                        }
+                    }
+                }
+                lineDrawAxisStrArr.push(lineDrawAxisStrArr[_i]);
+            }
+            for (var _i2 = 0; _i2 < 20; _i2++) {
+                $('.tigerContainer').prepend('<svg style="height: ' + lineH + 'px" preserveAspectRatio="none" version="1.1" class="winLine' + (_i2 + 1) + ' winLine">' +
+                    '<polyline points="' + lineDrawAxisStrArr[_i2] + '" style="fill:none;stroke:' + randomHexColor() + ';stroke-width:3"/>' +
+                    '</svg>');
+            }
+        };
+
+        //初始化每一列的DOM
+        Tiger.prototype.initColumn = function initColumn() {
+            for (var i = 0; i < this.columnNum; i++) {
+                this['$column' + i] = '<ul class="columnContainer' + i + '"></ul>';
+                $('.gameStage').append(this['$column' + i]);
+            }
+        };
+
+        //每次更新每一列的具体元素
+        Tiger.prototype.initCard = function initCard(numData) {
+            this.playTime++;
+            //限制元素只存在当前和结果
+            if ($('.columnContainer0 li').length > 40) {
+                return false;
+            }
+            for (var i = 0; i < this.columnNum; i++) {
+                for (var k = 0; k < 40; k++) {
+                    if (numData[i][k]) {
+                        $('.columnContainer' + i).append('<li class="cardItem playTime' + this.playTime + '"><img class="fruit' + numData[i][k] + '" src="./static/egame/tiger/ninja/' + numData[i][k] + '.png"></li>');
+                    } else {
+                        var j = Math.round((Math.random() * 10) + 1);
+                        $('.columnContainer' + i).append('<li class="cardItem playTime' + this.playTime + '"><img class="fruit' + numData[i][j] + '" src="./static/egame/tiger/ninja/' + numData[i][j] + '.png"></li>');
+                    }
+                }
+            }
+        };
+
+        //每局比赛完成清除前一局DOM，以及展示结果
+        Tiger.prototype.cleanData = function cleanData() {
+            var _this = this;
+
+            setTimeout(function() {
+                sessionStorage.removeItem('isGetResult');
+                for (var i = 0; i < _this.columnNum; i++) {
+                    $('.columnContainer' + i).removeClass('rowup');
+                }
+                $('.playTime' + (_this.playTime - 1)).remove();
+                if (_this.resultData.winMoney > 0) {
+                    $('.luckToYou').hide();
+                    $('.winNum').show();
+                    var winNumTxt = new CountUp('winNumTxt', 0, _this.resultData.winMoney, 2, 1, _this.options);
+                    winNumTxt.start();
+                }
+                $(".jackpotTxt").html(_this.resultData.jackpot);
+                $(".todayWinTxt").html(parseFloat(_this.resultData.coin).toFixed(2));
+                $(".todayNumTxt").html(_this.resultData.todayCount);
+                var winLine = _this.resultData.lines.split(',');
+                /* if (winLine.indexOf('21') != -1 || winLine.indexOf('22') != -1 || winLine.indexOf('23') != -1) {
+                    $('.fruit11').addClass('fruitStyle');
+                } */
+
+                var m = Number($('.totalPayTxt').text());
+
+                if (_this.resultData.winMoney > m) {
+                    if (_this.resultData.winMoney >= m * 2 && _this.resultData.winMoney < m * 3) {
+                        $('.winImg').attr('src', '/static/egame/tiger/fruit/xyj.png');
+                        $('.winnerBox').show();
+                        $('.xyjMusic')[0].play();
+                    } else if (_this.resultData.winMoney >= m * 3 && _this.resultData.winMoney < m * 4) {
+                        $('.winImg').attr('src', '/static/egame/tiger/fruit/dyj.png');
+                        $('.winnerBox').show();
+                        $('.dyjMusic')[0].play();
+                    } else if (_this.resultData.winMoney >= m * 4) {
+                        $('.winImg').attr('src', '/static/egame/tiger/fruit/dmg.png');
+                        $('.winnerBox').show();
+                        $('.dmgMusic')[0].play();
+                    }
+
+                    setTimeout(function(params) {
+                        $('.winnerBox').hide();
+                    }, 2500);
+                }
+
+                if (winLine.length > 0 && winLine[0]) {
+                    for (var _i3 in winLine) {
+                        _this.svgStyle(winLine, _i3);
+                        $('.winMusic')[0].play();
+                    }
+                }
+                if (!_this.gameInterval) {
+                    $('.startTigerGame').removeClass('gameRunning');
+                }
+                _this.state = false;
+            }, 3600);
+        };
+        //连线的展示与隐藏动画
+        Tiger.prototype.svgStyle = function svgStyle(winLine, i) {
+            this.lineTimeout = setTimeout(function() {
+                $('.winLine' + winLine[i]).show();
+                $('.winLine' + winLine[i]).attr('class', function(index, classNames) {
+                    return classNames + ' svgStyle';
+                });
+            }, i * 200);
+        };
+        //第一次进入游戏初始化
+        Tiger.prototype.tigerInitData = function tigerInitData() {
+            var _this = this;
+            $.ajax({
+                type: "get",
+                url: '/home/lottery_lh/init', //mobile/egame/tigerInit
+                data: {
+                    token: getQueryVariable('token'),
+                    level: getQueryVariable('level'),
+                    type: 2
+                },
+                success: function success(result) {
+                    // result = rinit;
+                    // console.log(result);
+                    // result = $.parseJSON(result);
+                    _this.numData = {};
+                    for (var i = 0; i < _this.columnNum; i++) {
+                        _this.numData[i] = result['l' + (i + 1)].split(',');
+                    }
+                    _this.initCard(_this.numData);
+
+                    _this.level = result.level;
+                    _this.levelMoney = result.levelMoney;
+
+                    $('.linePayTxt').text(accMul(_this.levelMoney, 1 / _this.defMul));
+                    $(".jackpotTxt").text(result.jackpot);
+                    $('.totalPayTxt').text(accMul(accMul(_this.levelMoney, 1 / _this.defMul), $('.lineMultipleTxt').text()));
+                    $(".todayWinTxt").text(parseFloat(result.coin).toFixed(2));
+                    $(".todayNumTxt").text(result.todayCount);
+                }
+            });
+        };
+        //每次投注
+        Tiger.prototype.tigerBet = function tigerBet(data, type) {
+            var _this = this;
+            var money = $(".linePayTxt").text();
+
+            //避免重复请求(第二次限制)
+            var isGetResult = sessionStorage.getItem('isGetResult');
+            if (isGetResult) {
+                return false;;
+            }
+            sessionStorage.setItem('isGetResult', 1);
+            $.ajax({
+                data: {
+                    gameId: 6,
+                    l1: data[0].join(','),
+                    l2: data[1].join(','),
+                    l3: data[2].join(','),
+                    l4: data[3].join(','),
+                    l5: data[4].join(','),
+                    money: money,
+                    type: 2
+                },
+                type: "post",
+                url: '/home/lottery_lh/bet?token=' + getQueryVariable('token'),
+                success: function success(result) {
+                    $('.luckToYou').show();
+                    $('.winNum').hide();
+                    // result = $.parseJSON(result);
+                    _this.resultData = result;
+                    if (result.success == '1') {
+                        _this.numData = {};
+                        for (var i = 0; i < _this.columnNum; i++) {
+                            _this.numData[i] = result['l' + (i + 1)].split(',');
+                        }
+                        _this.initCard(_this.numData);
+                        _this.start();
+
+                        if (type == 1) {
+                            $('.startAuto').hide();
+                            $('.stopAuto').show();
+                        }
+                    } else {
+                        if (type == 1) {
+                            _this.stopAuto();
+                        }
+
+                        alert(result.msg);
+
+                        if (result.msg == '余额不足') {
+                            window.parent.postMessage({
+                                'name': 'pay'
+                            },'*');
+                        }
+                        _this.state = false;
+                        sessionStorage.removeItem('isGetResult');
+                    }
+                },
+                error: function(error) {
+
+                }
+            });
+        };
+        //开始游戏
+        Tiger.prototype.start = function start() {
+            clearTimeout(this.lineTimeout);
+
+            $('.winLine,.winnerBox').hide();
+            $('.fruit11').removeClass('fruitStyle');
+            $('.winLine').attr('class', function(index, classNames) {
+                return classNames.replace('svgStyle ', '');
+            });
+            var _loop = function _loop(i) {
+                setTimeout(function() {
+                    $('.columnContainer' + i).addClass('rowup');
+                }, i * 250);
+
+                setTimeout(function() {
+                    $('.openPrizeMusic')[0].pause();
+                    $('.openPrizeMusic')[0].currentTime = 0;
+                    $('.openPrizeMusic')[0].play();
+                }, 2000 + (i * 240));
+            };
+            $('.playMusic')[0].play();
+            var playMusic = document.querySelector(".playMusic");
+            playMusic.volume = 0.6;
+            for (var i = 0; i < this.columnNum; i++) {
+                _loop(i);
+            }
+            this.state = true;
+            this.cleanData();
+            $('.startTigerGame').addClass('gameRunning');
+        };
+        //自动游戏
+        Tiger.prototype.autoStart = function autoStart(numData) {
+            var _this = this;
+            if (!this.state) {
+                this.tigerBet(numData, 1);
+                this.state = true;
+            }
+            this.gameInterval = setInterval(function() {
+                if (!_this.state) {
+                    _this.tigerBet(numData, 1);
+                }
+                _this.countDown();
+            }, 3800);
+        };
+        //停止自动游戏
+        Tiger.prototype.stopAuto = function stopAuto() {
+            clearInterval(this.gameInterval);
+            this.gameInterval = null;
+            $('.stopAuto').hide();
+            $('.startAuto').show();
+            $('.startTigerGame').removeClass('gameRunning');
+            $('.countDownTime').text('');
+            $('.countDownMusic')[0].pause();
+            $('.countDownMusic')[0].currentTime = 0;
+            clearInterval(this.countDownInterval);
+        };
+        //自动游戏间隔的倒计时
+        Tiger.prototype.countDown = function countDown() {
+            var _this = this;
+            if (this.state) {
+                var time = 4;
+                this.countDownInterval = setInterval(function(params) {
+                    time--;
+                    $('.countDownTime').text(time);
+                    if (time <= 0) {
+                        $('.countDownTime').text('');
+                        clearInterval(_this.countDownInterval);
+                    }
+                    $('.countDownMusic')[0].pause();
+                    $('.countDownMusic')[0].currentTime = 0;
+                    $('.countDownMusic')[0].play();
+                }, 1000);
+            }
+        };
+
+        return Tiger;
+    }();
+
+    new Tiger();
+
+    //加减乘 避免浮点数
+    // 加法
+    function accAdd(arg1, arg2) {
+        let r1, r2, m, c;
+        try {
+            r1 = arg1.toString().split(".")[1].length;
+        } catch (e) {
+            r1 = 0;
+        }
+        try {
+            r2 = arg2.toString().split(".")[1].length;
+        } catch (e) {
+            r2 = 0;
+        }
+        c = Math.abs(r1 - r2);
+        m = Math.pow(10, Math.max(r1, r2));
+        if (c > 0) {
+            let cm = Math.pow(10, c);
+            if (r1 > r2) {
+                arg1 = Number(arg1.toString().replace(".", ""));
+                arg2 = Number(arg2.toString().replace(".", "")) * cm;
+            } else {
+                arg1 = Number(arg1.toString().replace(".", "")) * cm;
+                arg2 = Number(arg2.toString().replace(".", ""));
+            }
+        } else {
+            arg1 = Number(arg1.toString().replace(".", ""));
+            arg2 = Number(arg2.toString().replace(".", ""));
+        }
+        return (arg1 + arg2) / m;
+    }
+
+    // 减法
+    function accSub(arg1, arg2) {
+        let r1, r2, m, n;
+        try {
+            r1 = arg1.toString().split(".")[1].length;
+        } catch (e) {
+            r1 = 0;
+        }
+        try {
+            r2 = arg2.toString().split(".")[1].length;
+        } catch (e) {
+            r2 = 0;
+        }
+        m = Math.pow(10, Math.max(r1, r2));
+        n = (r1 >= r2) ? r1 : r2;
+        return ((arg1 * m - arg2 * m) / m).toFixed(n);
+    }
+
+    // 乘法
+    function accMul(arg1, arg2) {
+        let m = 0,
+            s1 = arg1.toString(),
+            s2 = arg2.toString();
+        try {
+            m += s1.split(".")[1].length;
+        } catch (e) {}
+        try {
+            m += s2.split(".")[1].length;
+        } catch (e) {}
+        return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m);
+    }
+
+    var layer = parent.layer;
+    $('.tigerHelp').click(function(params) {
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['1030px', '600px'], //宽高
+            content: '<img src="/static/egame/tiger/fruit/help1.png"><img src="/static/egame/tiger/fruit/help2.png">'
+        });
+    });
+
+    function randomHexColor() {
+        var hex = Math.floor(Math.random() * 16777216).toString(16);
+        while (hex.length < 6) {
+            hex = '0' + hex;
+        }
+        return '#' + hex;
+    }
+
+    function randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+    </script>
+</body>
+
+</html>

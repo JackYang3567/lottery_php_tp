@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style type="text/css">
+        .sort{
+        cursor: pointer;
+        }
+        .layui-layer-tips{
+        word-break: break-all;
+        }
+        </style>
+        
+        <script type="text/javascript">
+        $(document).ready(function(){
+        
+        
+        
+        });
+        </script>
+    </head>
+    <body>
+          <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('djycpgk/user/proxylist')}">前台代理关系表</a></li>
+                </ul>
+                </div>
+            </div>
+        <div class="rightinfo">
+            
+            <div class="tools">
+                
+                <ul class="seachform" >
+                    <form action="{:url('djycpgk/user/proxylist')}" method="GET">
+                        <li>用户名：<input name="keywords" type="text" class="scinput"  {if isset($keywords)}value="{$keywords}"{/if} placeholder="请输入用户名" /></li>
+                        <li>日期：<input type="date"  id="start_time" name="start_time"  class="scinput" {if isset($start_time)}value="{$start_time}"{/if}/>&nbsp;-&nbsp;<input type="date"  id="end_time" name="end_time" class="scinput" {if isset($end_time)}value="{$end_time}"{/if}></li>
+                        
+                        <li><label>&nbsp;</label><input name="submit" type="submit" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+                    
+                    </form>
+					<li> <label>&nbsp;</label> <a class="btn btn-default btn-sm" href="{:url('proxylist')}" role="button">刷新</a></li>
+                </ul>
+                
+            </div>
+            
+            
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <th>用户ID</th>
+                        <th>用户名</th>
+                        <th>第一级下线数量</th>
+                        <th>第二级下线数量</th>
+                        <th>第三级下线数量</th>
+                        <th>下级总打码量</th>
+                        <th>总(分成/返佣)</th>
+                        <th>返点方式</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {if !$list->isEmpty()}
+                    {volist name="list" id='vo'}
+                    <tr>
+                        <td>{$vo.user_id}</td>
+                        <td>{$vo.username}</td>
+                        <td>{$vo.one_count}(<a href="javascript:;" style="color: blue" class="childnames" data-id="{$vo.user_id}" data-level="1" data-name="{$vo.username}"><u>详情</u></a>)</td>
+                        <td>{$vo.two_count}(<a href="javascript:;" style="color: blue" class="childnames" data-id="{$vo.user_id}" data-level="2" data-name="{$vo.username}"><u>详情</u></a>)</td>
+                        <td>{$vo.three_count}(<a href="javascript:;" style="color: blue" class="childnames" data-id="{$vo.user_id}"  data-level="3" data-name="{$vo.username}"><u>详情</u></a>)</td>
+                        <td>{$vo.dama}</td>
+                        <td>{$vo.total_fc}</td>
+                        <td>{if $vo.rebate_way == 0}盈亏{else/}流水{/if}</td>
+                        <td> <a href="javascript:;" class="tablelink rebate_way" data-id="{$vo.user_id}">修改返点方式</a></td>
+                    </tr>
+                    {/volist}
+                    {/if}
+                </tbody>
+            </table>
+            
+            
+            <div class="pagin">
+                <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+                
+                {if !$list->isEmpty()} {$list|raw}{/if}
+                
+            </div>
+            
+            </div>
+        </div>
+        <script type="text/javascript">
+        $('.refresh').click(function(){
+        window.location.reload();
+        })
+        $(function(){
+        var start_time = "{$start_time}";
+        var end_time = "{$end_time}";
+        var d = new Date();
+        if(start_time =='' && end_time == ''){
+        document.getElementById('start_time').valueAsDate =d;
+        document.getElementById('end_time').valueAsDate =d;
+        }
+        // var user = new Array();
+        // user.push('1');
+        // user.push('2');
+        // localStorage.user=user;
+        // console.log(typeof(localStorage.user))
+        // console.log(localStorage.user);
+        });
+        $('.tablelist tbody tr:odd').addClass('odd');
+        
+        $('.childnames').click(function(){
+        var user_id = $(this).attr('data-id');
+        var child_level = $(this).attr('data-level');
+        var username = $(this).attr('data-name');
+        
+        var start_time = "{$start_time}";
+        var end_time = "{$end_time}";
+        parent.layer.open({
+        type: 2,
+        title: '('+username+')下级详情——第'+child_level+'级',
+        shadeClose: true,
+        shade: false,
+        maxmin: true, //开启最大化最小化按钮
+        area: ['80%', '80%'],
+        content: "{:url('djycpgk/user/proxy_child')}?user_id="+user_id+"&child_level="+child_level+"&start_time="+start_time+"&end_time"+end_time,
+        });
+        })
+        
+        $('.rebate_way').click(function(){
+        var user_id = $(this).attr('data-id');
+        layer.open({
+        type: 1,
+        title:'返点方式',
+        skin:'layui-layer-rim',
+        area:['450px', 'auto'],
+        content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+            +'<div class="col-sm-12">'
+                +'<div class="input-group">'
+                    +'<span class="input-group-addon"> 方式 :</span>'
+                    +'<select class="form-control m-b" name="rebate_way">'
+                        +'<option value="0">盈亏</option>'
+                        +'<option value="1">流水</option>'
+                    +'</select>'
+                +'</div>'
+            +'</div>'
+        +'</div>'
+        ,
+        btn:['保存','取消'],
+        btn1: function (index,layero) {
+        
+        var rebate_way = $(layero).find("select[name='rebate_way']").val();
+        
+        $.ajax({
+        url:"{:url('djycpgk/user/change_rebate')}",//这里指向的就不再是页面了，而是一个方法。
+        data:{rebate_way:rebate_way,user_id:user_id},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        if(data.error == 0){
+        alert('操作成功');
+        window.location.reload(); // 父页面刷新
+        }else{
+        alert('操作失败');
+        }
+        }
+        })
+        },
+        btn2:function (index,layero) {
+        }
+        });
+        })
+        </script>
+    </body>
+</html>

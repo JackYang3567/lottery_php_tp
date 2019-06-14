@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {css href="/static/admin/css/bootstrap.min.css"/}
+    {js href="/static/admin/js/jquery-3.2.1.min.js"/}
+    {js href="/static/admin/layer/layer.js"/}
+    {js href="/static/admin/js/vueJs/vue.min.js" /}
+    <style>
+        .red{
+            color: red;
+        }
+        .green{
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <ul class="breadcrumb">
+        <li><span href="#">位置</span></li>
+        <li><a href="#">会员列表</a></li>
+    </ul>
+<div id="app">
+
+
+    <div class="container-fluid" >
+        <div class="container">
+            <form class="form-horizontal">
+                <table class="table">
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">用户名</label>
+                                <div class="col-sm-10">
+                                    <input v-model="name"  type="text" class="form-control" id="inputEmail3" placeholder="会员名称">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="inputEmail4" class="col-sm-2 control-label">用户ID</label>
+                                <div class="col-sm-10">
+                                    <input type="text" v-model="user_id" class="form-control" id="inputEmail4" placeholder="会员ID">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="inputEmail5" class="col-sm-2 control-label">所属代理</label>
+                                <div class="col-sm-10">
+                                    <input type="text" v-model="agent" class="form-control" id="inputEmail5" placeholder="所属代理名称">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label for="inputEmail6" class="col-sm-2 control-label">注册时间</label>
+                                <div class="col-sm-10">
+                                    <input type="date" v-model="start_time" class="form-control" id="inputEmail6" placeholder="所属代理名称">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="inputEmail7" class="col-sm-2 control-label">-----</label>
+                                <div class="col-sm-10">
+                                    <input type="date" v-model="end_time" class="form-control" id="inputEmail7" placeholder="所属代理名称">
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button"   @click="Searchx()" class="btn btn-success">搜索</button>
+                            <button type="button" @click="reLoad()" class="btn btn-default">刷新</button>
+                        </td>
+                    </tr>
+                </table>
+
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table" >
+                <thead  >
+                    <tr>
+                        <th>ID</th>
+                        <th>用户</th>
+                        <th>上级用户</th>
+                        <th>上级代理</th>
+                        <th>分组</th>
+                        <th>积分</th>
+                        <th>余额</th>
+                        <th>冻结金额</th>
+                        <th>累积中奖</th>
+                        <th>状态</th>
+                        <th>类型</th>
+                        <th>注册时间</th>
+                        <th>上次活动时间</th>
+                        <th>上次登录IP</th>
+                        <th>最后登录设备</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template  v-if="data_list.length"  v-for="(vo,key) in data_list">
+                        <tr>
+                            <td>{{ vo.id }}</td>
+                            <td>{{ vo.username }}<b style="color: #00bb00" v-if="vo.IsOnline==1">(在线)</b><b  v-else>(离线)</b></td>
+                            <td>{{ vo.SuperiorUser }}</td>
+                            <td>{{ vo.Parent }}</td>
+                            <td>
+                                <span v-if="vo.group==0" class="green">A组</span>
+                                <span v-else class="red">B组</span>
+                            </td>
+                            <td>{{ vo.point }}</td>
+                            <td>{{ vo.money }}</td>
+                            <td>{{ vo.no_money }}</td>
+                            <td>{{ vo.AccumulatedWinning }}</td>
+                            <td>
+                                <span v-if="vo.status==0" class="green">正常</span>
+                                <span v-else class="red">冻结</span>
+                            </td>
+                            <td>
+                                <span v-if="vo.DengJi==null"><img v-bind:src="img_v1"  alt="" style="display:block" width="50px"></span>
+                                <span v-else><img v-bind:src="vo.DengJi"  alt="" style="display:block" width="50px"></span>
+                            </td>
+                            <td>{{vo.create_time}}</td>
+                            <td>{{vo.active_time*1000 | formatDate }} </td>
+                            <td>{{vo.active_ip}}</td>
+                            <td>{{vo.SheBei}}</td>
+                            <td>
+                                <a class="btn btn-info" :href="'/djycpgk/user/info_edit.html?user_id='+vo.id+'&page='+page" >查看详情</a>&nbsp;
+                                <a class="btn btn-info" :href="'/djycpgk/user/messagelist?user_id='+vo.id+'&page='+page">消息管理</a>
+                                <a class="btn btn-info xufei" href="javascript:;" :data-id="vo.id" >续费</a>
+                                <a class="btn btn-info" href="javascript:;" v-if="vo.status==0"  @click="frozen(vo.status,vo.id,vo.username,key)"  >冻结</a>
+                                <a class="btn btn-info red" href="javascript:;" v-else  @click="frozen(vo.status,vo.id,vo.username,key)" >解冻</a>
+                                <a class="btn btn-info" href="javascript:;" @click="transfer(key,vo.id,vo.username)">转移</a>
+                                <a class="btn btn-info" href="javascript:;"   @click="fenzu(vo.id,vo.group,key)">改变分组</a>
+                                <a class="btn btn-info" href="javascript:;"   @click="dengji(vo.id,vo.username)">等级修改</a>
+                            </td>
+                        </tr>
+                    </template>
+                    <template  v-else="data_list.length==0">
+                        <tr>
+                            <td>未查询出数据</td>
+                        </tr>
+                    </template>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pagin"  v-if="data_list.length" >
+        <div class="message" style="float:left">共<i class="blue"> {{all_list}}</i>条记录，共&nbsp;<i class="blue"> {{all_page}}</i>&nbsp;页，当前显示第&nbsp;<i class="blue"> {{page}}&nbsp;</i>页</div>
+        <ul v-if="all_page > 1" style="float:right" class="pagination">
+            <li><a v-if="pageList[0] == '...'" @click="pageNext(1)" class="syy">首页</a></li>
+            <li><a @click="pageNext('prve')" class="syy">上一页</a></li>
+            <li v-for="vo in pageList" @click="pageNext(vo)" :class="['syy_list',{'active':vo == page}]"><a >{{vo}}</a></li>
+            <li><a @click="pageNext('next')" class="syy"> 下一页 </a></li>
+            <li><a v-if="pageList[pageList.length-1] == '...'" @click="pageNext(all_page)" class="syy"> 尾页 </a></li>
+        </ul>
+    </div>
+</div>
+    <!--分组弹出框-->
+    <template id="fenzu">
+        <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-addon"> 方式 :</span>
+                    <select class="form-control m-b" name="group">
+                        <option value="0">A组(拥有所有福利)</option>
+                        <option value="1">B组(取消所有福利 包括：签到，转盘抽奖，反水，返佣，红包。)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!--续费弹出框-->
+    <template id="actionMoney">
+        <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-addon"> 方式 :</span>
+                    <select class="form-control m-b" name="category">
+                        <option value="7">在线充值</option>
+                        <option value="5">彩金赠送</option>
+                    </select>
+                </div><br/>
+                <div class="input-group">
+                    <span class="input-group-addon"> 金额   :</span>
+                    <input id="rebate_rate"  name ="money" type="number" class="form-control" placeholder="0">
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="transfer">
+        <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-addon"> 转移至用户   :</span>
+                    <input id="rebate_rate2"  name ="p_id" type="number" class="form-control" placeholder="">
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!--等级修改弹出框-->
+    <template id="dengjix">
+        <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-addon"> 等级修改 :</span>
+                    <select class="form-control m-b" name="Grade">
+                        <option value="1">vip1</option>
+                        <option value="2">vip2</option>
+                        <option value="3">vip3</option>
+                        <option value="4">vip4</option>
+                        <option value="5">vip5</option>
+                        <option value="6">vip6</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+
+        // 续费
+        $(document).on('click','.xufei',function() {
+            var user_id = $(this).data('id');
+            var bool = false;
+            layer.open({
+                type: 1,
+                title: '分组改变',
+                area: ['450px', '230px'],
+                content: $('#actionMoney').html(),
+                btn: ['保存','取消'],
+                btn1: function (index,layero) {
+                    if(!bool) {
+                        bool = true;//锁住
+                        var money = $(layero).find("input[name='money']").val(),
+                            category = $(layero).find("select[name='category']").val();
+                        if(money == '' || money < 1){ layer.msg('请输入金额');return; }
+                        $.post('{:url("renew")}',{ id:user_id,type:category,money:money },function(res){
+                            if (res){
+                                layer.close(index);
+                                layer.msg(res.msg,false,function(){ vm.getData() });
+                            }
+                        });
+                    }
+                },
+            });
+        });
+
+    var vm = new Vue({
+        el:'#app',
+        mounted:function(){ //初始化调用
+            this.getData();
+        },
+        // 我们的数据对象
+        data:{
+            img_v1:"/static/admin/images/level1.svg",
+            data_list:[], //请求返回的数据
+            //-----------分页----------
+            page:1, //当前页
+            all_page:1,//总页数
+            all_list:0, //总数据条数
+            //---------搜索条件--------
+            name:'',//用户名称
+            user_id:'',//用户名称
+            agent:'',//上级名称
+            start_time:'',//注册开始时间
+            end_time:'',//注册结束时间
+            search:0,// 判断是否点击搜索
+        },
+        //自动加载
+        computed:{
+
+            //首页 和尾页
+            pageList:function(){
+                var _this = this;
+                if(_this.all_page <= 10){
+                    return _this.all_page;
+                }else{
+                    let bit = [_this.page],rs = _this.page;
+                    for(let i=1;i<=5;i++ ){
+                        if(parseInt(rs) - parseInt(i) <= 0){
+                            bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                        }else{
+                            bit.unshift( parseInt(bit[0]) - 1 );
+                        }
+                    }
+                    for( let i=1;i<=4;i++ ){
+                        if(parseInt(rs) + parseInt(i) <= _this.all_page){
+                            bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                        }else{
+                            bit.unshift( parseInt(bit[0]) - 1 );
+                        }
+                    }
+                    if(bit[bit.length - 1] != _this.all_page){
+                        bit.push('...');
+                    }
+                    if(bit[0] != 1){
+                        bit.unshift('...');
+                    }
+                    return bit;
+                }
+            }
+        },
+        //时间戳 转换
+        filters: {
+            formatDate: function (value) {
+                let date = new Date(value);
+                let y = date.getFullYear();
+                let MM = date.getMonth() + 1;
+                MM = MM < 10 ? ('0' + MM) : MM;
+                let d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                let h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                let m = date.getMinutes();
+                m = m < 10 ? ('0' + m) : m;
+                let s = date.getSeconds();
+                s = s < 10 ? ('0' + s) : s;
+                return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+            }
+        },
+        methods:{
+
+            transfer:function (key,id,name){
+                var user_id = id;
+                var _this = this;
+                layer.open({
+                    type: 1,
+                    title:'用户:' + name + '的代理转移(请输入要转移代理用户的ID)',
+                    area:['450px', '200px'],
+                    content: $('#transfer').html(),
+                    btn:['保存','取消'],
+                    btn1: function (index,layero) {
+                        var p_id = $(layero).find("input[name='p_id']").val();
+                        if(p_id == ''){ layer.msg('请输入要转移代理用户的ID');return; }
+                        $.post('{:url("transfer")}',{ user_id:user_id,p_id:p_id },function(res){
+                            layer.close(index);
+                            layer.msg(res.msg);
+                            if (res.error == 0){
+                                _this.data_list[key]['SuperiorUser'] = res.name+'(用户)';
+                            }
+                        });
+                    },
+                    btn2:function (index,layero) {}
+                });
+            },
+            dengji:function(id,name){
+
+                var _this = this;
+                layer.open({
+                    type: 1,
+                    title:name+'等级修改',
+                    area:['450px', '200px'],
+                    content: $('#dengjix').html(),
+                    btn:['保存','取消'],
+                    btn1: function (index,layero) {
+                        var Grade = $(layero).find("select[name='Grade']").val();
+                        $.post('{:url("Grade")}',{ id:id,grade:Grade},function(res){
+                            layer.close(index);
+                            layer.msg(res.msg,false,function(){ action(); });
+                        });
+                    },
+                    btn2:function (index,layero) {}
+                });
+            },
+            //分组
+            fenzu:function (id,group,key) {
+                var _this = this;
+                var user_id = id;
+                var bool = false;
+                layer.open({
+                    type: 1,
+                    title: '改变分组',
+                    area: ['450px', '200px'],
+                    content: $('#fenzu').html(),
+                    btn: ['保存','取消'],
+                    btn1: function (index,layero) {
+                        if(!bool) {
+                            bool = true;//锁住
+                            var group = $(layero).find("select[name='group']").val();
+                            $.post('{:url("group")}',{ id:user_id,group:group },function(res){
+                                layer.close(index);
+                                layer.msg(res.msg);
+                                if (res.error == 0){
+                                    // console.log(_this.data_list);
+                                    _this.data_list[key]['group'] = group;
+                                }
+                            });
+                        }
+
+                    },
+                    btn2:function (index,layero) {}
+                });
+            },
+            //冻结  解冻
+            frozen:function (status,id,username,key) {
+                var _this = this;
+                layer.confirm('您确定要 ' + username + ' 这个会员吗', {
+                    title: '冻结',
+                }, function(){
+                    $.post('{:url("userFrozen")}',{ id: id,status: status },function(res){
+                        layer.msg(res.msg);
+                        if(res.code == 1){
+                            _this.data_list[key]['status'] = status == 0 ? 1 : 0;
+                        }
+                    });
+                }, function(){
+                });
+            },
+
+            //搜索
+            Searchx:function () {
+                var _this = this;
+                if(_this.name =='' && _this.user_id=='' && _this.agent=='' && _this.start_time=='' && _this.end_time=='')
+                {
+                    _this.search = 0;
+                }else {
+                    _this.search = 1;
+                }
+                _this.page =  1,
+                _this.getData();
+            },
+            getData:function () {
+                layer.load(2);//开启加载动画
+                var _this = this;
+                var data_list = {
+                    page: _this.page,
+                    name: _this.name,
+                    user_id: _this.user_id,
+                    agent: _this.agent,
+                    search: _this.search,
+                    start_time:_this.start_time,
+                    end_time:_this.end_time,
+                };
+                $.post('/djycpgk/user/vue',data_list,function(res){
+                    layer.closeAll('loading');//关闭加载动画
+                    if(res.data){
+                        _this.page = res.current_page;
+                        _this.all_page = res.last_page;
+                        _this.all_list = res.total;
+                        _this.$set(_this,'data_list',res.data);
+                    }
+                });
+            },
+            //下一页 上一页
+            pageNext:function(type){
+                if(!type){return false;}
+                var _this = this;
+                if(!isNaN(type)){
+                    _this.page = type;
+                }else{
+                    if(type == 'prve'){
+                        _this.page -= 1;
+                    }else if(type == 'next'){
+                        _this.page = parseInt(_this.page) + 1;
+                    }else{
+                        return false;
+                    }
+                    if(_this.page < 1 ){
+                        _this.page = 1;
+                        return false;
+                    }else if(_this.page > _this.all_page){
+                        _this.page = _this.all_page;
+                        return false;
+                    }
+                }
+                _this.getData();
+            },
+            reLoad:function(){
+                let _this = this;
+                _this.name = '',
+                _this.user_id = '',
+                _this.agent = '',
+                _this.search = 0;
+                _this.start_time = '';
+                _this.end_time = '';
+                _this.getData();
+
+            }
+        },
+    });
+</script>
+</body>
+</html>

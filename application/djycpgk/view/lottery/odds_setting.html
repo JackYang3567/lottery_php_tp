@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/iCheck/custom.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/js/iCheck/icheck.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.i-checks').iCheck({
+    checkboxClass: 'icheckbox_square-green',
+    radioClass: 'iradio_square-green',
+    });
+    });
+    </script>
+    <style>
+    *{
+        font-size: 9px;
+        margin: 0;
+        padding: 1px;
+    }
+
+    .cp_content ul li{
+        list-style:none;
+    width: 28%;
+    float: left;
+    text-align: center;
+    border-top: solid 1px #a7b5bc;
+    border-left: solid 1px #a7b5bc;
+    border-right: solid 1px #ced9df;
+    border-bottom: solid 1px #ced9df;
+    margin-left: 5px;
+    margin-top: 5px;
+    }
+    .cp_content .type_name  input{
+    width: 70px;
+    border-bottom: solid 1px #ced9df;
+    font-size: 15px;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    /* padding-top: 4px; */
+    height: 16px;
+    text-align: center;
+    }
+    .cp_content .detail_config a{
+    color: #3EAFE0;
+    }
+    .cp_content p{
+      margin-top: 5px;
+    }
+    </style>
+  </head>
+  <body>
+    
+    <div class="rightinfo" style="width: 100%;">
+        {if ($type_id==21)}
+           
+            &nbsp; 
+            <b>A盘赔率同步</b>:
+            <input type="text"  class="dfinput" name="tongbu_a"   data-id="{$type_id}" style="width: 100px;height: 30px;">
+            &nbsp;&nbsp;
+            <input type="button" class="btn btn_tongbu_a"  value="同步"  style="width: 50px;height: 30px;" />
+
+             &nbsp; 
+             <b>B盘赔率同步</b>:
+             <input type="text"  class="dfinput" name="tongbu_b" data-id="{$type_id}" style="width: 100px;height: 30px;">
+             &nbsp;&nbsp;
+             <input type="button" class="btn btn_tongbu_b"  value="同步"  style="width: 50px;height: 30px;" />
+
+            {else/}
+            &nbsp; <b>赔率同步</b>:<input type="text"  class="dfinput" name="tongbu" style="width: 100px;height: 30px;">&nbsp;&nbsp;<input type="button" class="btn btn_tongbu" value="同步"  style="width: 50px;height: 30px;" />
+            {/if}
+      <div>
+       
+      </div>
+      <div class="cp_content" style="width: 100%;">
+        <form action="{:url('djycpgk/lottery/odds_setting')}" method="post">
+          <input type="hidden" name="type_id" value="{$type_id}">
+          <input type="hidden" name="type_key" value="{$type_key}" />
+		  {if isset($type_gf)}
+		   <input type="hidden" name="type_gf" value="{$type_gf}" />
+		  {/if}
+          <ul>
+            {volist name="data" id="vo"  key='k'}
+            <li>
+              <p class="type_name"><b>结果:</b><input type="text"  name="name[]" value="{$vo.name}" /></p>
+              {if(in_array($type_id,['24','25','26','27','57','58']))}
+              <p class="type_name"><b style="margin-left: 20px;">普通厅赔率:</b><input type="text"  class="peilv" style="color: red;" name="odds[{$k}][]" value="{$vo.odds.0}" /><b>(倍)</b></p>
+              <p class="type_name"><b style="margin-left: 20px;">贵宾厅赔率:</b><input type="text" class="peilv" style="color: red;" name="odds[{$k}][]" value="{$vo.odds.1}" /><b>(倍)</b></p>
+              <p class="type_name"><b style="margin-left: 20px;">VIP厅赔率:</b><input type="text" class="peilv" style="color: red;" name="odds[{$k}][]" value="{$vo.odds.2}" /><b>(倍)</b></p>
+              {elseif $type_id == 21}
+              <p class="type_name"><b style="margin-left: 20px;">A盘赔率:</b><input type="text"  class="peilv_a" style="color: red;" name="odds[{$k}][]" value="{$vo.odds.0}" /><b>(倍)</b></p>
+              <p class="type_name"><b style="margin-left: 20px;">B盘房赔率:</b><input type="text"  class="peilv_b" style="color: red;" name="odds[{$k}][]" value="{$vo.odds.1}" /><b>(倍)</b></p>
+              {else/}
+			
+				
+					
+				<p class="type_name"><b style="margin-left: 20px;">赔率:</b><input type="text" style="color: red;"  class="peilv" name="odds[]" value="{$vo.odds}" /><b>(倍)</b></p>
+				
+            
+			  
+              {/if}
+              <p><div class="radio i-checks">
+                <b style="margin-left: -5px;">开 </b>
+                <label class="checkbox-inline">
+                  <input type="radio" name="switch[{$k}]" value="1" {if  $vo['switch'] == 1}checked='checked'{/if} >
+                </label>
+                &nbsp;
+                <b style="margin-left: -5px;">关 </b>
+                <label class="checkbox-inline">
+                  <input type="radio" name="switch[{$k}]" value="0" {if $vo['switch'] == 0}checked='checked'{/if} >
+                </label>
+              </div>
+            </p>
+          </li>
+          {/volist}
+        </ul>
+        <div style="clear: both; text-align: center;"><br /><br /><input type="submit" class="btn" value="保存" /></div>
+        
+      </form>
+    </div>
+  </div>
+  
+  <script type="text/javascript">
+  $(".btn_tongbu").click(function(){
+  var tongbu = $("input[name='tongbu']").val();
+  if(tongbu == ''){
+  layer.msg('请输入同步数字');
+  return;
+  }
+  $('.peilv').val(tongbu);
+  })
+
+$(".btn_tongbu_a").click(function(){
+  var tongbu = $("input[name='tongbu_a']").val();
+  if(tongbu == ''){
+  layer.msg('请输入同步数字');
+  return;
+  }
+  $('.peilv_a').val(tongbu);
+  })
+
+
+  $(".btn_tongbu_b").click(function(){
+  var tongbu = $("input[name='tongbu_b']").val();
+  if(tongbu == ''){
+  layer.msg('请输入同步数字');
+  return;
+  }
+  $('.peilv_b').val(tongbu);
+  })
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>

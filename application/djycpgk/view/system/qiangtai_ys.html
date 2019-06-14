@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/colour/colpick.css" /}
+        {css href="/static/admin/css/colour/normalize.css" /}
+        {css href="/static/admin/css/colour/style.css" /}
+
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+         {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+
+         {js href="/static/admin/colour/colpick.js" /}
+          {js href="/static/admin/colour/plugin.js" /}
+        <style>
+
+            th{
+                 text-align:center;
+            }
+            .jz{
+             /* margin-left: 50px; */
+            }
+            html{
+              background: #f3f3f4;
+            }
+            #pickers0{
+    
+              margin:0 auto;
+            }
+        </style>
+    </head>
+    <body>
+      <div class="place">
+        <div class="ibox-content" style="margin-left: 30px;">
+            <div class="place">
+            <span>位置：</span>
+            <ul class="placeul">
+            <li><a href="{:url('/djycpgk/system/index')}">网站系统设置</a></li>
+            <li><a href="">前台页面颜色更换</a></li>
+            </ul>
+            </div>
+        </div>
+      </div>
+      <div id="pickers0">
+        <div id="picker01"></div>
+      </div>
+
+
+      <script type="text/javascript">
+         $(".colpick_submit").click(function(){
+          // var sort_out_money =
+          // window.location.href="{:url('djycpgk/System/qiangtai_ys')}?sort_out_money="+sort_out_money
+       })
+      </script>
+    </body>
+    </html>

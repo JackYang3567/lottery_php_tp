@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style type="text/css">
+        .sort{
+        cursor: pointer;
+        }
+            .ys{
+                height: 32px;
+                /*line-height: 32px;*/
+                border-top: solid 1px #a7b5bc;
+                border-left: solid 1px #a7b5bc;
+                border-right: solid 1px #ced9df;
+                border-bottom: solid 1px #ced9df;
+                /*text-indent: 10px;*/
+            }
+            .tz{
+                margin-top: 5px;
+            }
+        </style>
+        <script type="text/javascript">
+        $(document).ready(function(){
+        });
+        </script>
+    </head>
+    <body>
+        
+        <div class="rightinfo">
+            
+            <div class="tools">
+                
+                <ul class="toolbar">
+                    <li class="click paijiang"><span><img src="/static/admin/images/pj.png" style="width: 20px;height: 20px;" /></span>手动派奖</li>
+                    
+                    <li class="click prejk"><span><img src="/static/admin/images/ss.png" style="width: 20px;height: 20px;" /></span>预设开奖</li>
+
+                    <li class="click hmtj"><span><img src="/static/admin/images/ss.png" style="width: 20px;height: 20px;" /></span>号码添加</li>
+                </ul>
+                
+                <ul class="seachform" style="float: right">
+                    <form action="{:url('djycpgk/lottery/lotterymatch')}" method="GET">
+                        <li>彩种：
+                            <select class="scinput" name="type">
+                                <option value="-1">请选择</option>
+                                {volist name="lotterys" id="vo"}
+                                <option value="{$vo.type}"  {if isset($lottery_type) &&  $lottery_type == $vo.type}selected="selected"{/if}>{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </li>
+                        <li>期号：<input type="expect"  class="scinput" name="expect"  {if isset($expect)}value="{$expect}"{/if}/></li>
+                        <li>日期：<input type="date"  name="start_time"  class="scinput" {if isset($start_time)}value="{$start_time}"{/if}/>&nbsp;-&nbsp;<input type="date" name="end_time" class="scinput" {if isset($end_time)}value="{$end_time}"{/if}></li>
+                        <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+                    </form>
+                </ul>
+            </div>
+            
+            
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <th>期号</th>
+                        <th>彩种</th>
+                        <th>开奖号码</th>
+                        <th>开奖时间</th>
+                        <th>盈亏</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {if !$list->isEmpty()}
+                    {volist name="list" id='vo'}
+                    <tr>
+                        <td>{$vo.expect}</td>
+                        <td>{$vo.lottery_name}</td>
+                        <td>{$vo.content} <a href="javascript:;" class="tablelink xg" data-qh="{$vo.expect}" data-type="{$vo.type}" data-content="{$vo.content} " style="float: left;">修改</a></td>
+                        <td>{$vo.create_time|date='Y-m-d H:i:s'}</td>
+                        <td>{$vo.yk}</td>
+                    </tr>
+                    {/volist}
+                    {/if}
+                </tbody>
+            </table>
+            <div class="pagin">
+                <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+                {if !$list->isEmpty()} {$list|raw}{/if}
+            </div>
+        </div>
+
+        <template id="hmtj">
+            <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+                <div class="col-sm-12">
+                    <ul class="seachform" >
+                        <li>彩种：
+                            <select class="ys" name="type">
+                                <option value="-1">请选择</option>
+                                {volist name="lotterys" id="vo"}
+                                <option value="{$vo.type}"  {if isset($lottery_type) &&  $lottery_type == $vo.type}selected="selected"{/if}>{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </li>
+                        <li>期号：<input type="expect"  class="ys" name="expect"  /></li>
+                        <li>开奖号码：<input type="expect"  class="ys" name="expect"  /></li>
+                        <li>时间：<input type="expect"  class="ys" name="expect"  /></li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+        <script type="text/javascript">
+            //改变分组
+            $('.hmtj').on('click',function() {
+                var user_id = $(this).data('id');
+                var bool = false;
+                layer.open({
+                    type: 1,
+                    title: '改变分组',
+                    area: ['450px', '200px'],
+                    content: $('#hmtj').html(),
+                    btn: ['保存','取消'],
+                    btn1: function (index,layero) {
+                        if(!bool) {
+                            bool = true;//锁住
+                            var group = $(layero).find("select[name='group']").val();
+                            $.post("{:url('djycpgk/lottery/gx_haoma')}",{ id:user_id,group:group },function(res){
+                                if (res){
+                                    layer.msg(res.msg,false,function(){ action(); });
+                                }
+
+                            });
+                        }
+
+                    },
+                    btn2:function (index,layero) {}
+                });
+            });
+
+            $('.xg').click(function(){
+            var content = $(this).attr('data-content');
+            var type = $(this).attr('data-type');
+            var qh = $(this).attr('data-qh');
+            layer.open({
+            type: 1,
+            title:'修改号码',
+            skin:'layui-layer-rim',
+            area:['450px', 'auto'],
+            content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+              +'<div class="col-sm-12">'
+           
+                +'<div class="input-group">'
+                  +'<span class="input-group-addon"> 修改   :</span>'
+                  +'<input id="rebate_rate"  name ="hm" type="text" class="form-control" value="'+content+' " >'
+                  +'<input id="rebate_rate"  name ="type" type="hidden" class="form-control" value="'+type+' " >'
+                  +'<input id="rebate_rate"  name ="qh" type="hidden" class="form-control" value="'+qh+' " >'
+                +'</div>'
+              +'</div>'
+            +'</div>'
+            ,
+            btn:['保存','取消'],
+            btn1: function (index,layero) {
+            var money = $(layero).find("input[name='hm']").val();
+            var type = $(layero).find("input[name='type']").val();
+            var qh = $(layero).find("input[name='qh']").val();
+            if(money == ''){
+            alert('请输入号码');
+            return;
+            }
+            $.ajax({
+            url:"{:url('djycpgk/lottery/gx_haoma')}",//这里指向的就不再是页面了，而是一个方法。
+            data:{hm:money,qh:qh,type:type},
+            type:"POST",
+            dataType:"JSON",
+            success: function(data){
+            if(data.error == 0){
+            alert('操作成功');
+            window.location.reload(); // 父页面刷新
+            }else{
+            alert('操作失败');
+            }
+            }
+            })
+            },
+            btn2:function (index,layero) {
+            }
+            });
+            })
+
+        $('.tablelist tbody tr:odd').addClass('odd');
+        function p(s) {
+        return s < 10 ? '0' + s: s;
+        }
+        $('.prejk').click(function(){
+        var myDate = new Date();
+        //获取当前年
+        var year=myDate.getFullYear();
+        //获取当前月
+        var month=myDate.getMonth()+1;
+        //获取当前日
+        var date=myDate.getDate();
+        var h=myDate.getHours();       //获取当前小时数(0-23)
+        var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+        var s=myDate.getSeconds();
+        var now=year+'-'+p(month)+"-"+p(date)+" "+p(h)+':'+p(m)+":"+p(s);
+        
+        layer.open({
+        type: 1,
+        title:'预设开奖(添加之后,系统会根据预设开奖,进行派奖)',
+        skin:'layui-layer-rim',
+        area:['450px', 'auto'],
+        content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+            +'<div class="col-sm-12">'
+                +'<div class="input-group">'
+                    +'<span class="input-group-addon"> 彩种 :</span>'
+                    +'<select class="form-control m-b" name="type">'
+                        +'<option value="">请选择</option>'
+                        +'<option value="0">龙虎斗</option>'
+                        +'<option value="1">百家乐</option>'
+                        +'<option value="2">重庆时时彩</option>'
+                        +'<option value="3">PK10</option>'
+                        +'<option value="4">1.5分PK10</option>'
+                        +'<option value="5">幸运赛车</option>'
+                        +'<option value="6">一分彩</option>'
+                        +'<option value="7">二分彩</option>'
+                        +'<option value="8">三分彩</option>'
+                        +'<option value="9">五分彩</option>'
+                        +'<option value="10">江苏快3</option>'
+                        +'<option value="11">急速六合彩</option>'
+                        +'<option value="12">新疆时时彩</option>'
+                        +'<option value="13">天津时时彩</option>'
+                        +'<option value="14">上海快3</option>'
+                        +'<option value="15">安徽快3</option>'
+                        +'<option value="16">广东11选5</option>'
+                        +'<option value="17">山东11选5</option>'
+                        +'<option value="18">山西11选5</option>'
+                        +'<option value="19">福彩3D</option>'
+                        +'<option value="20">广西快乐十分</option>'
+                        +'<option value="22">排列三</option>'
+                        +'<option value="23">幸运农场</option>'
+                        +'<option value="24">北京28</option>'
+                        +'<option value="25">加拿大28</option>'
+                        +'<option value="26">重庆28</option>'
+                        +'<option value="27">新疆28</option>'
+                        +'<option value="28">河内五分彩</option>'
+                    +'</select>'
+                +'</div>'
+                +'<div class="input-group">'
+                    +'<span class="input-group-addon"> 期号   :</span>'
+                    +'<input id="expect"  name ="expect" type="text" class="form-control" placeholder="">'
+                +'</div>'
+                +'<div class="input-group">'
+                    +'<span class="input-group-addon"> 开奖号码   :</span>'
+                    +'<input id="content"  name ="content" type="text" class="form-control" placeholder="">'
+                +'</div>'
+                +'<div class="input-group">'
+                    +'<span class="input-group-addon"> 开奖时间   :</span>'
+                    +'<input id="create_time"  name ="create_time" type="datetime" class="form-control" value="'+now+'">'
+                +'</div>'
+            +'</div>'
+        +'</div>'
+        ,
+        btn:['保存','取消'],
+        btn1: function (index,layero) {
+        var type = $(layero).find("select[name='type']").val();
+        var create_time = $(layero).find("input[name='create_time']").val();
+        var content = $(layero).find("input[name='content']").val();
+        if(type == 0){
+        alert('请选择彩种');return;
+        }
+        if(content == ''){
+        alert('请输入开奖结果');return;
+        }
+        var expect = $(layero).find("input[name='expect']").val();
+        
+        if(expect == ''){
+        alert('请输入期号');
+        return;
+        }
+        $.ajax({
+        url:"{:url('djycpgk/lottery/prejk')}",//这里指向的就不再是页面了，而是一个方法。
+        data:{type:type,expect:expect,create_time:create_time,content:content},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        alert(data.msg);
+        window.location.reload(); // 父页面刷新
+        }
+        })
+        },
+        btn2:function (index,layero) {
+        }
+        });
+        })
+        $('.paijiang').click(function(){
+        var myDate = new Date();
+        //获取当前年
+        var year=myDate.getFullYear();
+        //获取当前月
+        var month=myDate.getMonth()+1;
+        //获取当前日
+        var date=myDate.getDate();
+        var h=myDate.getHours();       //获取当前小时数(0-23)
+        var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+        var s=myDate.getSeconds();
+        var now=year+'-'+p(month)+"-"+p(date)+" "+p(h)+':'+p(m)+":"+p(s);
+        
+        layer.open({
+        type: 1,
+        title:'手动派奖',
+        skin:'layui-layer-rim',
+        area:['450px', 'auto'],
+        content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+            +'<div class="col-sm-12">'
+                +'<div class="input-group">'
+                    +'<span class="input-group-addon"> 彩种 :</span>'
+                    +'<select class="form-control m-b" name="type">'
+                        +'<option value="">请选择</option>'
+                        +'<option value="0">龙虎斗</option>'
+                        +'<option value="1">百家乐</option>'
+                        +'<option value="2">重庆时时彩</option>'
+                        +'<option value="3">PK10</option>'
+                        +'<option value="4">1.5分PK10</option>'
+                        +'<option value="5">幸运赛车</option>'
+                        +'<option value="6">一分彩</option>'
+                        +'<option value="7">二分彩</option>'
+                        +'<option value="8">三分彩</option>'
+                        +'<option value="9">五分彩</option>'
+                        +'<option value="10">江苏快3</option>'
+                        +'<option value="11">急速六合彩</option>'
+                        +'<option value="12">新疆时时彩</option>'
+                        +'<option value="13">天津时时彩</option>'
+                        +'<option value="14">上海快3</option>'
+                        +'<option value="15">安徽快3</option>'
+                        +'<option value="16">广东11选5</option>'
+                        +'<option value="17">山东11选5</option>'
+                        +'<option value="18">山西11选5</option>'
+                        +'<option value="19">福彩3D</option>'
+                        +'<option value="20">广西快乐十分</option>'
+                        +'<option value="22">排列三</option>'
+                        +'<option value="23">幸运农场</option>'
+                        +'<option value="24">北京28</option>'
+                        +'<option value="25">加拿大28</option>'
+                        +'<option value="26">重庆28</option>'
+                        +'<option value="27">新疆28</option>'
+                        +'<option value="28">河内五分彩</option>'
+                    +'</select>'
+                +'</div>'
+                +'<div class="input-group">'
+                    +'<span class="input-group-addon"> 期号   :</span>'
+                    +'<input id="expect"  name ="expect" type="text" class="form-control" placeholder="">'
+                +'</div>'
+                +'<div class="input-group">'
+                    +'<span class="input-group-addon"> 开奖号码   :</span>'
+                    +'<input id="content"  name ="content" type="text" class="form-control" placeholder="">'
+                +'</div>'
+                +'<div class="input-group">'
+                    +'<span class="input-group-addon"> 开奖时间   :</span>'
+                    +'<input id="create_time"  name ="create_time" type="datetime" class="form-control" value="'+now+'">'
+                +'</div>'
+            +'</div>'
+        +'</div>'
+        ,
+        btn:['保存','取消'],
+        btn1: function (index,layero) {
+        var type = $(layero).find("select[name='type']").val();
+        var create_time = $(layero).find("input[name='create_time']").val();
+        var content = $(layero).find("input[name='content']").val();
+        if(type == 0){
+        alert('请选择彩种');return;
+        }
+        if(content == ''){
+        alert('请输入开奖结果');return;
+        }
+        var expect = $(layero).find("input[name='expect']").val();
+        
+        if(expect == ''){
+        alert('请输入期号');
+        return;
+        }
+        $.ajax({
+        url:"{:url('djycpgk/lottery/paijiang')}",//这里指向的就不再是页面了，而是一个方法。
+        data:{type:type,expect:expect,create_time:create_time,content:content},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        alert(data.msg);
+        window.location.reload(); // 父页面刷新
+        }
+        })
+        },
+        btn2:function (index,layero) {
+        }
+        });
+        })
+        </script>
+    </body>
+</html>

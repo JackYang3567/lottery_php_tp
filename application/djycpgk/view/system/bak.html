@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <script type="text/javascript">
+    $(document).ready(function(){
+    $(".click").click(function(){
+    $(".tip").fadeIn(200);
+    });
+    
+    $(".tiptop a").click(function(){
+    $(".tip").fadeOut(200);
+    });
+    $(".sure").click(function(){
+    $(".tip").fadeOut(100);
+    });
+    $(".cancel").click(function(){
+    $(".tip").fadeOut(100);
+    });
+    $(".del_backup").click(function(){
+    var time = $(this).attr('data-time');
+    layer.confirm('确定删除该备份吗?', {
+    btn: ['是','否'] //按钮
+    }, function(){
+    $.ajax({
+    url:"{:url('djycpgk/system/backupdel')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{time:time},
+    type:"POST",
+    dataType:"JSON",
+    
+    success: function(data){
+    if(data.error == 0){
+    layer.msg(data.msg,{icon:1,time:1000},function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    }else{
+    layer.msg(data.msg, {icon: 5,time:2000});
+    }
+    }
+    })
+    }, function(){
+    
+    });
+    })
+    $('.backupall').click(function(){
+    
+    layer.confirm('确定要备份吗?', {
+    btn: ['是','否'] //按钮
+    }, function(){
+    $.ajax({
+    url:"{:url('djycpgk/system/backupall')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{},
+    type:"POST",
+    dataType:"JSON",
+    beforeSend:function(){
+    layer.load(2, {
+    shade: [0.1,'#fff'] //0.1透明度的白色背景
+    });
+    },
+    success: function(data){
+    if(data.error == 0){
+    layer.msg(data.msg,{icon:1,time:1000},function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    }else{
+    layer.msg(data.msg, {icon: 5,time:2000});
+    }
+    }
+    })
+    }, function(){
+    
+    });
+    })
+    $(".recover").click(function(){
+    var time = $(this).attr('data-time');
+    var filename= $(this).attr('data-name');
+    
+    layer.confirm('确定还原本次备份吗?', {
+    btn: ['是','否'] //按钮
+    }, function(){
+    $.ajax({
+    url:"{:url('djycpgk/system/importbak')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{time:time,filename:filename},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    layer.msg(data.msg,{icon:1,time:1000},function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    }else{
+    layer.msg(data.msg, {icon: 5,time:2000});
+    }
+    }
+    })
+    }, function(){
+    
+    });
+    })
+    $(".downbak").click(function(){
+    var time = $(this).attr('data-time');
+    window.location.href="{:url('djycpgk/system/downbak')}?time="+time;
+    })
+    });
+    </script>
+  </head>
+  <body>
+    <div class="rightinfo">
+      <div class="tools">
+        <ul class="toolbar">
+          <li class="backupall"><span><img src="/static/admin/images/bf.png" style="width: 20px; height: 20px;"/></span>备份</li>
+          
+        </ul>
+      </div>
+      <table class="tablelist">
+        <thead>
+          <tr>
+            
+            <th>备份时间</th>
+            <th>备份名(大小)</th>
+            
+            
+            
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {if count($list)}
+          {volist name="list" id="vo" key='k'}
+          <tr>
+            
+            <td>{$vo.time|date='Y-m-d H:i:s'}</td>
+            <td>
+              {$vo.filename}&nbsp;({$vo.kb_size}kb)
+            </td>
+            
+            <td>&nbsp;&nbsp;<a href="javascript:;" class="downbak" data-time="{$vo.time}">下载</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;" class="recover" data-time="{$vo.time}" data-name="{$vo.filename}">还原</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;" class="del_backup" data-time="{$vo.time}">删除</a></td>
+            
+            
+          </tr>
+          {/volist}
+          {/if}
+        </tbody>
+      </table>
+    </div>
+    
+    <script type="text/javascript">
+    </script>
+  </body>
+</html>

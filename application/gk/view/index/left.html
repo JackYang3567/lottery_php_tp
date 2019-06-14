@@ -1,0 +1,143 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+  <div class="nav-close"><i class="fa fa-times-circle"></i>
+  </div>
+  <div class="sidebar-collapse">
+    <ul class="nav" id="side-menu">
+      <li class="nav-header">
+        <div class="dropdown profile-element">
+          <span><img alt="image" class="img-circle" src="/static/admin/images/profile_small.jpg" /></span>
+          <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+            <span class="clear">
+              <span class="block m-t-xs"><strong class="font-bold">{$Think.session.proxy.username}</strong></span>
+              <span class="text-muted text-xs block">代理<b class="caret"></b></span>
+            </span>
+          </a>
+           <ul class="dropdown-menu animated fadeInRight m-t-xs">
+            <li><a class="J_menuItem" href="{:url('gk/login/logout')}">安全退出</a>
+          </li>
+        </ul>
+        
+      </div>
+    </li>
+    {if $Think.session.proxy.type == 1}
+      <li>
+        <a class="J_menuItem" href="/gk/index/childindex.html" data-index="2">
+          <i class="fa fa-home"></i>
+          <span class="nav-label">首页</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/demo.html" data-index="2">
+          <i class="fa fa-user"></i>
+          <span class="nav-label">试玩列表</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/yg_tj.html" data-index="3">
+          <i class="fa fa fa-bar-chart-o"></i>
+          <span class="nav-label">代理统计</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/hy_tj.html" data-index="4">
+          <i class="fa fa fa-bar-chart-o"></i>
+          <span class="nav-label">用户统计</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="/gk/Chessgame/reportForm.html" data-index="2">
+          <i class="fa fa-table"></i>
+          <span class="nav-label">棋牌输赢明细</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="/gk/Chessgame/secondlevel.html" data-index="2">
+          <i class="fa fa-table"></i>
+          <span class="nav-label">棋牌结算报表</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/betting_detail.html" data-index="5">
+          <i class="fa fa-table"></i>
+          <span class="nav-label">用户投注明细</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/change_password.html" data-index="6">
+          <i class="fa fa-edit"></i>
+          <span class="nav-label">修改密码</span>
+        </a>
+      </li>
+      <li>
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/capitaldetail.html" data-index="7">
+          <i class="glyphicon glyphicon-bitcoin"></i>
+          <span class="nav-label">资金明细</span>
+        </a>
+      </li>
+    </li>
+    
+    {else/}
+    <!--<li>-->
+      <!--<a class="J_menuItem" href="{:url('gk/proxy/hy_tj')}">二级代理用户统计</a>-->
+    <!--</li>-->
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/hy_tj.html" data-index="4">
+          <i class="fa fa fa-bar-chart-o"></i>
+          <span class="nav-label">二级代理用户统计</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="{:url('gk/proxy/qrcode')}?id={$Think.session.proxy.uid}" data-index="5">
+          <i class="fa fa-picture-o"></i>
+          <span class="nav-label">二维码</span>
+        </a>
+      </li>
+
+      <li>
+        <a class="J_menuItem" href="/gk/Chessgame/chessawm.html" data-index="2">
+          <i class="fa fa-table"></i>
+          <span class="nav-label">棋牌二级代理用户统计</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="/gk/Chessgame/reportForm.html" data-index="2">
+          <i class="fa fa-table"></i>
+          <span class="nav-label">棋牌输赢明细</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/Betting_detail.html" data-index="5">
+          <i class="fa fa-table"></i>
+          <span class="nav-label">用户投注明细</span>
+        </a>
+      </li>
+    <!--<li>-->
+      <!--<a class="J_menuItem" href="{:url('gk/proxy/Betting_detail')}">用户投注明细</a>-->
+    <!--</li>-->
+    <!--<li>-->
+      <!--<a class="J_menuItem" href="{:url('gk/proxy/Change_Password')}">修改密码</a>-->
+    <!--</li>-->
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/Change_Password.html" data-index="6">
+          <i class="fa fa-edit"></i>
+          <span class="nav-label">修改密码</span>
+        </a>
+      </li>
+      <li>
+        <a class="J_menuItem" href="/gk/proxy/capitaldetail.html" data-index="7">
+          <i class="glyphicon glyphicon-bitcoin"></i>
+          <span class="nav-label">资金明细</span>
+        </a>
+      </li>
+     <!--<li>-->
+      <!--<a class="J_menuItem" href="{:url('gk/proxy/capitaldetail')}">资金明细</a>-->
+    <!--</li>-->
+    {/if}
+    
+    
+    
+  </ul>
+</div>
+</nav>

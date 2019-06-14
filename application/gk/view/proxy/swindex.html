@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <style type="text/css">
+    .sort{
+    cursor: pointer;
+    }
+    </style>
+    
+    <script type="text/javascript">
+    $(document).ready(function(){
+    
+    
+    $(".click").click(function(){
+    window.location.href="{:url('gk/proxy/user_add')}";
+    });
+    
+    $(".tiptop a").click(function(){
+    $(".tip").fadeOut(200);
+    });
+    $(".sure").click(function(){
+    $(".tip").fadeOut(100);
+    });
+    $(".cancel").click(function(){
+    $(".tip").fadeOut(100);
+    });
+    $(".scbtn").click(function(){
+    var keywords = $("input[name='keywords']").val();
+    window.location.href="{:url('gk/proxy/swindex')}?keywords="+keywords;
+    });
+    
+    $('.xufei').click(function(){
+    var user_id = $(this).attr('data-id');
+    var    category =  15;
+    layer.open({
+    type: 1,
+    title:'用户续费扣费操作',
+    skin:'layui-layer-rim',
+    area:['450px', 'auto'],
+    content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+      +'<div class="col-sm-12">'
+        +'<div class="input-group">'
+          +'<span class="input-group-addon"> 金额   :</span>'
+          +'<input id="rebate_rate"  name ="money" type="number" class="form-control" placeholder="0">'
+        +'</div>'
+      +'</div>'
+    +'</div>'
+    ,
+    btn:['保存','取消'],
+    btn1: function (index,layero) {
+    var money = $(layero).find("input[name='money']").val();
+    
+    if(money == ''){
+    alert('请输入金额');
+    return;
+    }
+    $.ajax({
+    url:"{:url('gk/proxy/renew')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{money:money,user_id:user_id,category:category},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    alert('操作成功');
+    window.location.reload(); // 父页面刷新
+    }else{
+    alert('操作失败');
+    }
+    }
+    })
+    },
+    btn2:function (index,layero) {
+    }
+    });
+    })
+    $('.transfer').click(function(){
+    var user_id  =$(this).attr('data-id');
+    layer.open({
+    type: 1,
+    title:'ID:'+user_id+'   代理转移(请输入转移代理用户的ID)',
+    skin:'layui-layer-rim',
+    area:['450px', 'auto'],
+    content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+      +'<div class="col-sm-12">'
+        +'<div class="input-group">'
+          +'<span class="input-group-addon"> 转移至用户   :</span>'
+          +'<input id="rebate_rate"  name ="p_id" type="number" class="form-control" placeholder="">'
+        +'</div>'
+      +'</div>'
+    +'</div>'
+    ,
+    btn:['保存','取消'],
+    btn1: function (index,layero) {
+    var p_id = $(layero).find("input[name='p_id']").val();
+    
+    if(p_id == ''){
+    alert('请输入转移代理的ID');
+    return;
+    }
+    $.ajax({
+    url:"{:url('djycpgk/user/transfer')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{p_id:p_id,user_id:user_id},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    alert('操作成功');
+    window.location.reload(); // 父页面刷新
+    }else{
+    alert(data.msg);
+    }
+    }
+    })
+    },
+    btn2:function (index,layero) {
+    }
+    });
+    })
+    $('.frozen').click(function(){
+    var data_id = $(this).attr('data-id');
+    layer.confirm('确定冻结该用户吗?', {
+    btn: ['是','否'] //按钮
+    }, function(){
+    $.ajax({
+    url:"{:url('gk/user/userfrozen')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{data_id:data_id},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    layer.msg(data.msg,{icon:1,time:1000},function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    }else{
+    layer.msg(data.msg, {icon: 5,time:2000});
+    }
+    }
+    })
+    }, function(){
+    
+    });
+    })
+    
+    });
+    </script>
+  </head>
+  <body>
+    <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('gk/proxy/swindex')}">试玩列表</a></li>
+                </ul>
+                </div>
+            </div>
+    </div>
+    
+    <div class="rightinfo">
+      
+      <div class="tools">
+        
+        <ul class="toolbar">
+          <li class="click"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+        </ul>
+        
+        <ul class="seachform" style="float: right;">
+          <li><input name="keywords" type="text" class="scinput"  {if isset($keywords)}value="{$keywords}"{/if} placeholder="请输入用户账号或姓名" /></li>
+          <li><label>&nbsp;</label><input name="" type="button" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+           <li> <label>&nbsp;</label><input name="" type="button" class="scbtn refresh" value="刷新" style="margin-top: -1px;" /></li>
+        </ul>
+      </div>
+      
+      
+      <table class="tablelist">
+        <thead>
+          <tr>
+            <th>ID<i class="sort sort_id" {if isset($sort_id)}data-value={$sort_id}{else}data-value="0"{/if}><!-- <img src="/static/admin/images/px.gif" title="排序" /> --></i></th>
+            <th>用户</th>
+            <th>所属上级</th>
+            
+            <th>积分</th>
+            <th>余额<i class="sort sort_money"  {if isset($sort_money)}data-value={$sort_money}{else}data-value="0"{/if}><!-- <img src="/static/admin/images/px.gif" title="排序" /> --></i></th>
+            <th>累积中奖</th>
+            <th>状态</th>
+            <th>类型</th>
+            <th>注册时间</th>
+            <th>上次登录时间</th>
+            <th>上次登录IP</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {if !$list->isEmpty()}
+          {volist name="list" id='user'}
+          <tr>
+            <td>{$user.id}</td>
+            <td>{$user.username}{if $user.is_online == 1}(<b style="color: red;">在线</b>){else/}(<b style="color: black;">离线</b>){/if}</td>
+            <td>{$user.parent}</td>
+            <td>{$user.point}</td>
+            <td>{$user.money}</td>
+            <td>{$user.accumulated_winning}</td>
+            <td>{if $user.status == 0}正常{else}<b style="color:green;">冻结</b>{/if}</td>
+            <td>{if $user.type == 0}普通用户{else}<b style="color:blue;">试玩用户</b>{/if}</td>
+            <td>{$user.create_time|date='Y-m-d H:i:s'}</td>
+            <td>{$user.create_times|date='Y-m-d H:i:s'}</td>
+            <td>{$user.last_login_ip}</td>
+            <td><a href="{:url('gk/proxy/info_edit')}?user_id={$user.id}" class="tablelink">查看详情</a>&nbsp;<a href="javascript:;" class="tablelink xufei" data-id="{$user.id}">续费</a>&nbsp;<a href="#" class="tablelink frozen" data-id="{$user.id}">冻结</a>&nbsp;
+            {if $user.type == 0}<a href="javascript:;" class="tablelink transfer" data-id="{$user.id}">转移</a>{/if}</td>
+          </tr>
+          {/volist}
+          {/if}
+        </tbody>
+      </table>
+      
+      <div class="pagin">
+        <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+        {if !$list->isEmpty()} {$list|raw}{/if}
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+
+          $('.refresh').click(function(){
+        window.location.reload();
+        })  
+    $('.tablelist tbody tr:odd').addClass('odd');
+    
+    </script>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/vueJs/vue.min.js" /}
+        <style type="text/css">
+
+        </style>
+    </head>
+<body>
+<ul class="breadcrumb">
+    <li><span href="#">位置</span></li>
+    <li><a href="#">前台代理关系表</a></li>
+</ul>
+<div id="app">
+    <div class="container-fluid " >
+        <div class="container">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="exampleInputName2">会员名称</label>
+                    <input type="text" class="form-control" id="exampleInputName2" placeholder="会员名称">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="date" class="form-control"> --
+                    <input type="date" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>用户ID</th>
+                    <th>用户名</th>
+                    <th>第一级下线数量</th>
+                    <th>第二级下线数量</th>
+                    <th>第三级下线数量</th>
+                    <th>下级总打码量</th>
+                    <th>总(分成/返佣)</th>
+                    <th>返点方式</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody v-if="data_list.length"  v-for="(vo,key) in data_list">
+                <tr>
+                    <td>{{vo.id}}</td>
+                    <td>{{vo.user_id}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    var vm = new Vue({
+        el:'#app',
+        mounted:function(){ //初始化调用
+            this.getData();
+        },
+        // 我们的数据对象
+        data:{
+            data_list:[], //请求返回的数据
+            //-----------分页----------
+            page:1, //当前页
+            all_page:1,//总页数
+            all_list:0,
+            //---------搜索条件--------
+            name:'',//用户名称
+            user_id:'',//用户名称
+            agent:'',//上级名称
+            start_time:'',//注册开始时间
+            end_time:'',//注册结束时间
+            search:0,// 判断是否点击搜索
+        },
+        methods:{
+            getData:function () {
+                layer.load(2);//开启加载动画
+                var _this = this;
+                var data_listx = {
+
+                }
+                $.post('/djycpgk/user/proxylist_yh',data_listx,function(res){
+                    layer.closeAll('loading');//关闭加载动画
+                    _this.$set(_this,'data_list',res);
+                });
+            }
+        },
+    });
+
+</script>
+</body>
+</html>

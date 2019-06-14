@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/jquery.idTabs.min.js" /}
+        <style>
+        .rule input {
+        width: 129pt;
+        }
+        .rule span{
+        display: inline-block;
+        height: 34px;
+        text-align: center;
+        }
+        .rule span img{
+        vertical-align: middle;
+        }
+        </style>
+        <script type="text/javascript">
+        
+        
+        
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <div class="rightinfo">
+            <div class="formbody" style="padding: 0 0;">
+                
+                
+                <div id="usual1" class="usual">
+                    
+                    <div id="tab1" class="tabson">
+                        <ul class="forminfo">
+                            <!-- <form action="{:url('djycpgk/system/dataclean')}" method="post"> -->
+                                <li >删除
+                                    <input type="date" name="start_time_zx" class="dfinput" value="">至
+                                    <input type="date" name="end_time_zx" class="dfinput" value="">的历史资金纪录
+                                    <input type="button" name="zjmx" class="btn" value="删除" style="padding-top:-4px;" />
+                                </li>
+                                <li >删除
+                                    <input type="date" name="start_time_tz" class="dfinput" value="">至
+                                    <input type="date" name="end_time_tz" class="dfinput" value="">的历史投注纪录
+                                    <input type="button" name="tzjl" class="btn" value="删除" style="padding-top:-4px;" />
+                                </li>
+                                <li >删除
+                                    <input type="date" name="start_time_zh" class="dfinput" value="">至
+                                    <input type="date" name="end_time_zh" class="dfinput" value="">的历史追号纪录
+                                    <input type="button" name="zhjl" class="btn" value="删除" style="padding-top:-4px;" />
+                                </li>
+                                <li >删除
+                                    <input type="date" name="start_time_kj" class="dfinput" value="">至
+                                    <input type="date" name="end_time_kj" class="dfinput" value="">的历史开奖纪录
+                                    <input type="button"  name="lskj" class="btn" value="删除" style="padding-top:-4px;" />
+                                </li>
+                                <li >删除
+                                    <input type="date" name="start_time_lts" class="dfinput" value="">至
+                                    <input type="date" name="end_time_lts" class="dfinput" value="">的聊天室记录
+                                    <input type="button"  name="lts" class="btn" value="删除" style="padding-top:-4px;" />
+                                </li>
+                            <!-- </form> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+            $("#usual1 ul").idTabs();
+            </script>
+            
+            <script type="text/javascript">
+            $('.tablelist tbody tr:odd').addClass('odd');
+
+            $("input[name='zjmx']").click(function(){
+                var  start_time_zx = $("input[name='start_time_zx']").val();
+                var  end_time_zx = $("input[name='end_time_zx']").val();
+                $.ajax({
+                    url:"{:url('djycpgk/system/dataClean')}",
+                    data:{start_time:start_time_zx,end_time:end_time_zx,type:1},
+                    type:"POST",
+                    dataType:"JSON",
+                    success: function(data){
+                        if(data.error == 0){
+                            layer.msg(data.msg,{icon:1,time:1000});
+                        }else{
+                            layer.msg(data.msg, {icon: 5,time:2000});
+                        }
+                    }
+                })
+            });
+            $("input[name='tzjl']").click(function(){
+                var  start_time_tz = $("input[name='start_time_tz']").val();
+                var  end_time_tz = $("input[name='end_time_tz']").val();
+                $.ajax({
+                    url:"{:url('djycpgk/system/dataClean')}",
+                    data:{start_time:start_time_tz,end_time:end_time_tz,type:2},
+                    type:"POST",
+                    dataType:"JSON",
+                    success: function(data){
+                        if(data.error == 0){
+                            layer.msg(data.msg,{icon:1,time:1000});
+                        }else{
+                            layer.msg(data.msg, {icon: 5,time:2000});
+                        }
+                    }
+                })
+            });
+            $("input[name='zhjl']").click(function(){
+                var  start_time_zh = $("input[name='start_time_zh']").val();
+                var  end_time_zh = $("input[name='end_time_zh']").val();
+                $.ajax({
+                    url:"{:url('djycpgk/system/dataClean')}",
+                    data:{start_time:start_time_zh,end_time:end_time_zh,type:3},
+                    type:"POST",
+                    dataType:"JSON",
+                    success: function(data){
+                        if(data.error == 0){
+                            layer.msg(data.msg,{icon:1,time:1000});
+                        }else{
+                            layer.msg(data.msg, {icon: 5,time:2000});
+                        }
+                    }
+                })
+            });
+            $("input[name='lskj']").click(function(){
+                var  start_time_kj = $("input[name='start_time_kj']").val();
+                var  end_time_kj = $("input[name='end_time_kj']").val();
+                $.ajax({
+                    url:"{:url('djycpgk/system/dataClean')}",
+                    data:{start_time:start_time_kj,end_time:end_time_kj,type:4},
+                    type:"POST",
+                    dataType:"JSON",
+                    success: function(data){
+                        if(data.error == 0){
+                            layer.msg(data.msg,{icon:1,time:1000});
+                        }else{
+                            layer.msg(data.msg, {icon: 5,time:2000});
+                        }
+                    }
+                })
+            });
+            $("input[name='lts']").click(function(){
+                var  start_time_lts = $("input[name='start_time_lts']").val();
+                var  end_time_lts = $("input[name='end_time_lts']").val();
+                $.ajax({
+                    url:"{:url('djycpgk/system/dataClean')}",
+                    data:{start_time:start_time_lts,end_time:end_time_lts,type:5},
+                    type:"POST",
+                    dataType:"JSON",
+                    success: function(data){
+                        if(data.error == 0){
+                            layer.msg(data.msg,{icon:1,time:1000});
+                        }else{
+                            layer.msg(data.msg, {icon: 5,time:2000});
+                        }
+                    }
+                })
+            });
+            </script>
+            
+            
+            
+            
+            
+        </div>
+    </body>
+</html>

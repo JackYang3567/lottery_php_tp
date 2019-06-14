@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    <style type="text/css">
+    .noshow{
+    display: none;
+    }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+    $(".select1").uedSelect({
+    width : 345
+    });
+    })
+    </script>
+    <script type="text/javascript">
+    
+    </script>
+    
+    <script type="text/javascript">
+    </script>
+  </head>
+  <body>
+      <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/system/bank_pay')}">收款银行设置  </a></li>
+                 <li><a href="#">收款银行设置添加  </a></li>
+                </ul>
+                </div>
+            </div>
+    
+    <div class="formbody">
+      
+      
+      <div id="usual1" class="usual">
+        
+        
+        <div id="tab1" class="tabson">
+          
+          
+          
+          <ul class="forminfo">
+            <form action="{:url('djycpgk/system/bank_add')}" method="post">
+              
+              <li><label>银行名称<b>*</b></label>
+              <div class="vocation">
+                <select class="select1" name="name" >
+                  
+                  {volist name="bankTool"  id="vo"}
+                  <option value="{$key}" >{$vo}</option>
+                  {/volist}
+                </select>
+              </div>
+            </li>
+        <li><label>账户号<b>*</b></label><input name="number" type="text" class="dfinput" value=""   required="" />
+          </li>
+          <li><label class="mc">账户姓名<b>*</b></label> 
+            <input id="ins" name="user_name" type="text" class="ins dfinput" value=""   />
+
+             <div id="voc" class="vocation">
+                <select id="ses" class="select1" name="user_name" >
+                  <option value="支付宝收款" >支付宝收款</option>
+                      <option value="支付宝转银行卡" >支付宝转银行卡</option>
+                      <option value="支付宝转账" >支付宝转账</option>
+                </select>
+              </div>
+
+              <div id="voc2" class="vocation">
+                <select id="ses2" class="select1" name="user_name" >
+                  <option value="微信好友" >微信好友</option>
+                      <option value="微信收款" >微信收款</option>
+                      <option value="微信转卡" >微信转卡</option>
+                </select>
+              </div>
+          
+               
+        </li>
+        <li><label>入款说明<b>*</b></label><input name="explain" type="text" class="dfinput" value=""   />
+      </li>
+      <li><label>充值标语<b>*</b></label><input name="slogan" type="text" class="dfinput" value=""  maxlength="40" />(充值标语，不超过40个字)
+    </li>
+    <li><label>最小充值金额<b>*</b></label><input name="min" type="number" class="dfinput" value="0"   />(设置为'0',则不限制)
+  </li>
+  <li><label>最大充值金额<b>*</b></label><input name="max" type="number" class="dfinput" value="0"   />(设置为'0',则不限制)
+</li>
+<li><label>二维码<b>*</b></label><img   src="" style="width: 90px;height: 90px;"  class="noshow"><input type="file"  class="form-control "  name="fileupload" data-id="1"><input name="qr_code" type="text" class="dfinput" value=""   style="display: none;" />
+</li>
+<li><label>排序<b>*</b></label><input name="sort" type="text" class="dfinput" value="0"   />
+</li>
+
+<li><label>是否开启<b>*</b></label>  <div style=" line-height: 34px;font-size: 11pt;">开&nbsp;<input type="radio" name="switch"  value="1" checked="checked">&nbsp;关&nbsp;<input type="radio" name="switch"  value="0"></div>
+</li>
+
+<li><label>&nbsp;</label><input name="" type="submit" class="btn" value="保存"/></li>
+</form>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="text/javascript">
+$("#usual1 ul").idTabs();
+</script>
+
+<script type="text/javascript">
+$('.tablelist tbody tr:odd').addClass('odd');
+</script>
+
+
+
+
+
+</div>
+<script type="text/javascript">
+
+var select1=$(".select1").val();
+
+ window.onload = function () { //页面加载完成 获取  银行；类型如果是 支付宝或微信改变样子
+  if (select1 == 'payalipay') {
+
+    $("input[id='ins']").attr('type','hidden');//隐藏 text 
+    $("input[id='ins']").attr("name",''); 
+
+    $("div[id='voc2']").attr("style","display:none;");//隐藏 div 微信
+    $("select[id='ses2']").attr("name",'');
+
+    $('.mc').html('标题<b>*</b>');
+
+  }else if(select1 == 'payweixin'){
+       $("input[id='ins']").attr('type','hidden');//隐藏 text 
+    $("input[id='ins']").attr("name",''); 
+
+    $("div[id='voc']").attr("style","display:none;"); //隐藏 支付宝
+    $("select[id='ses']").attr("name",'');
+
+    $('.mc').html("标题<b>*</b>");
+
+
+  }
+  else{
+    $("div[id='voc']").attr("style","display:none;"); //隐藏 支付宝
+    $("select[id='ses']").attr("name",'');
+
+    $("div[id='voc2']").attr("style","display:none;");//隐藏 div 微信
+    $("select[id='ses2']").attr("name",'');
+
+    $('.mc').html('账户姓名<b>*</b>');
+   
+ }
+  }
+
+$(".select1").click(function(){
+  var select1=$(".select1").val();
+
+  if (select1 == 'payalipay' ) {
+     $('.mc').html('标题'+'<b>*</b>');
+    
+
+    $("input[id='ins']").attr('type','hidden');//隐藏 text
+    $("input[id='ins']").attr("name",''); 
+
+    $("div[id='voc']").attr("style","display:block;");//显示div 支付宝
+    $("select[id='ses']").attr("name",'user_name');
+
+     $("div[id='voc2']").attr("style","display:none;");//隐藏 div 微信
+    $("select[id='ses2']").attr("name",'');
+
+
+  }else if(select1 == 'payweixin'){
+
+    $('.mc').html('标题'+'<b>*</b>');
+    
+    $("div[id='voc2']").attr("style","display:block;");//显示div 微信
+    $("select[id='ses2']").attr("name",'user_name');
+
+    $("div[id='voc']").attr("style","display:none;");//隐藏 div 支付宝
+    $("select[id='ses']").attr("name",'');
+
+     $("input[id='ins']").attr('type','hidden');//隐藏 text
+    $("input[id='ins']").attr("name",''); 
+
+
+
+  }else{
+    $("input[id='ins']").attr('type','text');// 显示 text
+    $("input[id='ins']").attr("name",'user_name'); 
+
+    $("div[id='voc2']").attr("style","display:none;");//隐藏 div 微信
+    $("select[id='ses2']").attr("name",'');
+
+    $("div[id='voc']").attr("style","display:none;");//隐藏 div 支付宝
+    $("select[id='ses']").attr("name",'');
+
+    $('.mc').html("账户姓名<b>*</b>");
+  }
+
+});
+
+
+$(document).on('change',"input[name='fileupload']", function(){
+// $("input[name='fileupload']").change(function(){
+f=this.files[0];
+var reader = new FileReader();
+reader.readAsDataURL(f);
+reader.onload = function(e){
+// $('#index_ppt').attr('src',e.target.result);
+img  = e.target.result;
+}
+var fd = new FormData();
+var img = $(this).prev();
+var imgpath = $(this).next();
+
+fd.append("file", f);
+$.ajax({
+url: "{:url('djycpgk/system/imgupload')}" ,
+type: 'POST',
+data: fd,
+async: false,
+cache: false,
+contentType: false,
+processData: false,
+success: function (data) {
+if(data.error == 0){
+layer.msg('上传成功');
+img.removeClass('noshow');
+img.attr('src',data.msg);
+imgpath.val(data.msg);
+}else{
+layer.msg(data.msg);
+}
+},
+error: function (data) {
+
+}
+});
+})
+
+
+</script>
+</body>
+</html>

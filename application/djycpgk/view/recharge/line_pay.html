@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>在线充值记录</title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/vueJs/vue.min.js" /}
+    <style type="text/css">
+        [v-cloak]{
+            display:none;
+        }
+        .place_w {
+            border-top:1px solid #ddd;
+            padding-top:5px;
+            /* background: none; */
+        }
+        .place_w span:hover {
+            background: #3e96c9;
+            color: #fff;
+            border: 1px solid #3e96c9;
+        }
+        .place_w span {
+            transition: background 0.2s,color 0.2s,border 0.2s;
+            margin: 0;
+            padding: 5px 10px;
+            line-height: 20px;
+            margin: 0 2px;
+        }
+        .place_w span {
+            line-height: 20px;
+            font-weight: bold;
+            float: left;
+            margin-left: 3px;
+        }
+        .syy {
+            text-align: center;
+            border-radius: 5px;
+            border: 1px solid rgb(178,165,213);
+            cursor: pointer;
+        }
+        .syy_list_click{
+          background:#3e96c9;
+          color:#fff;
+        }
+        .syy_list{
+
+          text-align: center;
+          border-radius:5px;
+          border: 1px solid rgb(178,165,213);
+          margin:0;
+        }
+    </style>
+</head>
+<body>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+        <li><a href="javascript:;">在线充值记录</a></li>
+        </ul>
+    </div>
+    <div style="clear: both"></div>
+    <div id="app" v-cloak>
+        <div style="margin-bottom: 5px;border-bottom:1px solid #ddd;padding-bottom: 5px;">
+            <div class="form-inline">
+                <label >选择查询类型</label>
+                <select v-model="where.type" class="form-control">
+                    <option value='1'>订单编号</option>
+                    <option value='2'>用户id</option>
+                    <!-- <option value='3'>用户名</option> -->
+                </select>
+                <div class="form-group">
+                    <label>查询的内容</label>
+                    <input type="text" class="form-control" v-model="where.text" placeholder="请输入内容">
+                </div>
+                <button type="bottom" class="btn btn-default" @click="queryOn()">查询</button>
+                <button type="bottom" class="btn btn-default" @click="refresh()">刷新</button>
+            </div>
+ 
+        </div>
+        <div style="clear: both;"></div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>订单编号</th>
+                    <th>用户id</th>
+                    <th>用户名</th>
+                    <th>支付类型</th>
+                    <th>充值金额</th>
+                    <th>充值时间</th>
+                    <th>到(用户)账时间</th>
+                    <th>当前状态</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in list">
+                    <td>{{item['id']}}</td>
+                    <td>{{item['order_id']}}</td>
+                    <td>{{item['user_id']}}</td>
+                    <td>{{item['username']}}</td>
+                    <td>{{item['typepay']}}</td>
+                    <td>{{item['money']}}</td>
+                    <td>{{item['create_time']}}</td>
+                    <td>{{item['over_time'] ? item['over_time'] :　'未到账'}}</td>
+                    <td>{{item['status'] == 0 ? "未支付" : ( item['status'] == 1 ? '已支付' : '已撤单' )}}</td>
+                    <td>{{item['remarks']}}</td>
+                    <td>暂无</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="clear: both;"></div>
+        <div class="pagin place_w" >
+            <div class="message" style="float:left">共<i class="blue"> {{all_list}}</i>条记录，共&nbsp;<i class="blue"> {{all_page}}</i>&nbsp;页，当前显示第&nbsp;<i class="blue"> {{page}}&nbsp;</i>页</div>
+            <div v-if="all_page > 1" style="float:right" class="list_page">
+                <span v-if="pageList[0] == '...'" @click="pageNext(1)" class="syy">首页</span>
+                <span @click="pageNext('prve')" class="syy">上一页</span>
+                <span v-for="vo in pageList" @click="pageNext(vo)" :class="['syy_list',{'syy_list_click':vo == page}]" style="cursor: pointer;">{{vo}}</span>
+                <span @click="pageNext('next')" class="syy"> 下一页 </span>
+                <span v-if="pageList[pageList.length-1] == '...'" @click="pageNext(all_page)" class="syy"> 尾页 </span>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:'#app',
+        mounted(){
+            this.getData();
+        },
+        data:function(){
+            return {
+                list:[],   //查询的数据
+                page:1,    //当前页
+                all_page:1,//总页数
+                all_list:0,
+                where:{
+                    click:0, //是否启动查询
+                    type:1,  //类型
+                    text:'' //内容
+                },
+                order:{
+                    click:0, 
+                    type:1,
+                    up:1    //是正序  0 是倒叙
+                }
+            }
+        },
+        watch:{
+        },
+        computed:{
+            pageList:function(){
+                var _this = this;
+                if(_this.all_page <= 10){
+                    return _this.all_page;
+                }else{
+                    let bit = [_this.page],rs = _this.page;
+                    for(let i=1;i<=5;i++ ){
+                        if(parseInt(rs) - parseInt(i) <= 0){
+                            bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                        }else{
+                            bit.unshift( parseInt(bit[0]) - 1 );
+                        }
+                    }
+
+                    for( let i=1;i<=4;i++ ){
+                        if(parseInt(rs) + parseInt(i) <= _this.all_page){
+                        bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                        }else{
+                        bit.unshift( parseInt(bit[0]) - 1 );
+                        }
+                    }
+
+                    if(bit[bit.length - 1] != _this.all_page){
+                        bit.push('...');
+                    }
+                    if(bit[0] != 1){
+                        bit.unshift('...');
+                    }
+                    return bit;
+                }
+            }
+        },
+        methods:{
+            //查询
+            queryOn(){
+                // layer.msg('暂未完成');
+                let _this = this;
+                if(_this.where['text'] == ''){
+                    layer.msg('请输入查询内容');
+                    return false;
+                }
+                _this.where['click'] = 1;
+                _this.getData();
+            },
+            refresh(){
+                window.location.reload();
+            },
+            //初始值
+            getData(){
+                let _this = this;
+                layer.load(2);
+                $.post('/djycpgk/recharge/line_pay',{page:_this.page,where:_this.where,order:_this.order},function(res){
+                    layer.closeAll('loading');
+                    if(res.data.length){
+                        _this.page = res.current_page;
+                        _this.all_page = res.last_page;
+                        _this.all_list = res.total;
+                        _this.$set(_this,'list',res.data);
+                    }
+                });
+            },
+            //翻页
+            pageNext:function(type){
+                if(!type){return false;}
+                var _this = this;
+                if(!isNaN(type)){
+                    _this.page = type;
+                }else{
+                    if(type == 'prve'){
+                        _this.page -= 1;
+                    }else if(type == 'next'){
+                        _this.page = parseInt(_this.page) + 1;
+                    }else{
+                        return false;
+                    }
+                    if(_this.page < 1 ){
+                        _this.page = 1;
+                        return false;
+                    }else if(_this.page > _this.all_page){
+                        _this.page = _this.all_page;
+                        return false;
+                    }
+                }
+                _this.getData();
+            }
+        }
+    });
+    </script>
+</html>

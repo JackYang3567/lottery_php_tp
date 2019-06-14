@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="https://cdn.staticfile.org/font-awesome/4.4.0/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/bootstrap.min.css" />
+    <!-- Morris -->
+    <link rel="stylesheet" type="text/css" href="/static/admin/H+/css/plugins/morris/morris-0.4.3.min.css" />
+    <!-- Gritter -->
+    <link rel="stylesheet" type="text/css" href="/static/admin/H+/css/style.min-v=4.1.0.css" />
+    <link rel="stylesheet" type="text/css" href="/static/admin/H+/js/plugins/gritter/jquery.gritter.css" />
+    <!--表单样式-->
+    <link rel="stylesheet" type="text/css" href="/static/admin/H+/css/laydate.css" />
+    {js href="/static/admin/js/jquery.js" /}
+
+
+</head>
+<body class="gray-bg">
+<ul class="breadcrumb">
+    <li><a href="{:url('gk/index/childindex')}">首页</a></li>
+    <li><a href="#">筛选 </a></li>
+</ul>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="ibox-content">
+                <label class="col-sm-1 control-label">选择时间：</label>
+                <form role="form" class="form-inline" action="{:url('gk/index/search')}" method="get" >
+                    <div class="form-group">
+                        <input placeholder="开始日期" type="date" class="form-control layer-date" id="start_time"  name="start_time" value="{$start_time}">
+                    </div>
+                    <div class="form-group">
+                        <input placeholder="结束日期" type="date" class="form-control layer-date" id="end_time" name="end_time" value="{$end_time}">
+                    </div>
+                    <div class="checkbox m-l m-r-xs">
+                    </div>
+                    <button class="btn btn-primary " type="submit"><i class="fa fa-check"></i>&nbsp;筛选</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>存款</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$cz_money}</h1>
+                    <div class="stat-percent font-bold text-success">{$cz_count}笔 <i class="fa fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>取款</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$tx_money}</h1>
+                    <div class="stat-percent font-bold text-success">{$tx_count}笔 <i class="fa fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>返水</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$fs_money}</h1>
+                    <div class="stat-percent font-bold text-success">{$fs_count}笔 <i class="fa fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>返佣</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$comission_money}</h1>
+                    <div class="stat-percent font-bold text-success">{$commission_count}笔 <i class="fa fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>彩金</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$give_money}</h1>
+                    <div class="stat-percent font-bold text-success">{$give_count}笔 <i class="fa fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>盈利</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{:abs($yl)}</h1>
+                    <div class="stat-percent font-bold text-success">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>流水</h5>
+                </div>
+                <div class="ibox-content">
+
+                    <h1 class="no-margins">{$betting_money}</h1>
+                    <div class="stat-percent font-bold text-success">{$betting_count}笔 <i class="fa fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>中奖</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$pj_money}</h1>
+                    <div class="stat-percent font-bold text-success">{$pj_count}笔 <i class="fa fa-bolt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        $(function () {
+        var start_time = "{$start_time}";
+        var end_time = "{$end_time}";
+        var d = new Date();
+        if (start_time == '' && end_time == '') {
+            document.getElementById('start_time').valueAsDate = new
+            Date(d.getTime() - 86400000 * 7);
+            ;
+            document.getElementById('end_time').valueAsDate = d;
+        }
+    })
+    </script>
+
+</body>
+</html>

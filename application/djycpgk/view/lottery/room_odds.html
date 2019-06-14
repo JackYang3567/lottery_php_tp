@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {css href="/static/admin/css/font-awesome.css" /}
+    {css href="/static/admin/css/animate.css" /}
+    {css href="/static/admin/css/boot/style.css" /}
+    {js href="/static/admin/js/jquery-1.11.3.min.js" /}
+    {js href="/static/admin/js/boot/bootstrap.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <script type="text/javascript">
+    $(document).ready(function(){
+        // $('.i-checks').iCheck({
+    //         checkboxClass: 'icheckbox_square-green',
+    //         radioClass: 'iradio_square-green',
+    //     });
+    });
+    </script>
+    <style>
+    ul { list-style:none; }
+    .cp_content ul li{
+    width: 28%;
+    float: left;
+    text-align: center;
+    border-top: solid 1px #a7b5bc;
+    border-left: solid 1px #a7b5bc;
+    border-right: solid 1px #ced9df;
+    border-bottom: solid 1px #ced9df;
+    margin-left: 5px;
+    margin-top: 5px;
+    }
+    .cp_content .type_name  input{
+    width: 70px;
+    border-bottom: solid 1px #ced9df;
+    font-size: 15px;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    /* padding-top: 4px; */
+    /*height: 16px;*/
+    text-align: center;
+    }
+    .cp_content .detail_config a{
+    color: #3EAFE0;
+    }
+    .cp_content p{
+      margin-top: 5px;
+    }
+    h1{
+    text-align: center;
+    font-size: 16px;
+    margin-right: 80px;
+    }
+    </style>
+  </head>
+  <body>
+    
+    <div class="rightinfo" style="width: 100%;">
+      <div class="col-sm-12">
+        <div class="tabs-container">
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> {$data['sd']['name']}</a>
+          </li>
+          <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">{$data['color']['name']}</a>
+        </li>
+        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">{$data['num']['name']}</a>
+      </li>
+    </ul>
+    
+    <div class="tab-content">
+      <div id="tab-1" class="tab-pane active">
+        <div class="cp_content" style="width: 100%;">
+          <form action="{:url('djycpgk/lottery/room_odds')}" method="post">
+            <input type="hidden" name="type" value="{$type_id}">
+            <input type="hidden" name="room_key" value="{$room_key}">
+            <ul style="float: left;">
+              <h1>{$data['sd']['name']}</h1>
+              {volist name="data['sd']['items']" id="vo"  key='k'}
+              <li>
+                <p class="type_name"><b>结果:</b><input type="text"  name="name['sd'][]" value="{$vo.name}" /></p>
+                
+                <p class="type_name"><b style="margin-left: 20px;">赔率:</b><input type="text"  class="peilv" style="color: red;" name="odds['sd'][]" value="{$vo.odds[$room_key]}" /><b>(倍)</b></p>
+              </li>
+              {/volist}
+            </ul>
+            <div style="clear: both; text-align: center;"><br /><br /><input type="submit" class="btn" value="保存" /></div>
+          </div>
+        </div>
+        <div id="tab-2" class="tab-pane ">
+          <div class="cp_content" style="width: 100%;">
+            <form action="{:url('djycpgk/lottery/room_odds')}" method="post">
+              <input type="hidden" name="type" value="{$type_id}">
+              <input type="hidden" name="room_key" value="{$room_key}">
+              <ul style="float: left;width: 100%;">
+                <h1 style="">{$data['color']['name']}</h1>
+                {volist name="data['color']['items']" id="vo"  key='k'}
+                <li>
+                  <p class="type_name"><b>结果:</b><input type="text"  name="name['color'][]" value="{$vo.name}" /></p>
+                  
+                  <p class="type_name"><b style="margin-left: 20px;">赔率:</b><input type="text"  class="peilv" style="color: red;" name="odds['color'][]" value="{$vo.odds[$room_key]}" /><b>(倍)</b></p>
+                </li>
+                {/volist}
+              </ul>
+              <div style="clear: both; text-align: center;"><br /><br /><input type="submit" class="btn" value="保存" /></div>
+            </div>
+          </div>
+          <div id="tab-3" class="tab-pane ">
+            <div class="cp_content" style="width: 100%;">
+              <form action="{:url('djycpgk/lottery/room_odds')}" method="post">
+                <input type="hidden" name="type" value="{$type_id}">
+                <input type="hidden" name="room_key" value="{$room_key}">
+                <ul style="float: left;">
+                  <h1>{$data['num']['name']}</h1>
+                  {volist name="data['num']['items']" id="vo"  key='k'}
+                  <li>
+                    <p class="type_name"><b>结果:</b><input type="text"  name="name['num'][]" value="{$vo.name}" /></p>
+                    
+                    <p class="type_name"><b style="margin-left: 20px;">赔率:</b><input type="text"  class="peilv" style="color: red;" name="odds['num'][]" value="{$vo.odds[$room_key]}" /><b>(倍)</b></p>
+                  </li>
+                  {/volist}
+                </ul>
+                <div style="clear: both; text-align: center;"><br /><br /><input type="submit" class="btn" value="保存" /></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+    </div>
+    <!--       <div class="cp_content" style="width: 100%;">
+      <form action="{:url('djycpgk/lottery/room_odds')}" method="post">
+        <input type="hidden" name="type_id" value="{$type_id}">
+        <input type="hidden" name="room_key" value="{$room_key}">
+        <ul style="float: left;">
+          <h1>{$data['sd']['name']}</h1>
+          {volist name="data['sd']['items']" id="vo"  key='k'}
+          <li>
+            <p class="type_name"><b>结果:</b><input type="text"  name="name[]" value="{$vo.name}" /></p>
+            
+            <p class="type_name"><b style="margin-left: 20px;">赔率:</b><input type="text"  class="peilv" style="color: red;" name="odds[]" value="{$vo.odds[$room_key]}" /><b>(倍)</b></p>
+          </li>
+          {/volist}
+        </ul>
+        <ul style="float: left;width: 100%;">
+          <h1 style="">{$data['color']['name']}</h1>
+          {volist name="data['color']['items']" id="vo"  key='k'}
+          <li>
+            <p class="type_name"><b>结果:</b><input type="text"  name="name[]" value="{$vo.name}" /></p>
+            
+            <p class="type_name"><b style="margin-left: 20px;">赔率:</b><input type="text"  class="peilv" style="color: red;" name="odds[]" value="{$vo.odds[$room_key]}" /><b>(倍)</b></p>
+          </li>
+          {/volist}
+        </ul>
+        <ul style="float: left;">
+          <h1>{$data['num']['name']}</h1>
+          {volist name="data['num']['items']" id="vo"  key='k'}
+          <li>
+            <p class="type_name"><b>结果:</b><input type="text"  name="name[]" value="{$vo.name}" /></p>
+            
+            <p class="type_name"><b style="margin-left: 20px;">赔率:</b><input type="text"  class="peilv" style="color: red;" name="odds[]" value="{$vo.odds[$room_key]}" /><b>(倍)</b></p>
+          </li>
+          {/volist}
+        </ul>
+        <div style="clear: both; text-align: center;"><br /><br /><input type="submit" class="btn" value="保存" /></div>
+        
+      </form>
+    </div>
+    -->
+  </div>
+  
+  <script type="text/javascript">
+  $(".btn_tongbu").click(function(){
+  var tongbu = $("input[name='tongbu']").val();
+  if(tongbu == ''){
+  layer.msg('请输入同步数字');
+  return;
+  }
+  $('.peilv').val(tongbu);
+  })
+  </script>
+</body>
+</html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <script type="text/javascript">
+    $(document).ready(function(){
+    $(".click").click(function(){
+    $(".tip").fadeIn(200);
+    });
+    $("input:radio").change(function(){
+    var switch_id = $(this).val();
+    var config_id = $(this).parent().next().val();
+    layer.confirm('确定修改该彩种状态?', {
+    btn: ['是','否'] //按钮
+    }, function(){
+    $.ajax({
+    url:"{:url(request()->module().'/lottery/type_switch')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{switch_id:switch_id,config_id:config_id},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    layer.msg(data.msg,{icon:1,time:1000},function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    }else{
+    layer.msg(data.msg, {icon: 5,time:2000});
+    }
+    }
+    })
+    }, function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    })
+    $(".config_setting").click(function(){
+    var type_id = $(this).attr('data-type');
+    var type_cate = $(this).attr('data-cate');
+    window.location.href="{:url(request()->module().'/lottery/detail_config')}?type_id="+type_id+'&type_cate='+type_cate;
+    });
+
+    $(".set-dan-kong").click(function () {
+       var type_id = $(this).attr('data-type');
+       var type_cate = $(this).attr('data-cate');
+        window.location.href="{:url(request()->module().'/forControl/set_dankong')}?type_id=" + type_id+'&type_cate='+type_cate;
+    });
+    $(".return_setting").click(function(){
+    var type_id = $(this).attr('data-type');
+    var type_name = $(this).attr('data-name');
+    var type_cate = $(this).attr('data-cate');
+    window.location.href="{:url(request()->module().'/lottery/return_config')}?type_id="+type_id+"&type_name="+type_name+"&type_cate="+type_cate;
+    })
+
+    $(".return_setting2").click(function(){
+    var type_id = $(this).attr('data-type');
+    var type_name = $(this).attr('data-name');
+    var type_cate = $(this).attr('data-cate');
+    window.location.href="{:url(request()->module().'/lottery/return_config_01')}?type_id="+type_id+"&type_name="+type_name+"&type_cate="+type_cate;
+    })
+
+        $(".kozkaijiang").click(function(){
+            var type_id = $(this).attr('data-type');
+            var type_name = $(this).attr('data-name');
+            var type_cate = $(this).attr('data-cate');
+            window.location.href="{:url(request()->module().'/lottery/kozkaijiang')}?type_id="+type_id+"&type_name="+type_name+"&type_cate="+type_cate;
+        })
+
+      $(".guize").click(function(){
+    var type_id = $(this).attr('data-type');
+    var type_name = $(this).attr('data-name');
+    var type_cate = $(this).attr('data-cate');
+    window.location.href="{:url(request()->module().'/lottery/guize')}?type_id="+type_id+"&type_name="+type_name+"&type_cate="+type_cate;
+    })
+
+    $('.time_setting').click(function(){
+    var type_id = $(this).attr('data-id');
+    var start_time = $(this).attr('data-time');
+     
+
+    var cha = $(this).attr('data-cha');
+    var number = $(this).attr('data-number');
+    var desc = $(this).attr('data-desc');
+    layer.open({
+    type: 1,
+    title:'开奖时间设置',
+    skin:'layui-layer-rim',
+    area:['450px', 'auto'],
+    content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+      +'<div class="col-sm-12">'
+        +'<div class="input-group">'
+          +'<span class="input-group-addon"> 开奖时间 (/天):</span>'
+          +'<input id="start_time"  name ="start_time" type="datetime" class="form-control" placeholder="0" value="'+start_time+'">'
+        +'</div>'
+        +'<div class="input-group">'
+          +'<span class="input-group-addon"> 开奖间隔时间(分钟):</span>'
+          +'<input id="cha"  name ="cha" type="cha" class="form-control" placeholder="0" value="'+cha+'">'
+        +'</div>'
+        +'<div class="input-group">'
+          +'<span class="input-group-addon"> 期数(/天)   :</span>'
+          +'<input id="number"  name ="num" type="cha" class="form-control" placeholder="0" value="'+number+'">'
+        +'</div>'
+         +'<div class="input-group">'
+          +'<span class="input-group-addon"> 封盘时间(/秒)   :</span>'
+          +'<input id="number"  name ="desc" type="cha" class="form-control" placeholder="0" value="'+desc+'">'
+        +'</div>'
+      +'</div>'
+    +'</div>'
+    ,
+    btn:['保存','取消'],
+    btn1: function (index,layero) {
+    var start_time = $(layero).find("input[name='start_time']").val();
+    var cha = $(layero).find("input[name='cha']").val();
+    var number=  $(layero).find("input[name='num']").val();
+    var desc=  $(layero).find("input[name='desc']").val();
+    $.ajax({
+    url:"{:url(request()->module().'/lottery/time_setting')}",
+    data:{start_time:start_time,cha:cha,number:number,type_id:type_id,desc:desc},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    alert('操作成功');
+    window.location.reload(); // 父页面刷新
+    }else{
+    alert('操作失败');
+    }
+    }
+    })
+    },
+    btn2:function (index,layero) {
+    }
+    });
+    })
+
+    $('.change_name').blur(function(){
+    var type_id = $(this).attr('data-type');
+    var note = $(this).val();
+    layer.confirm('确定修改该彩票名字吗?', {
+    btn: ['是','否'] //按钮
+    }, function(){
+    $.ajax({
+    url:"{:url(request()->module().'/lottery/change_name')}",
+    data:{type_id:type_id,note:note},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    layer.msg(data.msg,{icon:1,time:1000},function(){
+    self.location.reload();
+    self.layer.close();
+    });
+    }else{
+    layer.msg(data.msg, {icon: 5,time:2000});
+    }
+    }
+    })
+    }, function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    })
+
+
+
+
+    $('.change_note').blur(function(){
+    var type_id = $(this).attr('data-type');
+    var note = $(this).val();
+    layer.confirm('确定修改该彩票描述吗?', {
+    btn: ['是','否'] //按钮
+    }, function(){
+    $.ajax({
+    url:"{:url(request()->module().'/lottery/change_note')}",
+    data:{type_id:type_id,note:note},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    layer.msg(data.msg,{icon:1,time:1000},function(){
+    self.location.reload();
+    self.layer.close();
+    });
+    }else{
+    layer.msg(data.msg, {icon: 5,time:2000});
+    }
+    }
+    })
+    }, function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    })
+    $('.lottery_trade').change(function(){
+    var category = $(this).val();
+    window.location.href="{:url(request()->module().'/lottery/statussetting')}?category="+category;
+    })
+
+
+
+    $('.cate_odds_setting').click(function(){
+    layer.open({
+    type: 1,
+    title:'分类倍率设置',
+    skin:'layui-layer-rim',
+    area:['450px', 'auto'],
+    content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+      +'<div class="col-sm-12">'
+        +'<div class="input-group">'
+          +'<span class="input-group-addon"> 分类 :</span>'
+          +'<select class="form-control m-b" name="category">'
+            +'<option value="时时彩">时时彩</option>'
+            +'<option value="11选5">11选5</option>'
+            +'<option value="快3">快3</option>'
+            +'<option value="PK10">PK10</option>'
+            +'<option value="六合彩">六合彩</option>'
+            +'<option value="农场">农场</option>'
+            // +'<option value="PC28">PC28</option>'
+            +'<option value="快乐10分">快乐10分</option>'
+            +'<option value="低频彩">低频彩</option>'
+          +'</select>'
+        +'</div>'
+        +'<div class="input-group col-md-6">'
+          +'<span class="input-group-addon">大&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</span>'
+          +'<input id="da"  name ="da" type="number" class="form-control " >'
+        +'</div>'
+        +'<div class="input-group col-md-6">'
+          +'<span class="input-group-addon">小&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</span>'
+          +'<input id="x"  name ="x" type="number" class="form-control" >'
+        +'</div>'
+        +'<div class="input-group col-md-6">'
+          +'<span class="input-group-addon">单&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;</span>'
+          +'<input id="dan"  name ="dan" type="number" class="form-control">'
+        +'</div>'
+        +'<div class="input-group col-md-6">'
+          +'<span class="input-group-addon">双&nbsp;&nbsp;&nbsp; :&nbsp;</span>'
+          +'<input id="s"  name ="s" type="number" class="form-control">'
+        +'</div>'
+        +'<div class="input-group col-md-6">'
+          +'<span class="input-group-addon"> 数字  : </span>'
+          +'<input id="code"  name ="code" type="number" class="form-control" >'
+        +'</div>'
+          +'<div class="input-group col-md-6">'
+          +'<span class="input-group-addon"> 龙 &nbsp;&nbsp;&nbsp; : </span>'
+          +'<input id="long"  name ="long" type="number" class="form-control" >'
+        +'</div>'
+          +'<div class="input-group col-md-6">'
+          +'<span class="input-group-addon"> 虎 &nbsp;&nbsp;&nbsp; :</span>'
+          +'<input id="hu"  name ="hu" type="number" class="form-control" >'
+        +'</div>'
+      +'</div>'
+    +'</div>'
+    ,
+    btn:['保存','取消'],
+    btn1: function (index,layero) {
+    var da = $(layero).find("input[name='da']").val();
+    var x = $(layero).find("input[name='x']").val();
+    var dan=  $(layero).find("input[name='dan']").val();
+    var s=  $(layero).find("input[name='s']").val();
+    var code=  $(layero).find("input[name='code']").val();
+    var long=  $(layero).find("input[name='long']").val();
+    var hu=  $(layero).find("input[name='hu']").val();
+    var cate = $(layero).find("select[name='category']").val();
+    $.ajax({
+    url:"{:url(request()->module().'/lottery/cate_odds_setting')}",
+    data:{cate:cate,da:da,x:x,dan:dan,s:s,code:code,long:long,hu:hu},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    alert('操作成功');
+    window.location.reload(); // 父页面刷新
+    }else{
+    alert('操作失败');
+    }
+    }
+    })
+    },
+    btn2:function (index,layero) {
+    }
+    });
+    })
+    });
+    </script>
+    <style>
+
+    .switch {
+        position: relative;
+        margin: 20px auto;
+        margin-bottom: 10px;
+        height: 26px;
+        width: 120px;
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+    }
+    .switch-label {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 58px;
+    line-height: 26px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.35);
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+    }
+    .switch-label:active {
+    font-weight: bold;
+    }
+    .switch-label-off {
+    padding-left: 2px;
+    }
+    .switch-label-on {
+    padding-right: 2px;
+    }
+    /*
+    * Note: using adjacent or general sibling selectors combined with
+    *       pseudo classes doesn't work in Safari 5.0 and Chrome 12.
+    *       See this article for more info and a potential fix:
+    *       http://css-tricks.com/webkit-sibling-bug/
+    */
+    .switch-input {
+    display: none;
+    }
+    .switch-input:checked + .switch-label {
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.65);
+    text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+    -webkit-transition: 0.15s ease-out;
+    -moz-transition: 0.15s ease-out;
+    -o-transition: 0.15s ease-out;
+    transition: 0.15s ease-out;
+    }
+    .switch-input:checked + .switch-label-on ~ .switch-selection {
+    left: 60px;
+    /* Note: left: 50% doesn't transition in WebKit */
+    }
+    .switch-selection {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 2px;
+    left: 2px;
+    width: 58px;
+    height: 22px;
+    background: #65bd63;
+    border-radius: 3px;
+    background-image: -webkit-linear-gradient(top, #9dd993, #65bd63);
+    background-image: -moz-linear-gradient(top, #9dd993, #65bd63);
+    background-image: -o-linear-gradient(top, #9dd993, #65bd63);
+    background-image: linear-gradient(to bottom, #9dd993, #65bd63);
+    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+    -webkit-transition: left 0.15s ease-out;
+    -moz-transition: left 0.15s ease-out;
+    -o-transition: left 0.15s ease-out;
+    transition: left 0.15s ease-out;
+    }
+    .switch-blue .switch-selection {
+    background: #3aa2d0;
+    background-image: -webkit-linear-gradient(top, #4fc9ee, #3aa2d0);
+    background-image: -moz-linear-gradient(top, #4fc9ee, #3aa2d0);
+    background-image: -o-linear-gradient(top, #4fc9ee, #3aa2d0);
+    background-image: linear-gradient(to bottom, #4fc9ee, #3aa2d0);
+    }
+    .switch-yellow .switch-selection {
+    background: #c4bb61;
+    background-image: -webkit-linear-gradient(top, #e0dd94, #c4bb61);
+    background-image: -moz-linear-gradient(top, #e0dd94, #c4bb61);
+    background-image: -o-linear-gradient(top, #e0dd94, #c4bb61);
+    background-image: linear-gradient(to bottom, #e0dd94, #c4bb61);
+    }
+    .cp_content ul li{
+    width: 23%;
+    float: left;
+    text-align: center;
+    border-top: solid 1px #a7b5bc;
+    border-left: solid 1px #a7b5bc;
+    border-right: solid 1px #ced9df;
+    border-bottom: solid 1px #ced9df;
+    margin-left: 5px;
+    margin-top: 5px;
+    }
+    .cp_content .type_name{
+    font-size: 15px;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    /* padding-top: 4px; */
+    height: 16px;
+    }
+    .cp_content .detail_config a{
+    color: #3EAFE0;
+    }
+    .paginList{
+    margin-top: 13px;
+    }
+    #tupian{
+        margin-left: 0px;
+    }
+    .dankong-css{
+        width: 120px;
+        height: 25px;
+        line-height: 25px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        text-align: center;
+        cursor: pointer;
+        border: 1px solid #ccc;
+    }
+    .dankong-css:hover{
+        background: #ccc;
+        color: #fff;
+    }
+    .not-dankong-css{
+        width: 120px;
+        height: 25px;
+        line-height: 25px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+        text-align: center;
+        cursor: not-allowed;
+        border: 1px solid #ccc;
+        background: #aaa;
+        color: #fff;
+    }
+    </style>
+  </head>
+  <body>
+   <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url(request()->module().'/lottery/statussetting')}">彩种设置</a></li>
+                </ul>
+                </div>
+    </div>
+    <div class="rightinfo">
+      <div class="tools">
+        <ul class="seachform">
+          <li class="choose_edit" style="margin-left: 5px;margin-top: 3px;">
+            <select class="scinput lottery_trade" name="lottery_type">
+              <option value="">全部</option>
+              <option value="时时彩"  {if isset($lottery_cate) &&  $lottery_cate == '时时彩'}selected="selected"{/if}>时时彩</option>
+              <option value="11选5" {if isset($lottery_cate) &&  $lottery_cate == '11选5'}selected="selected"{/if}>11选5</option>
+              <option value="快3" {if isset($lottery_cate) &&  $lottery_cate == '快3'}selected="selected"{/if}>快3</option>
+              <option value="pk10" {if isset($lottery_cate) &&  $lottery_cate == 'pk10'}selected="selected"{/if}>PK10</option>
+              <option value="六合彩" {if isset($lottery_cate) &&  $lottery_cate == '六合彩'}selected="selected"{/if}>六合彩</option>
+              <option value="农场" {if isset($lottery_cate) &&  $lottery_cate == '农场'}selected="selected"{/if}>农场</option>
+              <option value="pc28" {if isset($lottery_cate) &&  $lottery_cate == 'pc28'}selected="selected"{/if}>PC28</option>
+              <option value="快乐10分" {if isset($lottery_cate) &&  $lottery_cate == '快乐10分'}selected="selected"{/if}>快乐10分</option>
+              <option value="低频彩" {if isset($lottery_cate) &&  $lottery_cate == '低频彩'}selected="selected"{/if}>低频彩</option>
+              <option value="其他" {if isset($lottery_cate) &&  $lottery_cate == '其他'}selected="selected"{/if}>其他</option>
+            </select>
+          </li>
+          <li class="click cate_odds_setting"><button class="btn">分类倍率设置</button></li>
+        </ul>
+      </div>
+      <div class="cp_content">
+        <ul>
+          {volist name="list" id="vo"}
+          <li>
+            <p class="type_name" style="text-align: center;margin-top: 5px"><input type="text" name="name" value="{$vo.name}" style="text-align: center;border: 1px solid #a7b5bc;" class="change_name" data-type="{$vo.type}"></p>
+            <p style="text-align: center; ">描述：<input type="text" name="note" class="change_note" data-type="{$vo.type}" value="{$vo.note}" style="width: 20%;"> </p>
+            <div class="switch switch-blue">
+              <input type="radio" class="switch-input" name="switch[{$vo.type}]" value="1" id="week{$vo['type']}" {if $vo["switch"] == 1}checked='checked'{/if}>
+              <label for="week{$vo.type}" class="switch-label switch-label-off">开</label>
+              <input type="radio" class="switch-input" name="switch[{$vo.type}]" value="0" id="month{$vo['type']}" {if $vo["switch"] == 0}checked='checked'{/if}>
+              <label for="month{$vo.type}" class="switch-label switch-label-on">关</label>
+              <span class="switch-selection" id="tupian"></span>
+            </div>
+              {if condition="in_array($vo.type,$sicai)"}
+                  {if isset($lottery_cate)== 0}
+                  <div class="dankong-css set-dan-kong" data-cate="" data-type="{$vo.type}">
+                      单控设置
+                  </div>
+                  {else/}
+                  <div class="dankong-css set-dan-kong" data-cate="{$lottery_cate}" data-type="{$vo.type}">
+                      单控设置
+                  </div>
+                  {/if}
+              {else /}
+              <div class="not-dankong-css">
+                  此彩种不支持单控
+              </div>
+              {/if}
+            <input type="hidden" name="config_id" value="{$vo.type}" />
+            <p class="detail_config" style="margin-left: 7px;">
+                {if(in_array($vo.type,['53','54','55','56']))}
+                    {if isset($lottery_cate)== 0}
+                        <a href="javascript:;"  class="config_setting" data-cate=" " data-type="{$vo.type}">玩法设置</a>
+                    {else/}
+                        <a href="javascript:;"  class="config_setting" data-cate="{$lottery_cate}" data-type="{$vo.type}">玩法设置</a>
+                    {/if}
+                    {if isset($lottery_cate)==0}
+                    &nbsp;|&nbsp;<a href="javascript:;"  class="guize" data-type="{$vo.type}" data-cate=" " data-name="{$vo.name}">规则说明</a>
+                    {else/}
+                    &nbsp;|&nbsp;<a href="javascript:;"  class="guize" data-type="{$vo.type}" data-cate="{$lottery_cate}" data-name="{$vo.name}">规则说明</a>
+                    {/if}
+                    <br>
+                    <br>
+
+                {else/}
+                {if isset($lottery_cate)== 0}
+                    <a href="javascript:;"  class="config_setting" data-cate=" " data-type="{$vo.type}">玩法设置</a>
+                    {else/}
+                    <a href="javascript:;"  class="config_setting" data-cate="{$lottery_cate}" data-type="{$vo.type}">玩法设置</a>
+                {/if}
+
+                {if($vo.type > 1 && !in_array($vo.type,['24','25','26','27','35']) ) }
+					{if isset($lottery_cate)== 0}
+						&nbsp;|&nbsp;<a href="/djycpgk/Lottery/sort/?type={$vo.type}"   >内容排序</a>
+					{else/}
+						&nbsp;|&nbsp;<a href="/djycpgk/Lottery/sort/?type={$vo.type}&type_cate={$lottery_cate}"  >内容排序</a>
+					{/if}
+                {/if}
+
+                &nbsp;|&nbsp;
+                 <a href="javascript:;" class="time_setting" data-id="{$vo.type}" data-time="{$vo.time_config.start_time}" data-cha="{$vo.time_config.cha}" data-number="{$vo.time_config.num}" data-desc="{$vo.time_config.desc}">开奖时间设置</a>
+				  {if $vo.type == 21 }
+                    {if isset($lottery_cate)== 0}
+                        &nbsp;|&nbsp;<a href="javascript:;"  class="return_setting2" data-cate=" " data-type="{$vo.type}" data-name="{$vo.name}">b盘返水设置</a>
+                    {else/}
+                        &nbsp;|&nbsp;<a href="javascript:;"  class="return_setting2" data-cate="{$lottery_cate}" data-type="{$vo.type}" data-name="{$vo.name}">b盘返水设置</a>
+                    {/if}
+                {/if}
+		   <!--{if(in_array($vo.type,['24','25','26','27']))}-->
+
+                <!--{if isset($lottery_cate)== 0}-->
+                     <!--&nbsp;|&nbsp;<a href="javascript:;"  class="return_setting" data-cate=" " data-type="{$vo.type}" data-name="{$vo.name}">返水设置</a>-->
+                    <!--{else/}-->
+                     <!--&nbsp;|&nbsp;<a href="javascript:;"  class="return_setting" data-cate="{$lottery_cate}" data-type="{$vo.type}" data-name="{$vo.name}">返水设置</a>-->
+                <!--{/if}-->
+
+            <!--{elseif($vo.type==21)/}-->
+                <!--{if isset($lottery_cate)== 0}-->
+                    <!--&nbsp;|&nbsp;<a href="javascript:;"  class="return_setting2" data-cate=" " data-type="{$vo.type}" data-name="{$vo.name}">b盘返水设置</a>-->
+                    <!--{else/}-->
+                    <!--&nbsp;|&nbsp;<a href="javascript:;"  class="return_setting2" data-cate="{$lottery_cate}" data-type="{$vo.type}" data-name="{$vo.name}">b盘返水设置</a>-->
+                <!--{/if}-->
+
+            <!--{else/}-->
+                 <!--{if isset($lottery_cate)== 0}-->
+                    <!--&nbsp;|&nbsp;<a href="javascript:;"  class="return_setting2" data-cate=" " data-type="{$vo.type}" data-name="{$vo.name}">返水设置</a>-->
+                    <!--{else/}-->
+                    <!--&nbsp;|&nbsp;<a href="javascript:;"  class="return_setting2" data-cate="{$lottery_cate}" data-type="{$vo.type}" data-name="{$vo.name}">返水设置</a>-->
+                <!--{/if}-->
+            <!--{/if}-->
+             {if(in_array($vo.type,['0','1']))}
+                {if isset($lottery_cate)== 0}
+                &nbsp;|&nbsp;<a href="javascript:;"  class="kozkaijiang" data-cate=" " data-type="{$vo.type}" data-name="{$vo.name}">控制开奖</a>
+                {else/}
+                &nbsp;|&nbsp;<a href="javascript:;"  class="kozkaijiang" data-cate="{$lottery_cate}" data-type="{$vo.type}" data-name="{$vo.name}">控制开奖</a>
+                {/if}
+              {/if}
+
+
+             {if(!in_array($vo.type,['0','1']))}
+                 {if isset($lottery_cate)==0}
+                    &nbsp;|&nbsp;<a href="javascript:;"  class="guize" data-type="{$vo.type}" data-cate=" " data-name="{$vo.name}">规则说明</a>
+                 {else/}
+                   &nbsp;|&nbsp;<a href="javascript:;"  class="guize" data-type="{$vo.type}" data-cate="{$lottery_cate}" data-name="{$vo.name}">规则说明</a>
+                {/if}
+            {/if}
+            {/if}
+
+            </p>
+        </li>
+        {/volist}
+      </ul>
+
+    </div>
+
+    <div class="pagin" style="clear: both;">
+      <br/>
+      <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+
+      {if !$list->isEmpty()} {$list|raw}{/if}
+    </div>
+  </div>
+</div>
+</body>
+</html>

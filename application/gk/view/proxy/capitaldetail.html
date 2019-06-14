@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style type="text/css">
+            .pagin {
+                position: relative;
+                margin-top: 10px;
+                padding: 0 12px;
+            }
+            .pagin .paginList {
+                position: absolute;
+                right: 12px;
+
+            }
+            ul {
+                display: block;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+            .pagin .paginList .paginItem {
+                float: left;
+            }
+
+            .pagin .paginList .paginItem.current, .pagin .paginList .paginItem.current a {
+                background: #f5f5f5;
+                cursor: default;
+                color: #737373;
+            }
+            .pagin .paginList .paginItem a {
+                float: left;
+                width: 31px;
+                height: 28px;
+                border: 1px solid #DDD;
+                text-align: center;
+                line-height: 30px;
+                border-left: none;
+                color: #3399d5;
+            }
+            .pagin .paginList .paginItem:first-child a {
+                border-bottom-left-radius: 5px;
+                border-top-left-radius: 5px;
+            }
+            .pagin .paginList .paginItem:first-child a {
+                border-left: 1px solid #DDD;
+            }
+            .pagin .paginList .paginItem:last-child a {
+                border-bottom-right-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+        </style>
+
+    </head>
+    <body>
+    <ul class="breadcrumb">
+        <li><span href="#">位置</span></li>
+        <li><a href="{:url('/gk/Proxy/capitaldetail')}">资金明细</a></li>
+    </ul>
+    <div class="container">
+        <form action="{:url('gk/proxy/capitalDetail')}" method="GET" class="form-inline">
+            <div class="form-group">
+                <label>类型:</label>
+                <select class="form-control" name="type">
+                    <option value="">请选择</option>
+                    <option value="0" {if isset($type) && $type == 0}selected="selected"{/if}>下注 </option>
+                    <option value="1" {if isset($type) && $type == 1}selected="selected"{/if}>提现</option>
+                    <option value="2" {if isset($type) && $type == 2}selected="selected"{/if}>线下充值 </option>
+                    <option value="3" {if isset($type) && $type == 3}selected="selected"{/if}>中奖</option>
+                    <option value="4" {if isset($type) && $type == 4}selected="selected"{/if}>扣款 </option>
+                    <option value="5" {if isset($type) && $type == 5}selected="selected"{/if}>赠送 </option>
+                    <option value="6" {if isset($type) && $type == 6}selected="selected"{/if}>退款 </option>
+                    <option value="7" {if isset($type) && $type == 7}selected="selected"{/if}>在线充值 </option>
+                    <option value="8" {if isset($type) && $type == 8}selected="selected"{/if}>返佣 </option>
+                    <option value="9" {if isset($type) && $type == 9}selected="selected"{/if}>签到 </option>
+                    <option value="10" {if isset($type) && $type == 10}selected="selected"{/if}>抽奖 </option>
+                    <option value="11" {if isset($type) && $type == 11}selected="selected"{/if}>返水 </option>
+                    <option value="12" {if isset($type) && $type == 12}selected="selected"{/if}>冻结资金 </option>
+                    <option value="13" {if isset($type) && $type == 13}selected="selected"{/if}>冻结返还 </option>
+                    <option value="14" {if isset($type) && $type == 14}selected="selected"{/if}>保底投注 </option>
+                    <option value="15" {if isset($type) && $type == 15}selected="selected"{/if}>系统充值</option>
+                    <option value="16" {if isset($type) && $type == 16}selected="selected"{/if}>红包</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputName2">用户名:</label>
+                <input name="keywords" type="text" id="exampleInputName2" class="form-control"  {if isset($keywords)}value="{$keywords}"{/if} placeholder="请输入用户账号或姓名" />
+            </div>
+            <div class="form-group">
+                <label >日期:</label>
+                <input type="date"  name="start_time"  class="form-control" {if isset($start_time)}value="{$start_time}"{/if}/>--
+                <input type="date" name="end_time" class="form-control" {if isset($end_time)}value="{$end_time}"{/if}>
+            </div>
+            <button type="submit" class="btn btn-success">搜索</button>
+            <a href="{:url('gk/proxy/capitalDetail')}"  class="btn btn-default">刷新</a>
+        </form>
+    </div>
+    <div class="table-responsive">
+        <table class="table" style=" margin-bottom: 20px;">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>类型</th>
+                    <th>用户名</th>
+                    <th>收入金额</th>
+                    <th>支付金额</th>
+                    <th>剩余金额</th>
+                    <th>处理时间</th>
+                    <th>说明</th>
+                </tr>
+            </thead>
+            <tbody>
+            {if !$list->isEmpty()}
+            {volist name="list" id='vo' key='k'}
+            <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.typename|raw}</td>
+                <td>{$vo.username}</td>
+                <td>{$vo.in_come}<b style="color:#1E9D37;padding-left: 20px;">↑</b></td>
+                <td>{$vo.expend} <b style="color: red;padding-left: 20px;">↓</b></td>
+                <td>{:number_format($vo.user_money, 2, '.', ',')}</td>
+                <td>{$vo.create_time|date='Y-m-d H:i:s'}</td>
+                <td>{$vo.explain}</td>
+            </tr>
+            {/volist}
+            {/if}
+            </tbody>
+        </table>
+    </div>
+    <div class="pagin">
+        <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+        {if !$list->isEmpty()} {$list|raw}{/if}
+    </div>
+
+    </body>
+</html>

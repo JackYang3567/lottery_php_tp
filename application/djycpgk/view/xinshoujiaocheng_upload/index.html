@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+</head>
+<body>
+<div class="place">
+    <div class="ibox-content" style="margin-left: 30px;">
+        <div class="place">
+            <span>位置：</span>
+            <ul class="placeul">
+                <li><a href="{:url(request()->module().'/XinshoujiaochengUpload/index')}">新手教程图片   </a></li>
+
+            </ul>
+        </div>
+    </div>
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li class="addArticle" onclick="addUpload()"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+            </ul>
+        </div>
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th><input name="checkall" type="checkbox" value=""  /></th>
+                <th>分类</th>
+                <th>图片</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $info as $k=>$i}
+            <tr>
+                <td>
+
+                </td>
+                <td>
+                    {switch name='$k'}
+                    {case value='zhuce'}注册新手教程{/case}
+                    {case value='chongzhi'}充值新手教程{/case}
+                    {case value='liaotian'}聊天新手教程{/case}
+                    {/switch}
+                </td>
+                <td>
+                    {foreach $i as $img}
+                    <img src="{$img}" style="width: 100px;" />
+                    {/foreach}
+                </td>
+                <td></td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+        <div class="pagin">
+
+
+        </div>
+    </div>
+</div>
+<script type="">
+    function addUpload()
+    {
+        layer.open({
+            type:2,
+            title:'图片上传',
+            shade:0.5,
+            area:['60%','70%'],
+            content:"{:url(request()->module().'/XinshoujiaochengUpload/addPage')}"
+        });
+    }
+</script>
+</body>
+</html>

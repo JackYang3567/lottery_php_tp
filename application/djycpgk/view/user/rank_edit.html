@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    <style type="text/css">
+    .noshow{
+    display: none;
+    }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+    $(".select1").uedSelect({
+    width : 345
+    });
+    })
+    </script>
+    <script type="text/javascript">
+    
+    </script>
+    
+    <script type="text/javascript">
+    </script>
+  </head>
+  <body>
+     <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('djycpgk/user/ranklist')}">等级设置</a></li>
+                <li><a href="#">修改等级</a></li>
+                </ul>
+                </div>
+            </div>
+    <div class="formbody">
+      
+      
+      <div id="usual1" class="usual">
+        
+        
+        <div id="tab1" class="tabson">
+          
+          
+          
+          <ul class="forminfo">
+            <form action="{:url('djycpgk/user/rank_edit')}" method="post">
+              
+              <input type="hidden" name="rank" value="{$rankinfo.rank}">
+              <li><label>等级名称<b>*</b></label><input name="name" type="text" class="dfinput" value="{$rankinfo.name}"   />
+            </li>
+            <li><label>等级图标<b>*</b></label><img   src="{$rankinfo.logo}" style="width: 90px;height: 90px;"  {if $rankinfo.logo == ''} class="noshow" {/if}><input type="file"  class="form-control "  name="fileupload" data-id="1"><input name="logo" type="text" class="dfinput" value="{$rankinfo.logo}"   style="display: none;" />
+          </li>
+          <li><label>存款条件<b>*</b></label><input name="recharge" type="text" class="dfinput" value="{$rankinfo.condition.recharge}"    />(存款金额达到多少,为该等级玩家)
+        </li>
+        <li><label>流水条件<b>*</b></label><input name="account" type="text" class="dfinput" value="{$rankinfo.condition.account}"   />
+      (流水达到多少,为该等级玩家)</li>
+     <!--  <li><label>最小下注金额<b>*</b></label><input name="betting_min" type="number" class="dfinput" value="{$rankinfo.right.betting_min}"   />(单注最小下注金额)
+    </li>
+    <li><label>最大下注金额<b>*</b></label><input name="betting_max" type="number" class="dfinput" value="{$rankinfo.right.betting_max}"   />(单注最大下注金额) -->
+  </li>
+  
+  <li><label>&nbsp;</label><input name="" type="submit" class="btn" value="保存"/></li>
+</form>
+</ul>
+
+</div>
+
+
+
+</div>
+
+<script type="text/javascript">
+$("#usual1 ul").idTabs();
+</script>
+
+<script type="text/javascript">
+$('.tablelist tbody tr:odd').addClass('odd');
+</script>
+
+
+
+
+
+</div>
+<script type="text/javascript">
+
+$(document).on('change',"input[name='fileupload']", function(){
+// $("input[name='fileupload']").change(function(){
+f=this.files[0];
+var reader = new FileReader();
+reader.readAsDataURL(f);
+reader.onload = function(e){
+// $('#index_ppt').attr('src',e.target.result);
+img  = e.target.result;
+}
+var fd = new FormData();
+var img = $(this).prev();
+var imgpath = $(this).next()  ;
+
+fd.append("file", f);
+$.ajax({
+url: "{:url('djycpgk/system/imgupload')}" ,
+type: 'POST',
+data: fd,
+async: false,
+cache: false,
+contentType: false,
+processData: false,
+success: function (data) {
+if(data.error == 0){
+layer.msg('上传成功');
+img.removeClass('noshow');
+img.attr('src',data.msg);
+imgpath.val(data.msg);
+}else{
+layer.msg(data.msg);
+}
+},
+error: function (data) {
+
+}
+});
+})
+</script>
+</body>
+</html>

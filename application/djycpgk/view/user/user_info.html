@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/style.css" /}
+        {css href="/static/admin/css/select.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/jquery.idTabs.min.js" /}
+        {js href="/static/admin/js/select-ui.min.js" /}
+        <script type="text/javascript">
+        $(document).ready(function(e) {
+        $(".select1").uedSelect({
+        width : 345
+        });
+
+        $("input[name='default']").change(function(){
+        var bank_id = $(this).next().val();
+        var user_id = $(this).next().next().val();
+
+        layer.confirm('确定修改该银行信息为默认值吗?', {
+        btn: ['是','否'] //按钮
+        }, function(){
+        $.ajax({
+        url:"{:url('default_bank')}",//这里指向的就不再是页面了，而是一个方法。
+        data:{bank_id:bank_id,user_id:user_id},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        if(data.error == 0){
+        layer.msg('修改成功',{icon:1,time:1000},function(){
+        self.location.reload(); // 父页面刷新
+        self.layer.close();
+        });
+        }else{
+        layer.msg('删除失败', {icon: 5,time:2000});
+        }
+        }
+        })
+        }, function(){
+        self.location.reload(); // 父页面刷新
+        self.layer.close();
+        });
+        })
+        });
+        </script>
+
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+         <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                    {if $set_data.type== 2}
+                    <li><a href="{:url('index')}?type={$set_data.type}&page={$set_data.page}">试玩会员列表</a></li>
+                    <li><a href="#">会员列表详情：{$baseinfo.username}</a></li>
+                    {else/}
+                    <li><a href="{:url('index')}?type={$set_data.type}&page={$set_data.page}">会员列表</a></li>
+                    <li><a href="#">会员列表详情：{$baseinfo.username}</a></li>
+                    {/if}
+
+                </ul>
+                </div>
+        <div class="rightinfo">
+            <!--         <div class="tools">
+
+                <ul class="toolbar">
+                    <li class="click"><span><img src="__PUBLIC__/admin/images/t04.png" /></span>添加</li>
+                </ul>
+
+            </div> -->
+            <div class="formbody" style="padding: 0 0;">
+
+
+                <div id="usual1" class="usual">
+                    <div class="itab">
+                        <ul>
+                            <li><a href="#tab1" {if $tab == '' || $tab == 1}class="selected"{/if}
+                            >基本信息</a></li>
+                            <li><a href="#tab2"  {if $tab==2}class="selected"{/if}>详细信息</a></li>
+                            <li><a href="#tab3"  {if $tab ==3}class="selected"{/if}>银行卡信息</a></li>
+                        </ul>
+                    </div>
+
+                    <div id="tab1" class="tabson">
+
+
+
+                        <ul class="forminfo">
+                            <form action="{:url('info_xg')}" method="post">
+                                <input type="hidden" name="user_id" value="{$baseinfo.id}">
+                                <input type="hidden" name="sw_type" value="{$set_data.type}">
+                                <input type="hidden" name="flag" value="base">
+                                <li><label>账号<b>*</b></label><input name="username" type="text" class="dfinput" value="{$baseinfo.username}" required="required"  readonly="readonly" /></li>
+                                <li><label>密码<b>*</b></label><input name="password" type="password" class="dfinput" value=""  /></li>
+
+                                <li><label>状态<b>*</b></label>
+                                <div style=" line-height: 34px;font-size: 11pt;">
+
+                                    <input type='radio' name="status" value="1"
+                                    <?php if($baseinfo['status'] == 1) echo "checked='checked'";?>
+                                    > 冻结&nbsp;&nbsp;
+                                    <input type='radio' name="status" value="0"    <?php if($baseinfo['status'] == 0) echo "checked='checked'";?> > 正常&nbsp;&nbsp;
+                                </div>
+                            </li>
+                            <li><label>类型<b>*</b></label>    <div class="vocation">
+
+                            <select class="select1" name="type">
+
+                                {if $set_data.type== 2}
+                                <option value="0" {if $baseinfo['type'] == 0}selected='selected' {/if}>普通会员</option>
+                                <option value="2" {if $baseinfo['type'] == 2}selected='selected' {/if}>内部试玩会员</option>
+                                {else/}
+                                <option value="0" {if $baseinfo['type'] == 0}selected='selected' {/if}>普通会员</option>
+                                {/if}
+                            </select>
+                        </div></li>
+                        <li><label>注册时间<b>*</b></label><input name="create_time" type="text" class="dfinput" value="{$baseinfo.create_time}"  readonly="readonly"  /></li>
+                        <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="修改"/></li>
+                    </form>
+                </ul>
+
+            </div>
+
+            <div id="tab2" class="tabson">
+                <ul class="forminfo">
+                    <form action="{:url('info_xg')}" method="post">
+                        <input type="hidden" name="user_id" value="{$extra_info.user_id}">
+                        <input type="hidden" name="flag" value="info">
+                        <li><label>提现密码<b>*</b></label><input name="draw_password" type="text" class="dfinput" value="" /></li>
+                        <li><label>电话号码<b>*</b></label><input name="phone_number" type="text" class="dfinput" value="{$extra_info.phone_number}" readonly="readonly"  /></li>
+                        <li><label>邮箱<b>*</b></label><input name="email" type="email" class="dfinput" value="{$extra_info.email}" /></li>
+                        <li><label>QQ<b>*</b></label><input name="qq" type="text" class="dfinput" value="{$extra_info.qq}"/></li>
+                        <li><label>身份证号<b>*</b></label><input name="id_number" type="text" class="dfinput" value="{$extra_info.id_number}"/></li>
+                        <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="修改"/></li>
+                    </form>
+                </ul>
+            </div>
+            <div id="tab3" class="tabson">
+                <ul class="forminfo">
+                    <input type="hidden" name="flag" value="backinfo"/>
+                    <li>
+                        {if !$banklist->isEmpty()}
+                        {volist name="banklist" id="vo"}
+                        <ul>
+                            <form action="{:url('info_xg')}" method="post">
+                                <input type="hidden" name="user_id" value="{$vo.user_id}" />
+                                <input type="hidden" name="flag" value="bank">
+                                <li><label>开户姓名<b>*</b></label><input name="username" type="text" class="dfinput" value="{$vo.username}" /></li>
+                                <li><label>银行名称<b>*</b></label><input name="name" type="text" class="dfinput" value="{$vo.name}" /></li>
+                                <li><label>银行卡号<b>*</b></label><input name="number" type="text" class="dfinput" value="{$vo.number}" /></li>
+
+                                <li style="margin-top: 10px;"><label>&nbsp;</label><input name=""  type="submit" class="btn" value="修改"/></li>
+                            </form>
+                        </ul>
+                        {/volist}
+                        {else}
+                        未绑定银行信息
+                        {/if}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+  $("#usual1 ul").idTabs();
+  $('.tablelist tbody tr:odd').addClass('odd');
+</script>
+
+</div>
+</body>
+</html>

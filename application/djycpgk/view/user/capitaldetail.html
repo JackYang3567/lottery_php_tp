@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style type="text/css">
+        .sort{
+        cursor: pointer;
+        }
+        </style>
+        
+        <script type="text/javascript">
+        $(document).ready(function(){
+        
+        
+        
+        
+        });
+        </script>
+    </head>
+    <body>
+        
+          <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/user/capitaldetail')}">资金明细</a></li>
+                </ul>
+                </div>
+            </div>
+        <div class="rightinfo">
+            
+            <div class="tools">
+                
+                <ul class="toolbar">
+                    
+                </ul>
+                
+                <ul class="seachform" style="">
+                    <form action="{:url('djycpgk/user/capitalDetail')}" method="GET">
+                        <li>类型：
+                            <select class="scinput" name="type">
+                                <option value="">全部</option>
+                                <option value="0" {if isset($type) && $type == 0}selected="selected"{/if}>下注 </option>
+                                <option value="1" {if isset($type) && $type == 1}selected="selected"{/if}>提现</option>
+                                <option value="2" {if isset($type) && $type == 2}selected="selected"{/if}>线下充值 </option>
+                                <option value="3" {if isset($type) && $type == 3}selected="selected"{/if}>中奖</option>
+                                <option value="4" {if isset($type) && $type == 4}selected="selected"{/if}>扣款 </option>
+                                <option value="5" {if isset($type) && $type == 5}selected="selected"{/if}>赠送 </option>
+                                <option value="6" {if isset($type) && $type == 6}selected="selected"{/if}>退款 </option>
+                                <option value="7" {if isset($type) && $type == 7}selected="selected"{/if}>在线充值 </option>
+                                <option value="8" {if isset($type) && $type == 8}selected="selected"{/if}>返佣 </option>
+                                <option value="9" {if isset($type) && $type == 9}selected="selected"{/if}>签到 </option>
+                                <option value="10" {if isset($type) && $type == 10}selected="selected"{/if}>抽奖 </option>
+                                <option value="11" {if isset($type) && $type == 11}selected="selected"{/if}>返水 </option>
+                                <option value="12" {if isset($type) && $type == 12}selected="selected"{/if}>冻结资金 </option>
+                                <option value="13" {if isset($type) && $type == 13}selected="selected"{/if}>冻结返还 </option>
+                                <option value="14" {if isset($type) && $type == 14}selected="selected"{/if}>保底投注 </option>
+                                <option value="15" {if isset($type) && $type == 15}selected="selected"{/if}>系统充值</option>
+                                <option value="16" {if isset($type) && $type == 16}selected="selected"{/if}>红包</option>
+                            </select>
+                        </li>
+                        <li>用户名：<input name="keywords" type="text" class="scinput"  {if isset($keywords)}value="{$keywords}"{/if} placeholder="请输入用户账号或姓名" /></li>
+                        
+                        <li>日期：<input type="date"  name="start_time"  class="scinput" {if isset($start_time)}value="{$start_time}"{/if}/>&nbsp;-&nbsp;<input type="date" name="end_time" class="scinput" {if isset($end_time)}value="{$end_time}"{/if}></li>
+                        <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+						<li> <label>&nbsp;</label> <a class="btn btn-default btn-sm" href="{:url('capitaldetail')}" role="button">刷新</a></li>
+                    </form>
+                </ul>
+            </div>
+            
+            
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>类型</th>
+                        <th>用户名</th>
+                        <th>收入金额</th>
+                        <th>支付金额</th>
+                        
+                        <th>剩余金额</th>
+                        <th>处理时间</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {if !$list->isEmpty()}
+                    {volist name="list" id='vo' key='k'}
+                    <tr>
+                        <td>{$vo.id}</td>
+                        <td>{$vo.typename|raw}</td>
+                        <td>{$vo.username}</td>
+                        <td>{$vo.in_come}<b style="color:#1E9D37;padding-left: 20px;">↑</b></td>
+                        <td>{$vo.expend} <b style="color: red;padding-left: 20px;">↓</b></td>
+                        <td>{:number_format($vo.user_money, 2, '.', ',')}</td>
+                        <td>{$vo.create_time|date='Y-m-d H:i:s'}</td>
+                        <td>{$vo.explain}</td>
+                    </tr>
+                    {/volist}
+                    {/if}
+                </tbody>
+            </table>
+            
+            
+            <div class="pagin">
+                <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+                {if !$list->isEmpty()} {$list|raw}{/if}
+            </div>
+            
+            {if isset($type) && $type == 0}<h3>下注统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 1}<h3>提现统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3> {/if}
+            {if isset($type) && $type == 2}<h3>线下充值统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3> {/if}
+            {if isset($type) && $type == 3}<h3>中奖统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>）{/if}
+            {if isset($type) && $type == 4}<h3>扣款统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 5}<h3>赠送统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 6}<h3>退款统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 7}<h3>在线充值统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 8}<h3>返佣统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 9}<h3>签到统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 10}<h3>抽奖统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 11}<h3>返水统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 12}<h3>冻结资金统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 13}<h3>冻结返还统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 14}<h3>保底投注统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+            {if isset($type) && $type == 15}<h3>系统充值统计:{$ze}<b style="color: red;">（默认统计今天）</b></h3>{/if}
+
+                
+            
+            
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+        
+        </script>
+    </body>
+</html>

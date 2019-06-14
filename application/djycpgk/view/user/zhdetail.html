@@ -1,0 +1,37 @@
+{css href="/static/admin/css/bootstrap.min.css" /}
+{css href="/static/admin/css/style.css" /}
+{css href="/static/admin/css/animate.css" /}
+{css href="/static/admin/css/font-awesome.min.css" /}
+{css href="/static/admin/css/boot/style.css" /}
+<div class="row" style="width: 84%;">
+    
+    <div class="ibox-content">
+        <table class="table table-bordered">
+            <p>追号总期数:{$zh_count}</p>
+            <thead>
+                <tr>
+                    
+                    <th>追号期数</th>
+                    <th>奖金</th>
+                    <th>状态</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {volist name="zhdata" id="vo"}
+                <tr>
+                    
+                    <td>{$vo.expect}</td>
+                    <td>{$vo.win}</td>
+                    <td>{if $vo.state==1}已开奖{else/}未开奖{/if}</td>
+                    
+                </tr>
+                {/volist}
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+<div class="pagin" style="width: 45%;">
+    {if !$zhdata->isEmpty()} {$zhdata|raw}{/if}
+</div>

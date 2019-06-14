@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-title" content="百家乐">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="x5-page-mode" content="app">
+    <meta name="browsermode" content="application">
+    <meta name="layoutmode" content="standard">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>百家乐</title>
+    <link rel="stylesheet" href="/static/css/bjlAll.css">
+    <script src="/static/js/bjlGame.js?v=1.0.3"></script>
+    <!-- <link rel="stylesheet" href="static_game/css/bjl.css">
+    <script src="static_game/js/jquery-1.8.3.min.js"></script>
+    <script src="static_game/js/velocity.min.js"></script>
+    <script src="static_game/js/howler.min.js"></script>
+    <script src="static_game/js/kdCookie.js"></script>
+    <script src="static_game/js/bjl-game.js"></script> -->
+</head>
+<body>
+<div class="page">
+    <div class="bjl-g ab0">
+        <div class="head">
+            <div class="width">
+                <div class="height">
+                    <div class="head-left black-bg">
+                        <div class="flex middle">
+                            <span>
+                                <b class="desk"></b>
+                                <i class="people"></i>
+                            </span>
+
+                            <a class="music-switch opened" id="music-switch" href="javascript:;"><i class="icon"></i></a>
+                        </div>
+                        <div class="flex middle">
+                            <span id="issueNo"></span>
+                        </div>
+                    </div>
+                    <div class="head-middle">
+                        <div class="countdown">
+                            <div id="time" class="time flex center middle"></div>
+                        </div>
+                    </div>
+                    <div class="head-right">
+                        <div class="info flex middle">
+                            <span id="userName"></span>
+                        </div>
+                        <div class="gold"></div>
+                        <div class="balance black-bg flex middle">
+                            <span id="balance"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="body ab0">
+            <div class="width">
+                <div class="height">
+                    <div class="deal left">
+                        <div class="role left flex center middle">闲</div>
+                    </div>
+                    <div class="deal right">
+                        <div class="role right flex center middle">庄</div>
+                    </div>
+                    <div class="bet">
+                        <div class="flex stretch">
+                            <div id="Xian" data-text="闲"></div>
+                            <div id="Zhuang" data-text="庄"></div>
+                        </div>
+                        <div class="flex stretch">
+                            <div id="XianDui" data-text="闲对"></div>
+                            <div id="WanMeiDui" data-text="完美对子"></div>
+                            <div id="RenYiDui" data-text="任意对子"></div>
+                            <div id="ZhuangDui" data-text="庄对"></div>
+                        </div>
+                        <div class="flex stretch">
+                            <div id="Xiao" data-text="小"></div>
+                            <div id="He" data-text="和"></div>
+                            <div id="Da" data-text="大"></div>
+                        </div>
+                    </div>
+                    <div class="btn clearfix">
+                        <div><div class="ab0 flex center middle">返回大厅</div></div>
+                        <div><div class="ab0 flex center middle betnow">确认下注</div></div>
+                        <div><div class="ab0 flex center middle">重新下注</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="cards-mask ab0"></div>
+
+            <div class="road-new clearfix opened" id="road-new">
+                <a href="javascript:;" class="road-new-close" id="road-new-close-btn">关闭</a>
+                <div class="road-new-inner clearfix">
+                    <div class="road-new-counter clearfix" id="road-new-counter"></div>
+                    <div class="content road-new-content-lz clearfix" id="road-new-table-1"></div>
+                    <div class="content road-new-content-zx clearfix" id="road-new-table-2"></div>
+                    <div class="content road-new-content-wl-title clearfix" id="road-new-wl-title"></div>
+                    <div class="content road-new-content-wl0 clearfix" id="road-new-table-3"></div>
+                    <div class="content road-new-content-wl1 clearfix" id="road-new-table-4"></div>
+                    <div class="content road-new-content-wl2 clearfix" id="road-new-table-5"></div>
+                </div>
+            </div>
+        </div>
+        <div class="foot">
+            <div class="width">
+                <div class="height">
+                    <div id="chipWrapper" class="foot-left clearfix"></div>
+                    <div class="foot-right black-bg">
+                        <div class="flex middle">
+                            <span>闲下注：<i id="totalPlayer">0</i></span>
+                        </div>
+                        <div class="flex middle">
+                            <span>庄下注：<i id="totalDealer">0</i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="roadBtn opened" id="road-new-open-btn">路子</div>
+        </div>
+    </div>
+    <div class="loading ab0 stage">
+        <b class="ab0">加载中</b>
+        <div class="rotation ab0 is3d">
+            <div><i></i><span>$</span></div>
+            <div><i></i><span>$</span></div>
+        </div>
+    </div>
+    <!--<input id="userID" type="hidden" value="@ViewBag.UserID">-->
+</div>
+</body>
+</html>

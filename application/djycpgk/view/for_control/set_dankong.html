@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    <style type="text/css">
+
+        .tongyi {
+            width: 100px;
+            margin-top: 10px;
+        }
+        .my-btn{
+            background: #00bb00;
+            width: 120px;
+            color: #fff;
+            padding: 5px 10px;
+            text-align: center;
+            border-radius: 5%;
+            font-size: 14px;
+        }
+        .my-btn::before{
+            content: '\271A';
+            margin-right: 2px;
+            font-size: 16px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".click").click(function(){
+                $(".tip").fadeIn(200);
+            });
+            $(".odds_setting").click(function(){
+                var type_key = $(this).attr('data-type');
+                var type_id = $(this).attr('data-id');
+                var type_name = $(this).attr('data-name');
+                var type_gf = $(this).attr('data-gf');
+
+
+                layer.open({
+                    type: 2,
+                    skin: 'layui-layer-rim', //加上边框
+                    title:type_name+' (赔率自定义)',
+                    area: ['950px', '580px'], //宽高
+                    content: "{:url('djycpgk/lottery/odds_setting')}?type_id="+type_id+"&type_key="+type_key+"&type_gf="+type_gf,
+                });
+            })
+            $('.tb_peilv').click(function(){
+                var type =  $("input[name='type_id']").val();
+                $.ajax({
+                    url:"{:url('djycpgk/lottery/tb_peilv')}",//这里指向的就不再是页面了，而是一个方法。
+                    data:{type:type},
+                    type:"POST",
+                    dataType:"JSON",
+                    success: function(data){
+                        if(data.error == 0){
+                            layer.msg(data.msg,{icon:1,time:1000},function(){
+                                self.location.reload(); // 父页面刷新
+                                self.layer.close();
+                            });
+                        }else{
+                            layer.msg(data.msg, {icon: 5,time:2000});
+                        }
+                    }
+                })
+            })
+        });
+    </script>
+    <style>
+        .switch-input:checked + .switch-label {
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.65);
+            text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+            -webkit-transition: 0.15s ease-out;
+            -moz-transition: 0.15s ease-out;
+            -o-transition: 0.15s ease-out;
+            transition: 0.15s ease-out;
+        }
+        .switch-input:checked + .switch-label-on ~ .switch-selection {
+            left: 60px;
+            /* Note: left: 50% doesn't transition in WebKit */
+        }
+        .switch-blue .switch-selection {
+            background: #3aa2d0;
+            background-image: -webkit-linear-gradient(top, #4fc9ee, #3aa2d0);
+            background-image: -moz-linear-gradient(top, #4fc9ee, #3aa2d0);
+            background-image: -o-linear-gradient(top, #4fc9ee, #3aa2d0);
+            background-image: linear-gradient(to bottom, #4fc9ee, #3aa2d0);
+        }
+        .switch-yellow .switch-selection {
+            background: #c4bb61;
+            background-image: -webkit-linear-gradient(top, #e0dd94, #c4bb61);
+            background-image: -moz-linear-gradient(top, #e0dd94, #c4bb61);
+            background-image: -o-linear-gradient(top, #e0dd94, #c4bb61);
+            background-image: linear-gradient(to bottom, #e0dd94, #c4bb61);
+        }
+        .cp_content ul li{
+            width: 23%;
+            float: left;
+            text-align: center;
+            border-top: solid 1px #a7b5bc;
+            border-left: solid 1px #a7b5bc;
+            border-right: solid 1px #ced9df;
+            border-bottom: solid 1px #ced9df;
+            margin-left: 5px;
+            margin-top: 5px;
+        }
+        .cp_content .type_name  input{
+            width: 70px;
+            border-bottom: solid 1px #ced9df;
+            font-size: 15px;
+            font-weight: bolder;
+            letter-spacing: 2px;
+            /* padding-top: 4px; */
+            height: 16px;
+            text-align: center;
+        }
+        .cp_content .detail_config a{
+            color: #3EAFE0;
+        }
+        .batch label{
+            display: inline-block;
+            width: 50px;
+            height: 30px;
+            text-align: right;
+        }
+        .status-1,.status-0{
+            display: inline-block !important;
+            color: #fff;
+            /*padding: 0 10px !important;*/
+            width: 50px !important;
+            height: 22px;
+            text-indent:0;
+            /*text-align: center;*/
+            line-height: 21px !important;
+            float: none !important;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .status-1{
+            background: #0aac34;
+        }
+        .status-0{
+            background: #0a8cd2;
+        }
+        .tablelist thead tr th,.tablelist tbody tr td{
+            text-align: center;
+        }
+        .tablelist tbody tr td{
+            border-bottom: 1px solid #ccc;
+        }
+        .img-css{
+            width: 14px;
+            height: 14px;
+        }
+        .input-for-money{
+            width: 100px;
+            height: 22px;
+            border: 1px solid #0a8cd2;
+            border-radius: 15px !important;
+            text-align: center;
+        }
+        .input-for-money:focus{
+            outline:none;
+        }
+    </style>
+</head>
+<body>
+<div class="place">
+    <div class="ibox-content" style="margin-left: 30px;">
+        <div class="place">
+            <span>位置：</span>
+            <ul class="placeul">
+                <li><a href="{:url('/djycpgk/lottery/statussetting')}?category={$cate}">彩种设置</a></li>
+                <li><a href="#">{$name}：单控设置</a></li>
+            </ul>
+        </div>
+
+        <div class="rightinfo">
+
+            <div class="tools">
+
+                <ul class="toolbar">
+
+                </ul>
+
+                <ul class="seachform" style="">
+                    {if condition="$type"}
+                    <li style="float: left;margin-right: 25px;">
+                        <button class="my-btn" onclick="openAddPage()">添加单控</button>
+                    </li>
+                    {/if}
+                    <li>彩种：
+                        <select class="scinput typechoose" name="type">
+                            <option value="">请选择</option>
+                            {volist name="lottery_array" id="vo"}
+                            <option value="{$vo.type}" {if isset($type) && $type==$vo.type}selected="selected"{/if}>{$vo.name} </option>
+                            {/volist}
+                        </select>
+                    </li>
+                        <li>搜索会员：<input name="username" type="text" class="scinput"  value="" /></li>
+                </ul>
+            </div>
+
+
+            <table class="tablelist">
+                <thead>
+                <tr>
+                    <th width="60">彩种名称</th>
+                    <th width="60">会员名称</th>
+                    <th width="100">单控阈值</th>
+                    <th width="100">添加时间</th>
+                    <th width="60">状态</th>
+                    <th width="100">操作</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {if !$dankong->isEmpty()}
+                {volist name="dankong" id='vo' key='k'}
+                <tr>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.username}</td>
+                    <td>{$vo.money}</td>
+                    <td>{:date('Y-m-d H:i:s',$vo.create_time)}</td>
+                    <td>
+                        {switch name="$vo.status"}
+                        {case value="0"}<span class="status-0" onclick="changeStatus('{$vo.id}','{$vo.name}','{$vo.username}',this,1)">正常</span>{/case}
+                        {case value="1"}<span class="status-1" onclick="changeStatus('{$vo.id}','{$vo.name}','{$vo.username}',this,0)">单控</span>{/case}
+                        {/switch}
+                    </td>
+
+                    <td>
+                        <a href="javascript:;" data-status="0" title="修改单控阈值" onclick="changeMoney(this,'{$vo.id}','{$vo.name}','{$vo.username}')"><img src="/static/images/edit.png" alt="" class="img-css" style="margin-right: 5px" /></a>
+                        <a href="javascript:;" title="删除" onclick="delthiscontrol(this,'{$vo.id}','{$vo.name}','{$vo.username}')"><img src="/static/images/delete.png" alt="" class="img-css" /></a>
+                    </td>
+                </tr>
+                {/volist}
+                {/if}
+                </tbody>
+            </table>
+
+
+            <div class="pagin">
+                <div class="message">共<i class="blue"> {if !$dankong->isEmpty()}{$dankong->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$dankong->isEmpty()}{$dankong->currentPage()}{/if}&nbsp;</i>页</div>
+                {if !$dankong->isEmpty()} {$dankong|raw}{/if}
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(".typechoose").change(function () {
+    var type_id = $(this).val();
+    var type_cate = $(".typechoose").find("option:selected").html();
+    window.location.href="{:url(request()->module().'/forControl/set_dankong')}?type_id=" + type_id+'&type_cate='+type_cate;
+});
+function openAddPage()
+{
+    layer.open({
+        title:'添加单控',
+        shade:0.5,
+        area:['50%','70%'],
+        type:2,
+        content: "{:url(request()->module().'/forControl/addControlPage')}?type_id={$type}&type_cate={$name}"
+    });
+}
+function changeStatus(id,name,username,obj,status)
+{
+    if(status)
+    {
+        var conf = "请确定要在彩票<abcd style='color: red'>"+name+"</abcd>中把用户<abcd style='color: red'>"+username+"</abcd>的状态更改为<abcd style='color: #0aac34'>单控</abcd>吗？";
+        var html = "<span class=\"status-1\" onclick=\"changeStatus('"+id+"','"+name+"','"+username+"',this,0)\">单控</span>";
+    }
+    else
+    {
+        var conf = "您确定要在彩票<abcd style='color: red'>"+name+"</abcd>中把用户<abcd style='color: red'>"+username+"</abcd>的状态更改为<abcd style='color: #0a8cd2'>正常</abcd>吗？";
+        var html = "<span class=\"status-0\" onclick=\"changeStatus('"+id+"','"+name+"','"+username+"',this,1)\">正常</span>";
+    }
+    layer.confirm(conf,{
+        btn:['更改','取消'],
+        icon:3,
+        shade:0.3
+    },function () {
+        $.post("{:url(request()->module().'/forControl/changeStatus')}",{id:id,status:status},function (data) {
+            if(data == 1)
+            {
+                layer.msg('修改成功！',{
+                    icon:1,
+                    time:1500
+                });
+                $(obj).parent().html(html);
+            }
+            else
+            {
+                layer.msg('系统繁忙，请稍后重试！',{
+                    icon:2,
+                    time:2000
+                });
+            }
+        });
+    });
+}
+
+function changeMoney(obj,id,name,username)
+{
+    var status = $(obj).attr('data-status');
+    var money_o = $(obj).parent().prev().prev().prev();
+    var money = money_o.html();
+    if(status == 0)
+    {
+        money_o.html("<input type='text' value='"+money+"' class='input-for-money' onchange=\"editMoney(this,"+id+",'"+name+"','"+username+"')\">");
+        $(obj).attr('data-status','1');
+    }
+    else
+    {
+        money_o.html($('.input-for-money').val());
+        $(obj).attr('data-status','0');
+    }
+}
+function editMoney(obj,id,name,username)
+{
+    var money = $(obj).val();
+
+    if(!isNaN(money) && money >= 0)
+    {
+        var conf = "请确定要在彩票<abcd style='color: red'>"+name+"</abcd>中把用户<abcd style='color: red'>"+username+"</abcd>的单控阈值更改为<abcd style='color: #0aac34'>"+money+"</abcd>吗？";
+        layer.confirm(conf,{
+            btn:['修改','取消'],
+            icon:3,
+            shade:0.3
+        },function () {
+            $.post("{:url(request()->module().'/forControl/editMoney')}",{id:id,money:money},function (data){
+                if(data == 1)
+                {
+                    layer.msg('单控阈值修改成功！',{
+                        icon:1,
+                        time:1500
+                    })
+                    $(obj).parent().html(money);
+                }
+                else
+                {
+                    layer.msg(data,{
+                        icon:2,
+                        time:2000
+                    })
+                }
+            })
+        })
+    }
+    else
+    {
+        layer.msg('单控阈值是一个大于等于0的数字！',{
+            icon:2,
+            time:2000
+        })
+    }
+}
+
+function delthiscontrol(obj,id,name,username)
+{
+    var conf = "请确定要删除用户<abcd style='color: red'>"+username+"</abcd>在彩票<abcd style='color: red'>"+name+"</abcd>中得的单控行为吗？";
+    layer.confirm(conf,{
+        btn:['删除','取消'],
+        icon:3,
+        shade:0.3
+    },function () {
+        $.post("{:url(request()->module().'/forControl/delthiscontrol')}",{id:id},function (data){
+            if(data == 1)
+            {
+                layer.msg('删除成功！',{
+                    icon:1,
+                    time:1500
+                })
+                $(obj).parent().parent().remove();
+            }
+            else
+            {
+                layer.msg(data,{
+                    icon:2,
+                    time:2000
+                })
+            }
+        })
+    })
+}
+</script>
+</body>
+</html>

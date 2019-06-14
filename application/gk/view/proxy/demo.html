@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/vueJs/vue.min.js" /}
+        <style type="text/css">
+            .red{
+                color: red;
+            }
+            .green{
+                color: green;
+            }
+        </style>
+    </head>
+<body>
+<ul class="breadcrumb">
+    <li><span href="#">位置</span></li>
+    <li><a href="#">试玩列表</a></li>
+</ul>
+<div id="app">
+    <div class="container " >
+        <form class="form-inline">
+
+            <a href="user_add" type="button" class="btn btn-success ">添加试玩</a>
+
+            <div class="form-group">
+                <input type="text" v-model="name" class="form-control" id="exampleInputName2" placeholder="会员名称">
+            </div>
+            <button type="button" class="btn btn-success" @click="Searchx()" >搜索</button>
+            <button type="button" class="btn btn-success" @click="reLoad()" >刷新</button>
+        </form>
+    </div>
+    <div class="table-responsive">
+        <table class="table" style=" margin-bottom: 20px;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>用户</th>
+                    <th>所属上级</th>
+                    <th>积分</th>
+                    <th>余额</th>
+                    <th>累积中奖</th>
+                    <th>状态</th>
+                    <th>类型</th>
+                    <th>注册时间</th>
+                    <th>最近活动时间</th>
+                    <th>最近登录IP</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody >
+                <template  v-if="data_list.length"  v-for="(vo,key) in data_list">
+                    <tr>
+                        <td>{{vo.id}}</td>
+                        <td>
+                            {{vo.username}}
+                            <b style="color: #00bb00" v-if="vo.IsOnline==1">(在线)</b><b  v-else>(离线)</b>
+                        </td>
+                        <td>{{vo.Parent}}</td>
+                        <td>{{vo.point}}</td>
+                        <td>{{vo.money}}</td>
+                        <td>{{vo.AccumulatedWinning}}</td>
+                        <td>
+                            <span v-if="vo.status==0" class="green">正常</span>
+                            <span v-else class="red">冻结</span>
+                        </td>
+                        <td>
+                            <span v-if="vo.type==2" class="green">试玩用户</span>
+                            <span v-else class="red">未知用户</span>
+                        </td>
+                        <td>{{vo.create_time}}</td>
+                        <td>{{vo.active_time | formatDate}}</td>
+                        <td>{{vo.active_ip}}</td>
+                        <td>
+                            <a  class="tablelink" @click='xiangqing(vo.id)'>查看详情</a>
+                            <a href="javascript:;" class="xufei" :data-id="vo.id" >续费</a>
+                            <a href="javascript:;" v-if="vo.status==0"  @click="frozen(vo.status,vo.id,vo.username,key)"  >冻结</a>
+                            <a href="javascript:;" v-else class="red" @click="frozen(vo.status,vo.id,vo.username,key)" >解冻</a>
+                        </td>
+                    </tr>
+                </template>
+                <template  v-if="data_list==''">
+                    <tr>
+                        <td colspan="11" style="text-align: center;">没有找到匹配的记录</td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+    <div class="pagin"  v-if="data_list.length" >
+        <div class="message" style="float:left">共<i class="blue"> {{all_list}}</i>条记录，共&nbsp;<i class="blue"> {{all_page}}</i>&nbsp;页，当前显示第&nbsp;<i class="blue"> {{page}}&nbsp;</i>页</div>
+        <ul v-if="all_page > 1" style="float:right" class="pagination">
+            <li><a v-if="pageList[0] == '...'" @click="pageNext(1)" class="syy">首页</a></li>
+            <li><a @click="pageNext('prve')" class="syy">上一页</a></li>
+            <li v-for="vo in pageList" @click="pageNext(vo)" :class="['syy_list',{'active':vo == page}]"><a >{{vo}}</a></li>
+            <li><a @click="pageNext('next')" class="syy"> 下一页 </a></li>
+            <li><a v-if="pageList[pageList.length-1] == '...'" @click="pageNext(all_page)" class="syy"> 尾页 </a></li>
+        </ul>
+    </div>
+</div>
+<!--续费弹出框-->
+<template id="actionMoney">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="input-group">
+                <span class="input-group-addon"> 金额   :</span>
+                <input id="rebate_rate"  name ="money" type="number" class="form-control" placeholder="0">
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    $(".click").click(function(){
+        window.location.href="{:url('gk/proxy/user_add')}";
+    });
+    // 续费
+    $(document).on('click','.xufei',function() {
+        var user_id = $(this).data('id');
+        var bool = false;
+        layer.open({
+            type: 1,
+            shadeClose: true,
+            title: '续费',
+            area: ['auto', '180px'],
+            content: $('#actionMoney').html(),
+            btn: ['保存','取消'],
+            btn1: function (index,layero) {
+                if(!bool) {
+                    bool = true;//锁住
+                    var money = $(layero).find("input[name='money']").val();
+                    if(money == '' || money < 1){ layer.msg('请输入金额');return; }
+                    $.ajax({
+                        url:"{:url('gk/proxy/renew')}",//这里指向的就不再是页面了，而是一个方法。
+                        data:{money:money,user_id:user_id,category:15},
+                        type:"POST",
+                        dataType:"JSON",
+                        success: function(data){
+                            if(data.error == 0){
+                                alert('操作成功');
+                                layer.close(index);
+                                vm.getData();
+                            }else{
+                                alert('操作失败');
+                            }
+                        }
+                    })
+                }
+            },
+        });
+    });
+    var vm = new Vue({
+        el:'#app',
+        mounted:function(){ //初始化调用
+            this.getData();
+        },
+
+        // 我们的数据对象
+        data:{
+            data_list:[], //请求返回的数据
+            //-----------分页----------
+            page:1, //当前页
+            all_page:1,//总页数
+            all_list:0,//总数据条数
+            //---------搜索条件--------
+            name:'',//用户名称
+            search:0,// 判断是否点击搜索
+        },
+        //自动加载
+        computed:{
+
+            //首页 和尾页
+            pageList:function(){
+                var _this = this;
+                if(_this.all_page <= 10){
+                    return _this.all_page;
+                }else{
+                    let bit = [_this.page],rs = _this.page;
+                    for(let i=1;i<=5;i++ ){
+                        if(parseInt(rs) - parseInt(i) <= 0){
+                            bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                        }else{
+                            bit.unshift( parseInt(bit[0]) - 1 );
+                        }
+                    }
+                    for( let i=1;i<=4;i++ ){
+                        if(parseInt(rs) + parseInt(i) <= _this.all_page){
+                            bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                        }else{
+                            bit.unshift( parseInt(bit[0]) - 1 );
+                        }
+                    }
+                    if(bit[bit.length - 1] != _this.all_page){
+                        bit.push('...');
+                    }
+                    if(bit[0] != 1){
+                        bit.unshift('...');
+                    }
+                    return bit;
+                }
+            }
+        },
+        filters: {
+            formatDate: function (value) {
+                let date = new Date(value);
+                let y = date.getFullYear();
+                let MM = date.getMonth() + 1;
+                MM = MM < 10 ? ('0' + MM) : MM;
+                let d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                let h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                let m = date.getMinutes();
+                m = m < 10 ? ('0' + m) : m;
+                let s = date.getSeconds();
+                s = s < 10 ? ('0' + s) : s;
+                return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+            }
+        },
+        methods:{
+            //查看详情
+            xiangqing:function (id) {
+                window.location.href="{:url('gk/proxy/info_edit')}?user_id="+id;
+            },
+            //冻结  解冻
+            frozen:function (status,id,username,key) {
+                var _this = this;
+                layer.confirm('您确定要 ' + username + ' 这个会员吗', {
+                    title: '冻结',
+                }, function(){
+                    $.post("{:url('gk/Proxy/userfrozen')}",{ id: id,status: status },function(res){
+                        layer.msg(res.msg);
+                        if(res.code == 1){
+                            _this.data_list[key]['status'] = status == 0 ? 1 : 0;
+                        }
+                    });
+                }, function(){
+                });
+            },
+            //搜索
+            Searchx:function () {
+                var _this = this;
+                if(_this.name =='')
+                {
+                    _this.search = 0;
+                }else {
+                    _this.search = 1;
+                }
+                _this.page =  1;
+                _this.getData();
+            },
+            getData:function () {
+                layer.load(2);//开启加载动画
+                var _this = this;
+                var data_list = {
+                    page: _this.page,
+                    name: _this.name,
+                    search: _this.search,
+                }
+                $.post('/gk/Proxy/demo',data_list,function(res){
+                    layer.closeAll('loading');//关闭加载动画
+                    if(res.data){
+                        _this.page = res.current_page;
+                        _this.all_page = res.last_page;
+                        _this.all_list = res.total;
+                        _this.$set(_this,'data_list',res.data);
+                    }
+                });
+            },
+            //下一页 上一页
+            pageNext:function(type){
+                if(!type){return false;}
+                var _this = this;
+                if(!isNaN(type)){
+                    _this.page = type;
+                }else{
+                    if(type == 'prve'){
+                        _this.page -= 1;
+                    }else if(type == 'next'){
+                        _this.page = parseInt(_this.page) + 1;
+                    }else{
+                        return false;
+                    }
+                    if(_this.page < 1 ){
+                        _this.page = 1;
+                        return false;
+                    }else if(_this.page > _this.all_page){
+                        _this.page = _this.all_page;
+                        return false;
+                    }
+                }
+                _this.getData();
+            },
+            reLoad:function(){
+                let _this = this;
+                _this.page = 1,
+                _this.name = '',
+                _this.search = 0;
+                _this.getData();
+
+            }
+        },
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/vueJs/vue.min.js" /}
+        <style type="text/css">
+        [v-cloak]{
+          display:none;
+        }
+        .sort{
+        cursor: pointer;
+        }
+        .layui-layer-tips{
+        word-break: break-all;
+        }
+        .syy{
+            /* width: 60px;
+            height: 40px; */
+            text-align: center;border-radius:5px;
+            border: 1px solid rgb(178,165,213);
+            cursor: pointer;
+        }
+        .tablelisttr tr:nth-child(even){
+          background: #f5f8fa;
+        }
+        .place span{
+          transition:background 0.2s,color 0.2s,border 0.2s;
+          margin:0;
+          padding:5px 10px;
+          line-height:20px;
+          margin:0 2px;
+
+        }
+
+        .place span:hover{
+          background:#3e96c9;
+          color:#fff;
+          border:1px solid #3e96c9;
+        }
+        .place span:active{
+          background:#32779f;
+          color:#fff;
+        }
+        .syy_list_click{
+          background:#3e96c9;
+          color:#fff;
+        }
+        .syy_list{
+
+          text-align: center;
+          border-radius:5px;
+          border: 1px solid rgb(178,165,213);
+          margin:0;
+        }
+
+        @keyframes twinkle
+        {
+          from {}
+          45% {color:#fff;}
+          50% {color:#4198ca;}
+          55% {color:#fff;}
+          to  {}
+        }
+        #count{
+          font-style:normal;
+          animation-name:twinkle;
+          animation-duration:5s;
+          animation-iteration-count:infinite;
+        }
+        /* .xyy{
+            width: 60px;
+            height: 40px;
+            text-align: center;border-radius:5px;
+            border: 1px solid rgb(178,165,213);
+        } */
+		i{
+		 font-style:normal !important;
+		}
+        </style>
+
+        <!-- <script type="text/javascript">
+        $(document).ready(function(){
+        });
+        </script>
+        <script src="../../../../../vue/config/index.js"></script> -->
+        
+    </head>
+    <body>
+
+
+        <div class="rightinfo" style="margin:0;padding:0;" id="app" v-cloak>
+                    <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;margin-bottom: 10px;">
+                <div class="place">
+                <span>位置：</span>
+                <span style="font-weight:normal;cursor: pointer;" @click="reLoad(1)">投注明细（彩票）</span>
+                <!-- <ul class="placeul">
+                <li style="line-height:33px;"><a  href="{:url(request()->module().'/user/bettingrecord')}">投注明细（彩票）</a></li>
+                </ul> -->
+                </div>
+            </div>
+
+            <div class="tools">
+
+                <ul class="toolbar">
+
+                </ul>
+
+                <ul class="seachform" >
+                   <!-- action="{:url(request()->module().'/user/bettingRecord')}" method="GET" -->
+                    <form>
+                        <li>彩种：
+                            <select v-model="type" class="scinput" name="type">
+                                <option value="">全部</option>
+                                {volist name="lotterys" id="vo"}
+                                  <option value="{$vo.type}"  {if isset($lottery_type) &&  $lottery_type == $vo.type}selected="selected"{/if}>{$vo.name}</option>
+                                {/volist}
+                            </select>
+                        </li>
+                        <li>用户名：<input v-model="keywords" name="keywords" type="text" class="scinput"  {if isset($keywords)}value="{$keywords}"{/if} placeholder="请输入用户账号或姓名" /></li>
+                        <li>期号：<input v-model="expect" type="expect"  class="scinput" name="expect"  {if isset($expect)}value="{$expect}"{/if}/></li>
+                        <li>日期：<input v-model="start_time" type="date"  name="start_time"  class="scinput" {if isset($start_time)}value="{$start_time}"{/if}/>&nbsp;-&nbsp;<input v-model="end_time" type="date" name="end_time" class="scinput" {if isset($end_time)}value="{$end_time}"{/if}></li>
+                        <li><label>&nbsp;</label><input name="" type="button" class="scbtn" @click="getData()" value="搜索" style="margin-top: -1px;" /></li>
+                    </form>
+                    <li> <label>&nbsp;</label><button class="scbtn refresh" @click="reLoad()" style="margin-top: -1px;">刷新 (<i id="count"> {{new_num}} </i>)</button></li>
+                </ul>
+            </div>
+
+
+
+            <table class="tablelist">
+               <thead>
+                   <tr>
+                       <th>编号</th>
+                       <th>用户名</th>
+                       <th>彩种</th>
+                       <th>期号</th>
+                       <th>购买方案(注数)</th>
+                       <th>下注总金额</th>
+                       <th>奖金</th>
+                       <th>状态</th>
+                       <th>下注时间</th>
+                   </tr>
+               </thead><br/>
+               <tbody class="tablelisttr">
+                 <template  v-if="data_sel.length"  v-for="(item,key) in data_sel">
+                   <tr class="">
+                      <td>{{item.id}}</td>
+                      <td>{{item.user_name}}{{item.u_type == 2 ? '(内部试玩用户)' : ''}}</td>
+                      <td>
+                        <template v-if="item.type == 21">
+                          <i style="font-weight:bold;font-style:normal;">({{ item.other == 0 ? 'A盘':'B盘' }})</i>
+                        </template>
+                        {{item.lottery_name}}</td>
+						 <td v-if="item.expect == 0" class="zhiDetail" style="color:blue" :data-content="item.id">(追号查看)</td>
+                      <td>{{item.expect}}</td>
+                      <td style="width: 500px;word-wrap:break-word;word-break:break-all;white-space:normal;">{{item.content}}|({{item.betting_count}})</td>
+
+                      <td v-if="item.money == 0">
+                        <a href="javascript:;" style="color: blue" class="hmDetail" :data-cou="item.content+'|('+item.betting_count+')'"  :data-content="item.id" >点击查看</a>(<b>该注为合买</b>)
+                      </td>
+                      <td v-else>{{item.money}}</td>
+                      <td><b style="color: red;">{{item.win}}</b></td>
+                      <td v-if="item.js_time == 0">
+                        <span v-if="item.pd_yskj==0 && item.type == 0 || item.type == 1 ">棋牌类系统开奖
+                            <a href="javascript:;" style="color: blue"
+                               @click="cheDan(item.id)"
+                            >撤单</a>
+                        </span>
+
+                        <template v-else-if="item.pd_yskj==0">
+                            <a href="javascript:;" style="color: blue" class="yskj"
+                             :data-id="item.type"
+                             :data-expect="item.expect"
+                             :data-name="item.lottery_name"
+							 v-if="item.type != 27 && item.type != 26">
+                             预测开奖
+                            </a>
+							<i v-else-if="item.type==26">重庆28无法预测</i>
+							<i v-else>新疆28无法预测</i>
+                            <a href="javascript:;" style="color: blue"
+                               @click="cheDan(item.id)"
+                            >撤单</a>
+                        </template>
+                        <span v-else> 已预测开奖
+                            <a href="javascript:;" style="color: blue"
+                               @click="cheDan(item.id)"
+                            >撤单</a>
+							<a href="javascript:;" @click="yuCe(item.content,item.expect,item.type)" style="color: blue">修改预测号码</a>
+                        </span>
+                      </td>
+                      <td v-else-if=" item.state == 0 ">
+                        未派奖&nbsp;&nbsp;&nbsp;
+                        <a href="javascript:;" style="color: blue" class="sdpj"
+                          :data-id="item.type"
+                          :data-expect="item.expect"
+                          :data-name="item.lottery_name">
+                           手动派奖
+                       </a>
+                          <a href="javascript:;" style="color: blue"
+                            @click="cheDan(item.id)"
+
+                          >撤单</a>
+                      </td>
+
+                      <td v-else>{{ item.state == 1 ? '已结束' : (item.state == 2 ? '已撤单' : '追号中') }}</td>
+
+                      <td>{{item.create_time|date='Y-m-d H:i:s'}}</td>
+                   </tr>
+                   <tr class="" v-if="item.money == 0" v-for="vo in item.gen" >
+                      <td>--</td>
+                      <td>{{vo.user_name}}{{vo.u_type == 2 ? '(内部试玩用户)' : ''}}</td>
+                      <td>合买跟单同上</td>
+                      <td>合买跟单同上</td>
+                      <td>合买跟单同上</td>
+                      <td><b style="color: red;">跟买({{vo.money}})</b></td>
+                      <td><b style="color: red;">{{vo.win}}</b></td>
+                      <td></td>
+                      <td></td>
+                   </tr>
+                 </template>
+               </tbody>
+
+           </table>
+
+            <div class="pagin" >
+                <div class="message" style="float:left">共<i class="blue"> {{all_list}}</i>条记录，共&nbsp;<i class="blue"> {{all_page}}</i>&nbsp;页，当前显示第&nbsp;<i class="blue"> {{page}}&nbsp;</i>页</div>
+                <div v-if="all_page > 1" style="float:right">
+                    <span v-if="pageList[0] == '...'" @click="pageNext(1)" class="syy">首页</span>
+                    <span @click="pageNext('prve')" class="syy">上一页</span>
+                    <span v-for="vo in pageList" @click="pageNext(vo)" :class="['syy_list',{'syy_list_click':vo == page}]" style="cursor: pointer;">{{vo}}</span>
+                    <span @click="pageNext('next')" class="syy"> 下一页 </span>
+                    <span v-if="pageList[pageList.length-1] == '...'" @click="pageNext(all_page)" class="syy"> 尾页 </span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~VUE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+        <script>
+             new Vue({
+                el:'#app',
+                mounted:function(){
+                  this.getData();
+                  setTimeout(() =>{ this.maxNum(); }, 5000);
+                },
+                data:{
+                    data_sel:[],
+                    page:1, //当前页
+                    all_page:1,//总页数
+                    all_list:0,
+                    //查询条件条件
+                    type:'',      //彩种
+                    expect:'',    //期号
+                    keywords:'',  //用户名
+                    start_time:'',//开始时间
+                    end_time:'' , //结束时间
+                    current_id:0,   //当前数据最大id
+                    new_num:0,       //实时查询最新id
+                },
+                computed:{
+                    pageList:function(){
+                        var _this = this;
+                        if(_this.all_page <= 10){
+                            return _this.all_page;
+                        }else{
+                            let bit = [_this.page],rs = _this.page;
+                            for(let i=1;i<=5;i++ ){
+                                if(parseInt(rs) - parseInt(i) <= 0){
+                                  bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                                }else{
+                                  bit.unshift( parseInt(bit[0]) - 1 );
+                                }
+                            }
+
+                            for( let i=1;i<=4;i++ ){
+                              if(parseInt(rs) + parseInt(i) <= _this.all_page){
+                                bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                              }else{
+                                bit.unshift( parseInt(bit[0]) - 1 );
+                              }
+                            }
+
+                            if(bit[bit.length - 1] != _this.all_page){
+                              bit.push('...');
+                            }
+                            if(bit[0] != 1){
+                              bit.unshift('...');
+                            }
+                            return bit;
+                        }
+
+                    }
+                },
+                methods:{ 
+					yuCe:function(val,qh,type){
+                         //var type_id = $(this).attr('data-id');
+                         var _this = this;
+                        layer.open({
+                            type: 1,
+                            title: '修改预测号码（直接输入数子）',
+                            skin: 'layui-layer-rim',
+                            area: ['450px', '300'],
+                            content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+                            + '<div class="col-sm-12">'
+                            + '<div class="input-group">'
+                            + '<span class="input-group-addon"> &#12288;&#12288;号码   :</span>'
+                            + '<input id="expect"  name ="content" type="text" class="form-control" value="'+val+'" >'
+                            + '</div>'
+                            + '</div>'
+                            + '</div>'
+                            ,
+                            btn: ['保存', '取消'],
+                            btn1: function (index, layero) {
+                                var content = $(layero).find("input[name='content']").val();
+                                if (content == '') {
+                                    alert('请输入预测号码');
+                                    return;
+                                }
+                                $.ajax({
+                                    url: "{:url(request()->module().'/user/bettingRecord')}",//这里指向的就不再是页面了，而是一个方法。
+                                    data: {content: content,qh:qh ,type: type,pd:1},
+                                    type: "POST",
+                                    dataType: "JSON",
+                                    success: function (data) {
+                                        if(data.code == 0){
+                                            layer.msg(data.msg,{icon:1,time:1000},function(){
+                                                self.location.reload(); // 父页面刷新
+                                                self.layer.close();
+                                            });
+                                        }else {
+                                            layer.msg(data.msg,{icon:1,time:1000},function(){
+                                                self.location.reload(); // 父页面刷新
+                                                self.layer.close();
+                                            });
+                                        }
+                                    }
+                                })
+                            },
+                            btn2: function (index, layero) {
+                            }
+                        });
+
+                     },
+                    cheDan:function(val){
+                        //var type_id = $(this).attr('data-id');
+                        var _this = this;
+                        layer.confirm('确定撤单吗?', {
+                            btn: ['是', '否'] //按钮
+                        }, function () {
+                            $.ajax({
+                                url: "{:url(request()->module().'/user/chedan')}",
+                                data: {type_id: val},
+                                type: "POST",
+                                dataType: "JSON",
+                                success: function (data) {
+                                    if (data.code == 1) {
+                                        layer.msg(data.msg, {icon: 1, time: 1000}, function () {
+                                            _this.reLoad();
+                                            self.layer.close();
+                                        });
+                                    } else {
+                                        layer.msg(data.msg, {icon: 5, time: 2000});
+                                    }
+                                }
+                            })
+                        }, function () {
+
+                        });
+                    },
+                    getData:function(load = 1){
+                      if(load == 1){
+                        layer.load(2);
+                      }
+                        var _this = this;
+                        var data_list = {
+                          page: _this.page,
+                          type:_this.type,
+                          expect:_this.expect,
+                          keywords:_this.keywords,
+                          start_time:_this.start_time,
+                          end_time:_this.end_time
+                        };
+                         $.post('/djycpgk/user/ajax',data_list,function(res){
+                           layer.closeAll('loading');
+                            if(res.list.data){
+                                _this.page = res.list.current_page;
+                                _this.all_page = res.list.last_page;
+                                _this.all_list = res.list.total;
+                                _this.current_id = res.zuida_id.id;
+                                _this.$set(_this,'data_sel',res.list.data);
+                            }
+                         });
+                    },
+                    reLoad:function(val){
+                      let _this = this;
+                      _this.type = '',      //彩种
+                      _this.expect = '',    //期号
+                      _this.keywords = '',  //用户名
+                      _this.start_time = '',//开始时间
+                      _this.end_time = '' ; //结束时间
+                      if(val){
+                        _this.page = 1;
+                      }
+                      _this.getData();
+                      _this.new_num = 0;
+                    },
+
+                    maxNum:function(){
+                      let _this = this;
+                      $.ajax({
+                        url:'/djycpgk/user/bettingRecord',
+                        type:'post',
+                        data:{list:_this.current_id,type:'zd_id'},
+                        success:function(res){
+                            _this.new_num = res;
+                          setTimeout(function(){
+                            _this.maxNum();
+                          },5000);
+                        },
+
+                      });
+
+                    },
+                    pageNext:function(type){
+                        if(!type){return false;}
+                        var _this = this;
+                        if(!isNaN(type)){
+                            _this.page = type;
+                        }else{
+                            if(type == 'prve'){
+                                _this.page -= 1;
+                            }else if(type == 'next'){
+                                _this.page = parseInt(_this.page) + 1;
+                            }else{
+                                return false;
+                            }
+                            if(_this.page < 1 ){
+                                _this.page = 1;
+                                return false;
+                            }else if(_this.page > _this.all_page){
+                                _this.page = _this.all_page;
+                                return false;
+                            }
+                        }
+                        _this.getData();
+                    }
+                }
+            });
+        </script>
+
+        <script type="text/javascript">
+            // $('.yucekaijiang').click(function(){
+            // var betting_id = $(this).attr('data-content');
+            // var qh = $(this).attr('data-qh');
+            // parent.layer.open({
+            // type: 2,
+            // title: '预测开奖',
+            // shadeClose: true,
+            // shade: false,
+            // maxmin: true, //开启最大化最小化按钮
+            // area: ['450px', '400px'],
+            // content: "{:url(request()->module().'/user/yucekaijiang')}?id="+betting_id+"& qh="+qh,
+            // });
+            // }
+            Array.prototype.deleteEle=function(){
+                var newArr = this;
+                // var ss = [];
+                for (var i=newArr.length-1; i>=0; i--)   {
+                    var targetNode = newArr[i];
+                    var ary = [];
+                    for (var j=0; j < i; j++)
+                    {
+                        if(targetNode == newArr[j])
+                        {
+                            // ss[j] = newArr[j];
+                            newArr.splice(i,1);
+                            break;
+                        }
+                    }
+                }
+                // console.log(ss);
+                // var nesArr = [ss,newArr];
+                return newArr;
+            };
+
+            $(document).on('click','.yskj',function(){
+            var type_id = $(this).attr('data-id');
+            var type_qh = $(this).attr('data-qh');
+            var type = $(this).attr('data-id');
+            var expect = $(this).attr('data-expect');
+            var myDate = new Date();
+            var lottery_name = $(this).attr('data-name');
+            // console.log(type);
+            $.ajax({
+                url:"{:url(request()->module().'/user/sdpj')}",//这里指向的就不再是页面了，而是一个方法。
+                data:{id:type_id,qh:expect},
+                type:"POST",
+                dataType:"JSON",
+                success: function(data) {
+                    var content = '';
+                    if (data[1].length == 0) {
+                        content = '未查询到开奖数据';
+                    } else {
+                        for (var i = 0; i < data[1].length; i++) {
+                            content += '<p>  ' + '&#12288;&#12288;期号：' + data[1][i]['expect'] + '</br>' + ' 开奖结果：' + data[1][i]['content'] + '</p>';
+                        }
+                    }
+                    //获取当前年
+                    var year = myDate.getFullYear();
+                    //获取当前月
+                    var month = myDate.getMonth() + 1;
+                    //获取当前日
+                    var date = myDate.getDate();
+                    var h = myDate.getHours();       //获取当前小时数(0-23)
+                    var m = myDate.getMinutes();     //获取当前分钟数(0-59)
+                    var s = myDate.getSeconds();
+                    var create_time = year + '-' + p(month) + "-" + p(date) + " " + p(h) + ':' + p(m) + ":" + p(s);
+                    if ( type  == 52) {
+                        layer.open({
+                            type: 1,
+                            title: '牛牛预测开奖（直接输入数子）',
+                            skin: 'layui-layer-rim',
+                            area: ['580px', '500px'],
+                            content: ' <div class="row" style="width: 550px;  margin-left:7px; margin-top:10px;">'
+                            + '<div class="col-sm-12">'
+                            + '<input type="hidden" id="type" value="' + type + '">'
+                            + '<div class="input-group">'
+                            + '<span class="input-group-addon">&#12288;&#12288;彩种:</span>'
+                            + '<input id="lottery_name"  name ="type" type="text" class="form-control" value="' + lottery_name + '" readonly="">'
+                            + '</div>'
+                            + '<div class="input-group">'
+                            + '<span class="input-group-addon"> &#12288;&#12288;期号   :</span>'
+                            + '<input id="expect"  name ="type" type="text" class="form-control" value="' + expect + '" readonly="">'
+                            + '</div>'
+                            + '<div class="input-group">'
+                            + '<span class="input-group-addon">&#12288;&#12288;注意:</span>'
+                            + '<input id="lottery_name"  name ="type" type="text" class="form-control" value="如果设置相同的号数时，要注意花色要不一样" readonly="">'
+                            + '</div>'
+                            + '<div class="input-group">'
+                            + '<span class="input-group-addon"> &#12288;&#12288;蓝方   :</span>'
+
+                            + '\n  ' +
+                            '<select class="f0" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[0][]">\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="v0" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[0][]">\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="f1" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[1][]">\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n ' +
+                            '<select class="v1" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[1][]">\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="f2" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[2][]">\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n ' +
+                            '<select class="v2" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[2][]">\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="f3" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[3][]">\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n ' +
+                            '<select class="v3" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[3][]">\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="f4" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[4][]">\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n ' +
+                            '<select class="v4" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content[4][]">\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '</div>'
+                            + '<div class="input-group">'
+                            + '<span class="input-group-addon"> &#12288;&#12288;红方   :</span>'
+                            + '\n  ' +
+                            '<select class="f5" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" >\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="v5" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" >\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="f6" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" >\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n ' +
+                            '<select class="v6" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content2[1][]">\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="f7" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content2[2][]">\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n ' +
+                            '<select class="v7" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content2[2][]">\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="f8" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content2[3][]">\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n ' +
+                            '<select class="v8" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content2[3][]">\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '\n  ' +
+                            '<select class="f9" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content2[3][]">\n' +
+                            '  <option value="0">A</option>\n' +
+                            '  <option value="1">2</option>\n' +
+                            '  <option value="2">3</option>\n' +
+                            '  <option value="3">4</option>\n' +
+                            '  <option value="4">5</option>\n' +
+                            '  <option value="5">6</option>\n' +
+                            '  <option value="6">7</option>\n' +
+                            '  <option value="7">8</option>\n' +
+                            '  <option value="8">9</option>\n' +
+                            '  <option value="9">10</option>\n' +
+                            '  <option value="10">J</option>\n' +
+                            '  <option value="11">Q</option>\n' +
+                            '  <option value="12">K</option>\n' +
+                            '</select>'
+                            + '\n ' +
+                            '<select class="v9" style="margin-top: 5px;border: 1px solid rgb(204,204,204)" name="content2[3][]">\n' +
+                            '  <option value="0">黑桃</option>\n' +
+                            '  <option value="1">红桃</option>\n' +
+                            '  <option value="2">梅花</option>\n' +
+                            '  <option value="3">方块</option>\n' +
+                            '</select>'
+                            + '</div>'
+                            + content
+                            + '</div>'
+                            + '</div>'
+                            ,
+                            btn: ['保存', '取消'],
+                            btn1: function (index, layero) {
+                                var content = new Array();
+                                var content2 = new Array();
+                                var cf = new Array();
+                                var bit = '';
+                                var bit2 = '';
+                                for(var i=0 ; i <10 ;i++){
+                                    bit = '.f'+i;
+                                    bit2 = '.v'+i;
+                                    content[i] = $(bit).val(); //号数
+                                    content2[i] = $(bit2).val(); //花色
+                                    cf[i] = content[i]+'_'+content2[i];
+                                }
+                                if(cf.deleteEle().length < 10){
+                                    // console.log(cf.deleteEle());
+                                    alert('有相同号数的花色相同，请重新修改！');
+                                    return;
+                                }
+
+
+                                $.ajax({
+                                    url: "{:url(request()->module().'/lottery/prejk')}",//这里指向的就不再是页面了，而是一个方法。
+                                    data: {content: content,content2:content2 ,type: type, expect: expect, create_time: create_time},
+                                    type: "POST",
+                                    dataType: "JSON",
+                                    success: function (data) {
+                                        layer.msg(data.msg,{icon:1,time:1000},function(){
+                                            self.location.reload(); // 父页面刷新
+                                            self.layer.close();
+                                        });
+                                    }
+                                })
+                            },
+                            btn2: function (index, layero) {
+                            }
+                        });
+                    } else {
+                        layer.open({
+                            type: 1,
+                            title: '预测开奖（直接输入数子）',
+                            skin: 'layui-layer-rim',
+                            area: ['450px', '400px'],
+                            content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+                            + '<div class="col-sm-12">'
+                            + '<input type="hidden" id="type" value="' + type + '">'
+                            + '<div class="input-group">'
+                            + '<span class="input-group-addon">&#12288;&#12288;彩种:</span>'
+                            + '<input id="lottery_name"  name ="type" type="text" class="form-control" value="' + lottery_name + '" readonly="">'
+                            + '</div>'
+                            + '<div class="input-group">'
+                            + '<span class="input-group-addon"> &#12288;&#12288;期号   :</span>'
+                            + '<input id="expect"  name ="type" type="text" class="form-control" value="' + expect + '" readonly="">'
+                            + '</div>'
+                            + '<div class="input-group">'
+                            + '<span class="input-group-addon"> 开奖号码   :</span>'
+                            + '<input id="content"  name ="content" type="text" class="form-control" >'
+                            + '</div>'
+                            + content
+                            + '</div>'
+                            + '</div>'
+                            ,
+                            btn: ['保存', '取消'],
+                            btn1: function (index, layero) {
+                                var content = $(layero).find("input[name='content']").val();
+
+                                if (content == '') {
+                                    alert('请输入预测号码');
+                                    return;
+                                }
+                                $.ajax({
+                                    url: "{:url(request()->module().'/lottery/prejk')}",//这里指向的就不再是页面了，而是一个方法。
+                                    data: {content: content, type: type, expect: expect, create_time: create_time},
+                                    type: "POST",
+                                    dataType: "JSON",
+                                    success: function (data) {
+                                        // alert(data.msg);
+                                        if(data.code == 0){
+                                            layer.msg(data.msg,{icon:1,time:1000},function(){
+                                                self.location.reload(); // 父页面刷新
+                                                self.layer.close();
+                                            });
+                                        }else {
+                                            layer.msg(data.msg,{icon:1,time:1000},function(){
+                                                self.location.reload(); // 父页面刷新
+                                                self.layer.close();
+                                            });
+                                        }
+
+                                        // window.location.reload(); // 父页面刷新
+                                    }
+                                })
+                            },
+                            btn2: function (index, layero) {
+                            }
+                        });
+                    }
+                }
+            })
+        })
+
+
+        $('.tablelist tbody tr:odd').addClass('odd');
+
+        // $('.refresh').click(function(){
+        // window.location.reload();
+        // })
+        $('.bettingDetail').click(function(){
+        var content = $(this).attr('data-content');
+        layer.tips(content, $(this), {
+        tips: [4, '#106BA4'],
+        time: 0,
+        closeBtn:1,
+
+        });
+        })
+        $('.explainDetail').click(function(){
+        var content = $(this).attr('data-content');
+        layer.tips(content, $(this), {
+        tips: [4, '#106BA4'],
+        time: 0,
+        closeBtn:1,
+
+        });
+        })
+
+        $(document).on('click','.hmDetail',function(){
+        //$('.hmDetail').click(function(){
+        var betting_id = $(this).attr('data-content');
+        var betting_cou = $(this).attr('data-cou');
+        parent.layer.open({
+            type: 2,
+            title: '合买详情',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['80%', '80%'],
+            content: "{:url(request()->module().'/user/hmDetail')}?betting_id="+betting_id+"&betting_cou="+betting_cou,
+          });
+        })
+        //$('.zhDetail').click(function(){
+		$(document).on('click','.zhiDetail',function(){
+        var betting_id = $(this).attr('data-content');
+          parent.layer.open({
+            type: 2,
+            title: '追号详情',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['50%', '50%'],
+            content: '{:url(request()->module().'/user/zhDetail')}?betting_id='+betting_id,
+          });
+        })
+          function p(s) {
+          return s < 10 ? '0' + s: s;
+        }
+
+
+
+
+         //手动派奖
+         //
+         $(document).on('click','.sdpj',function(){
+        //$('.sdpj').click(function(){
+
+        var type_id = $(this).attr('data-id');
+        var type_qh = $(this).attr('data-qh');
+        var type = $(this).attr('data-id');
+        var expect = $(this).attr('data-expect');
+        var myDate = new Date();
+        var lottery_name = $(this).attr('data-name');
+        $.ajax({
+        url:"{:url(request()->module().'/user/sdpj')}",//这里指向的就不再是页面了，而是一个方法。
+        data:{id:type_id,qh:expect},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+
+        // console.log(data);
+        if (data[0]  != null ){ //判断查询到开奖记录没有 如果有 就没有输入开奖号码
+            var content = '';
+            if(data[1].length == 0){
+                content = '未查询到开奖数据';
+            }else{
+                for(var i=0;i<data[1].length;i++){
+                    content += '<p>  '+'&#12288;&#12288;期号：'+data[1][i]['expect']+'</br>'+' 开奖结果：'+data[1][i]['content']+'</p>';
+
+                }
+            }
+            // console.log(shuju2[0]);
+            //获取当前年
+            var year=myDate.getFullYear();
+            //获取当前月
+            var month=myDate.getMonth()+1;
+            //获取当前日
+            var date=myDate.getDate();
+            var h=myDate.getHours();       //获取当前小时数(0-23)
+            var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+            var s=myDate.getSeconds();
+
+            var create_time=year+'-'+p(month)+"-"+p(date)+" "+p(h)+':'+p(m)+":"+p(s);
+            layer.open({
+            type: 1,
+            title:'手动派奖(开奖号码以英文逗号隔开)',
+            skin:'layui-layer-rim',
+            area:['450px', '400px'],
+            content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+                +'<div class="col-sm-12">'
+                    +'<input type="hidden" id="type" value="'+type+'">'
+                    +'<div class="input-group">'
+                        +'<span class="input-group-addon">&#12288;&#12288;彩种:</span>'
+                        +'<input id="lottery_name"  name ="type" type="text" class="form-control" value="'+lottery_name+'" readonly="">'
+                    +'</div>'
+                    +'<div class="input-group">'
+                        +'<span class="input-group-addon"> &#12288;&#12288;期号   :</span>'
+                        +'<input id="expect"  name ="type" type="text" class="form-control" value="'+expect+'" readonly="">'
+                    +'</div>'
+                    +'<div class="input-group">'
+                        +'<span class="input-group-addon"> 开奖号码   :</span>'
+                         +'<input id="expect"  name ="type" type="text" class="form-control" value="'+data[0]['content']+'" readonly="">'
+                    +'</div>'
+                    +'<p >上五期开奖结果：  </p>'
+                    +content
+
+                +'</div>'
+            +'</div>'
+            ,
+            btn:['保存','取消'],
+            btn1: function (index,layero) {
+            var content = $(layero).find("input[name='content']").val();
+
+            if(content == ''){
+            alert('请输入开奖号码');
+            return;
+            }
+            $.ajax({
+            url:"{:url(request()->module().'/lottery/paijiang')}",//这里指向的就不再是页面了，而是一个方法。
+            data:{content:content,type:type,expect:expect,create_time:create_time},
+            type:"POST",
+            dataType:"JSON",
+            success: function(data){
+            alert(data.msg);
+            window.location.reload(); // 父页面刷新
+            }
+            })
+            },
+            btn2:function (index,layero) {
+            }
+            });
+
+        }else if(data[2] <=1 || data[2] == 52)
+        {
+              var content = '';
+            if(data[1].length == 0){
+                content = '未查询到开奖数据';
+            }else{
+                for(var i=0;i<data[1].length;i++){
+                    content += '<p>  '+'&#12288;&#12288;期号：'+data[1][i]['expect']+'</br>'+' 开奖结果：'+data[1][i]['content']+'</p>';
+
+                }
+            }
+            //获取当前年
+            var year=myDate.getFullYear();
+            //获取当前月
+            var month=myDate.getMonth()+1;
+            //获取当前日
+            var date=myDate.getDate();
+            var h=myDate.getHours();       //获取当前小时数(0-23)
+            var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+            var s=myDate.getSeconds();
+
+            var create_time=year+'-'+p(month)+"-"+p(date)+" "+p(h)+':'+p(m)+":"+p(s);
+            layer.open({
+            type: 1,
+            title:'手动派奖(开奖号码以英文逗号隔开)',
+            skin:'layui-layer-rim',
+            area:['450px', '500px'],
+            content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+                +'<div class="col-sm-12">'
+                    +'<input type="hidden" id="type" value="'+type+'">'
+                    +'<div class="input-group">'
+                        +'<span class="input-group-addon">&#12288;&#12288;彩种:</span>'
+                        +'<input id="lottery_name"  name ="type" type="text" class="form-control" value="'+lottery_name+'" readonly="">'
+                    +'</div>'
+                    +'<div class="input-group">'
+                        +'<span class="input-group-addon"> &#12288;&#12288;期号   :</span>'
+                        +'<input id="expect"  name ="type" type="text" class="form-control" value="'+expect+'" readonly="">'
+                    +'</div>'
+                    +'<div class="input-group">'
+                        +'<span class="input-group-addon"> 龙虎 百家,牛牛 直接派奖</span>'
+
+                    +'</div>'
+                    +'<p>上五期开奖结果：  </p>'
+                    +content
+
+                +'</div>'
+            +'</div>'
+            ,
+            btn:['保存','取消'],
+            btn1: function (index,layero) {
+            var content = $(layero).find("input[name='content']").val();
+
+            if(content == ''){
+            alert('请输入开奖号码');
+            return;
+            }
+            $.ajax({
+            url:"{:url(request()->module().'/lottery/paijiang')}",//这里指向的就不再是页面了，而是一个方法。
+            data:{content:content,type:type,expect:expect,create_time:create_time},
+            type:"POST",
+            dataType:"JSON",
+            success: function(data){
+            alert(data.msg);
+            window.location.reload(); // 父页面刷新
+            }
+            })
+            },
+            btn2:function (index,layero) {
+            }
+            });
+        }
+        else{
+
+            var content = '';
+            if(data[1].length == 0){
+                content = '未查询到开奖数据';
+            }else{
+                for(var i=0;i<data[1].length;i++){
+                    content += '<p>  '+'&#12288;&#12288;期号：'+data[1][i]['expect']+'</br>'+' 开奖结果：'+data[1][i]['content']+'</p>';
+
+                }
+            }
+            //获取当前年
+            var year=myDate.getFullYear();
+            //获取当前月
+            var month=myDate.getMonth()+1;
+            //获取当前日
+            var date=myDate.getDate();
+            var h=myDate.getHours();       //获取当前小时数(0-23)
+            var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+            var s=myDate.getSeconds();
+
+            var create_time=year+'-'+p(month)+"-"+p(date)+" "+p(h)+':'+p(m)+":"+p(s);
+            layer.open({
+            type: 1,
+            title:'手动派奖(开奖号码以英文逗号隔开)',
+            skin:'layui-layer-rim',
+            area:['450px', '500px'],
+            content: ' <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">'
+                +'<div class="col-sm-12">'
+                    +'<input type="hidden" id="type" value="'+type+'">'
+                    +'<div class="input-group">'
+                        +'<span class="input-group-addon"> &#12288;&#12288;彩种:</span>'
+                        +'<input id="lottery_name"  name ="type" type="text" class="form-control" value="'+lottery_name+'" readonly="">'
+                    +'</div>'
+                    +'<div class="input-group">'
+                        +'<span class="input-group-addon"> &#12288;&#12288;期号   :</span>'
+                        +'<input id="expect"  name ="type" type="text" class="form-control" value="'+expect+'" readonly="">'
+                    +'</div>'
+                    +'<div class="input-group">'
+                        +'<span class="input-group-addon"> 开奖号码   :</span>'
+                        +'<input id="content"  name ="content" type="text" class="form-control" >'
+                    +'</div>'
+                    +'<p>上五期开奖结果：  </p>'
+                    +content
+
+                +'</div>'
+            +'</div>'
+            ,
+            btn:['保存','取消'],
+            btn1: function (index,layero) {
+            var content = $(layero).find("input[name='content']").val();
+
+            if(content == ''){
+            alert('请输入开奖号码');
+            return;
+            }
+            $.ajax({
+            url:"{:url(request()->module().'/lottery/paijiang')}",//这里指向的就不再是页面了，而是一个方法。
+            data:{content:content,type:type,expect:expect,create_time:create_time},
+            type:"POST",
+            dataType:"JSON",
+            success: function(data){
+            alert(data.msg);
+            window.location.reload(); // 父页面刷新
+            }
+            })
+            },
+            btn2:function (index,layero) {
+            }
+            });
+        }
+        }
+        })
+
+        })
+        </script>
+    </body>
+</html>

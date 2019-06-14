@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th width="100">选&ensp;&ensp;择</th>
+        <th>会员名称</th>
+    </tr>
+    </thead>
+    <tbody>
+    {foreach $user as $u}
+    <tr>
+        <td>
+            <input type="checkbox" value="{$u.id}" onclick="selectUser(this,'{$u.id}','{$u.onlyname}')">
+        </td>
+        <td>
+            {$u.username|raw}
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+<style>
+    .paginItem{
+        display: inline-block;
+        border: 1px solid #ccc;
+    }
+    .paginItem>a{
+        width: 100%;
+        height: 100%;
+        padding: 3px 8px;
+    }
+    .show-page{
+        margin-top: 5px;
+    }
+</style>
+<div class="show-page">
+    {if condition="isset($keyword)"}
+    {$user->appends(['type_id'=>$type_id,'keyword'=>$keyword])->render()|raw}
+    {else /}
+    {$user->appends(['type_id'=>$type_id])->render()|raw}
+    {/if}
+</div>
+<script>
+    $('.paginItem').click(function () {
+        var a_biaoqian = $(this).children();
+        var url = a_biaoqian.attr('href');
+        if(url == '#')
+        {
+            return false;
+        }
+        $.get(url,{},function (data) {
+            $(".the-user-has-be-selected").html('');
+            $("input[name='uid']").val('');
+            $("input[name='username']").val('');
+            $(".show-all-user").html(data);
+        });
+        return false;
+    });
+    function selectUser(obj,uid,name)
+    {
+        var isChecked = $(obj).is(':checked');
+        var allUid = $("input[name='uid']").val();
+        var allName = $("input[name='username']").val();
+        if(allUid.length > 0)
+        {
+            allUid = allUid.split(',');
+        }
+        else
+        {
+            allUid = new Array();
+        }
+
+        if(allName.length > 0)
+        {
+            allName = allName.split(',');
+        }
+        else
+        {
+            allName = new Array();
+        }
+        if(isChecked)
+        {
+            allUid.push(uid);
+        }
+        else
+        {
+            var key = allUid.indexOf(uid);
+            if(key != -1)
+            {
+                allUid.splice(key,1);
+            }
+        }
+        allUid = allUid.join(',');
+        $("input[name='uid']").val(allUid);
+
+        if(isChecked)
+        {
+            allName.push(name);
+        }
+        else
+        {
+            var key = allName.indexOf(name);
+            if(key != -1)
+            {
+                allName.splice(key,1);
+            }
+        }
+        allName = allName.join(',');
+        $("input[name='username']").val(allName);
+
+        var username = $("input[name='username']").val();
+        username = username.split(',');
+        var html = '';
+        for (var i=0;i<username.length;i++)
+        {
+            html += "<span>"+username[i]+"</span>";
+        }
+        $(".the-user-has-be-selected").html(html);
+    }
+</script>
+</body>
+</html>

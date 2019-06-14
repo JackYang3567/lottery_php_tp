@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/vueJs/vue.min.js" /}
+
+</head>
+<body>
+<ul class="breadcrumb">
+    <li><span href="#">位置</span></li>
+    <li><a href="{:url('/djycpgk/system/bank_pay')}">收款银行设置  </a></li>
+    <li>收款银行设置添加</li>
+</ul>
+<div id="app">
+    <div class="container">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">银行名称</label>
+                <div class="col-sm-6">
+                    <select class="form-control"  v-model="name" @change="chongzhi()" >
+                        <option  value="0">请选择</option>
+                        <option  v-for="(vo,key) in data_list" :value="key" >{{vo}}</option>
+                    </select>
+                </div>
+            </div>
+            <template  v-if="name=='payalipay' ||  name=='payweixin'"  >
+                <div class="form-group" v-for="(vo,key) in data_rank">
+                    <label  class="col-sm-2 control-label">{{vo.name}}:二维码</label>
+                    <div class="col-sm-6">
+                        <input type="file"  @change="uploadPhoto($event,key)">
+                    </div>
+                </div>
+            </template>
+            <template  v-else-if="name!='payalipay' && name!='payweixin' && name!=0" v-for="(vo,key) in data_rank">
+
+                <div class="form-group" >
+                    <label for="inputEmail5" class="col-sm-2 control-label">{{vo.name}}账户姓名</label>
+                    <div class="col-sm-6">
+                        <input type="text" v-model="user_name[key]" class="form-control" id="inputEmail5" placeholder="">
+                    </div>
+                </div>
+
+                <div class="form-group" >
+                    <label  class="col-sm-2 control-label">{{vo.name}}:账户号</label>
+                    <div class="col-sm-6">
+                        <input type="text" v-model="number[key]" class="form-control">
+                    </div>
+                </div>
+            </template>
+            <div class="form-group" v-if="name=='payalipay'">
+                <label for="inputEmail3" class="col-sm-2 control-label">标题</label>
+                <div class="col-sm-6">
+                    <select class="form-control">
+                        <option value="支付宝收款" >支付宝收款</option>
+                        <option value="支付宝转银行卡" >支付宝转银行卡</option>
+                        <option value="支付宝转账" >支付宝转账</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" v-else-if="name=='payweixin'">
+                <label for="inputEmail3" class="col-sm-2 control-label">标题</label>
+                <div class="col-sm-6">
+                    <select class="form-control" v-if="">
+                        <option value="微信好友" >微信好友</option>
+                        <option value="微信收款" >微信收款</option>
+                        <option value="微信转卡" >微信转卡</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group" v-if="name=='payalipay' ||  name=='payweixin'">
+                <label for="inputEmail3" class="col-sm-2 control-label">账户号</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="inputEmail3" v-model="number" placeholder="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">入款说明</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="inputPassword3" placeholder=""  v-model="explain">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword7" class="col-sm-2 control-label">充值标语</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="inputPassword7" v-model="slogan">
+                </div>
+                <span class="col-sm-4">(充值标语，不超过40个字)</span>
+            </div>
+            <div class="form-group">
+                <label for="inputPassworda" class="col-sm-2 control-label">最小充值金额</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="inputPassworda" v-model="min">
+                </div>
+                <span class="col-sm-4">(设置为'0',则不限制)</span>
+            </div>
+            <div class="form-group">
+                <label for="inputPasswordb" class="col-sm-2 control-label">最大充值金额</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="inputPasswordb" v-model="max">
+                </div>
+                <span class="col-sm-4">(设置为'0',则不限制)</span>
+            </div>
+            <div class="form-group">
+                <label for="inputPasswordc" class="col-sm-2 control-label">排序</label>
+                <div class="col-sm-6">
+                    <input type="number" class="form-control" id="inputPasswordc" v-model="sort">
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-2 control-label">是否开启</label>
+                <div class="col-sm-6">
+                    <label class="radio-inline">
+                        <input type="radio" name="1" v-model="type"   value="1" >开
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="1" v-model="type" value="0">关
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="button" class="btn btn-default" @click="baocun()">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+
+    var vm = new Vue({
+        el:'#app',
+        mounted:function(){ //初始化调用
+            this.getData();
+        },
+        // 我们的数据对象
+        data:{
+            data_list:[], //请求返回的数据
+            data_rank:[], //请求返回的数据
+
+            qr_code:[],//二维码
+
+            name: 0,//银行名称
+            number: [],//账户号
+            user_name: [],//账户姓名
+            explain: '',//入款说明
+            slogan: '',//充值标语
+            min: 0,//最小
+            max: 0,//最大
+            sort: '',//排序
+            type: 1,//开关
+        },
+
+
+        methods:{
+            //获取 图片 64 编码
+            uploadPhoto:function(e,key) {
+                var _this = this;
+                // 利用fileReader对象获取file
+                var file = e.target.files[0];
+                var filesize = file.size;
+                var filename = file.name;
+                // 2,621,440   2M
+                if (filesize > 2101440) {
+                    // 图片大于2MB
+                    alert('图片不能大于2MB');
+                    return ;
+                }
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function (e) {
+
+                    // 读取到的图片base64 数据编码 将此编码字符串传给后台即可
+                    var imgcode = e.target.result;
+                    let bit = JSON.parse(JSON.stringify(_this.qr_code));
+                    bit[key] = imgcode;
+                    _this.$set(_this,'qr_code',bit);
+                }
+            },
+            baocun:function () {
+                layer.load(2);//开启加载动画
+                var _this = this;
+                //console.log(_this.qr_code);
+                var data = {
+                    name: _this.name,
+                    number: _this.number,
+                    user_name: _this.user_name,
+                    explain: _this.explain,
+                    slogan: _this.slogan,
+                    min:_this.min,
+                    max:_this.max,
+                    sort:_this.sort,
+                    switch:_this.type,
+                    qr_code:_this.qr_code,
+                };
+                if(data.name !='payalipay' && data.name !='payweixin'){
+                    data.qr_code ='';
+                }
+                $.post('/djycpgk/Wqxfw/yhtj',data,function(res){
+                    layer.closeAll('loading');//关闭加载动画
+                    if(res.error == 1){
+                        layer.msg(res.msg,{time:2000},function(){
+                            _this.getData();
+                        });
+                    }else {
+                        layer.msg(res.msg);
+                    }
+                });
+            },
+
+            chongzhi:function () {
+                var _this = this;
+                if(_this.name !='payalipay' && _this.name !='payweixin'){
+                    _this.number = [];
+                }
+            },
+            getData:function () {
+                layer.load(2);//开启加载动画
+                var _this = this;
+                $.post('/djycpgk/System/bank_add',{},function(res){
+                    layer.closeAll('loading');//关闭加载动画
+                    if(res[0]){
+                        _this.$set(_this,'data_list',res[0]);
+                        _this.$set(_this,'data_rank',res[1]);
+                    }
+                });
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

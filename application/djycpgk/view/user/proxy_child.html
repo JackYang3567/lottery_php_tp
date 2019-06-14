@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>合买详情</title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/font-awesome.css" /}
+        {css href="/static/admin/css/animate.css" /}
+        {css href="/static/admin/css/boot/style.css" /}
+        {js href="/static/admin/js/jquery-1.11.3.min.js" /}
+        {js href="/static/admin/js/boot/bootstrap.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style>
+        
+        </style>
+        <script type="text/javascript">
+        $(document).ready(function(e) {
+        });
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <div class="rightinfo">
+            
+            <div class="row">
+                
+                
+                
+                <!--选项卡-->
+                <div class="col-sm-12">
+                    <div class="tabs-container">
+                        
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="ibox-content">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>用户名</th>
+                                                <th>余额</th>
+                                                <th>投注</th>
+                                                <th>中奖</th>
+                                                <th>充值</th>
+                                                <th>赠送</th>
+                                                <th>提款</th>
+                                                <th>打码量</th>
+                                                <th>分成/返佣</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {volist name='list' id="vo"}
+                                            <tr>
+                                                <td>{$vo.username}</td>
+                                                <td>{$vo.money}</td>
+                                                <td>{$vo.xz}</td>
+                                                <td>{$vo.zj}</td>
+                                                <td>{$vo.cz}</td>
+                                                <td>{$vo.zs}</td>
+                                                <td>{$vo.tx}</td>
+                                                <td>{$vo.xz}</td>
+                                                <td>{$vo.fc}</td>
+                                            </tr>
+                                            {/volist}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            
+            
+            
+            
+        </div>
+        <script type="text/javascript">
+        
+        </script>
+        
+        
+    </body>
+</html>

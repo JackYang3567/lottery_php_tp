@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="https://cdn.bootcss.com/bootstrap-switch/4.0.0-alpha.1/css/bootstrap-switch.css" rel="stylesheet">
+    <title></title>
+
+    {css href="/static/layui/css/layui.css" /}
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <script type="text/javascript">
+        $("#kui").change(function(){
+            var switch_id = $("#kui").val();
+            console.log(switch_id);
+            var config_id = $(this).parent().next().val();
+            layer.confirm('确定修改该彩种状态?', {
+                btn: ['是','否'] //按钮
+            }, function(){
+                $.ajax({
+                    url:"{:url(request()->module().'/lottery/type_switch')}",//这里指向的就不再是页面了，而是一个方法。
+                    data:{switch_id:switch_id,config_id:config_id},
+                    type:"POST",
+                    dataType:"JSON",
+                    success: function(data){
+                        if(data.error == 0){
+                            layer.msg(data.msg,{icon:1,time:1000},function(){
+                                self.location.reload(); // 父页面刷新
+                                self.layer.close();
+                            });
+                        }else{
+                            layer.msg(data.msg, {icon: 5,time:2000});
+                        }
+                    }
+                })
+            }, function(){
+                self.location.reload(); // 父页面刷新
+                self.layer.close();
+            });
+        })
+        $('[name="status"]').bootstrapSwitch({
+            onText: "启动",
+
+            onColor: "success",
+            offColor: "info",
+            size: "small",
+            onSwitchChange: function (event, state) {
+                if (state == true) {
+                    alert('已打开');
+                } else {
+                    alert('已关闭');
+                }
+            },
+        });
+        $(document).ready(function(){
+            $(".click").click(function(){
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function(){
+                $(".tip").fadeOut(200);
+            });
+            $(".sure").click(function(){
+                $(".tip").fadeOut(100);
+            });
+            $(".cancel").click(function(){
+                $(".tip").fadeOut(100);
+            });
+            $("input[name='checkall']").click(function(){
+                var    CheckBox=document.getElementsByName('article_id');
+                if($(this).is(':checked') ==false){
+                    for(i=0;i<CheckBox.length;i++){
+                        CheckBox[i].checked=false;
+                    };
+                }else{
+                    for(i=0;i<CheckBox.length;i++){
+                        CheckBox[i].checked=true;
+                    };
+                }
+            })
+
+            $('.choose_dlt').click(function(){
+                var checked_id = $("input[name='id']:checked");
+                var article_list = [];
+                if(checked_id.length == 0){
+                    layer.msg('请选择要删除的文章',{icon:3});
+                }else{
+
+                    for(var i=0;i<checked_id.length;i++){
+                        article_list.push($(checked_id[i]).val());
+                    }
+                    $.ajax({
+                        url:"{:url('djycpgk/PJ/delete')}",//这里指向的就不再是页面了，而是一个方法。
+                        data:{id:article_list},
+                        type:"POST",
+                        dataType:"JSON",
+                        success: function(data){
+                            if(data.error == 0){
+                                layer.msg('删除成功',{icon:1,time:1000},function(){
+                                    self.location.reload(); // 父页面刷新
+                                    self.layer.close();
+                                });
+                            }else{
+                                layer.msg('删除失败', {icon: 5,time:2000});
+                            }
+                        }
+                    })
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <div>
+        <button id="addArticle" type="button" class="btn btn-success">添加</button>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>编号<i class="sort"><img src="/static/admin/images/px.gif" /></i></th>
+            <th>游戏接口商</th>
+            <th>是否显示</th>
+            <th>排序</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        {volist name="tai" id="vo"}
+        <tr>
+            <td>{$vo.id}</td>
+            <td>{$vo.name}</td>
+            <td>
+                <a href="javascript:;" class="article_dlts"  switch="{$vo.switch},{$vo.id}">{if $vo["switch"] == 1}开{else}关{/if}</a>(点击修改状态)
+            </td>
+            <td>
+                {$vo.sort}
+            </td>
+            <td>
+                <a href="{:url('djycpgk/PJ/edit')}?id={$vo.id}" class="tablelink">查看并修改</a>
+                <a href="{:url('djycpgk/PJ/youxin')}?id={$vo.id}" class="tablelink">查看游戏</a>
+                <a href="javascript:;" class="tablelink article_dlt" data-id="{$vo.id}"> 删除</a>
+            </td>
+        </tr>
+        {/volist}
+    </table>
+</div>
+<script type="text/javascript">
+    $('#addArticle').click(function(){
+        window.location.href="{:url('djycpgk/PJ/add')}";
+    })
+    $('.article_dlt').click(function(){
+        var data_id = $(this).attr('data-id');
+        layer.confirm('确定删除该', {
+            btn: ['是','否'] //按钮
+        }, function(){
+            $.ajax({
+                url:"{:url('djycpgk/PJ/delete')}",//这里指向的就不再是页面了，而是一个方法。
+                data:{id:data_id},
+                type:"POST",
+                dataType:"JSON",
+                success: function(data){
+                    if(data.error == 0){
+                        layer.msg('删除成功',{icon:1,time:1000},function(){
+                            self.location.reload(); // 父页面刷新
+                            self.layer.close();
+                        });
+                    }else{
+                        layer.msg('删除失败', {icon: 5,time:2000});
+                    }
+                }
+            })
+        }, function(){
+        });
+    })
+    $('.article_dlts').click(function(){
+        var data_switch = $(this).attr('switch');
+        layer.confirm('是否改变状态', {
+            btn: ['是','否'] //按钮
+        }, function(){
+            $.ajax({
+                url:"{:url('djycpgk/PJ/cuai')}",//这里指向的就不再是页面了，而是一个方法。
+                data:{switch:data_switch},
+                type:"POST",
+                dataType:"JSON",
+                success: function(data){
+                    //console.log(data);
+                    if(data.error == 0){
+                        layer.msg('修改成功',{icon:1,time:1000},function(){
+                            self.location.reload(); // 父页面刷新
+                            self.layer.close();
+                        });
+                    }else{
+                        layer.msg('修改失败', {icon: 5,time:2000});
+                    }
+                }
+            })
+        }, function(){
+
+        });
+    })
+</script>
+</body>
+</html>

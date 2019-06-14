@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/vueJs/vue.min.js" /}
+    <style type="text/css">
+        [v-cloak]{
+            display:none;
+        }
+        .sort{
+            cursor: pointer;
+        }
+        .layui-layer-tips{
+            word-break: break-all;
+        }
+        .syy{
+            /* width: 60px;
+            height: 40px; */
+            text-align: center;border-radius:5px;
+            border: 1px solid rgb(178,165,213);
+            cursor: pointer;
+        }
+        .tablelisttr tr:nth-child(even){
+            background: #f5f8fa;
+        }
+        .tablelisttr tr td{
+
+        }
+        .place span{
+            transition:background 0.2s,color 0.2s,border 0.2s;
+            margin:0;
+            padding:5px 10px;
+            line-height:20px;
+            margin:0 2px;
+
+        }
+
+        .place span:hover{
+            background:#3e96c9;
+            color:#fff;
+            border:1px solid #3e96c9;
+        }
+        .place span:active{
+            background:#32779f;
+            color:#fff;
+        }
+        .syy_list_click{
+            background:#3e96c9;
+            color:#fff;
+        }
+        .syy_list{
+
+            text-align: center;
+            border-radius:5px;
+            border: 1px solid rgb(178,165,213);
+            margin:0;
+        }
+
+        @keyframes twinkle
+        {
+            from {}
+            45% {color:#fff;}
+            50% {color:#4198ca;}
+            55% {color:#fff;}
+            to  {}
+        }
+        #count{
+            font-style:normal;
+            animation-name:twinkle;
+            animation-duration:5s;
+            animation-iteration-count:infinite;
+        }
+        /* .xyy{
+            width: 60px;
+            height: 40px;
+            text-align: center;border-radius:5px;
+            border: 1px solid rgb(178,165,213);
+        } */
+        i{
+            font-style:normal !important;
+        }
+    </style>
+
+    <!-- <script type="text/javascript">
+    $(document).ready(function(){
+    });
+    </script>
+    <script src="../../../../../vue/config/index.js"></script> -->
+
+</head>
+<body>
+
+
+<div class="rightinfo" style="margin:0;padding:0;">
+    <div class="place">
+        <div class="ibox-content" style="margin-bottom: 10px;">
+            <div class="place">
+                <span>位置：</span>
+                <span style="font-weight:normal;cursor: pointer;" @click="reLoad(1)">推广页面</span>
+            </div>
+        </div>
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th>平台</th>
+                <th>是否使用</th>
+                <th>生成推广页面</th>
+            </tr>
+            </thead>
+            <tbody class="tablelisttr">
+            {foreach $ex as $k=>$e}
+            <tr>
+                <td>
+                    {switch name="$k"}
+                    {case value="zc"}众筹{/case}
+                    {case value="xy"}幸运{/case}
+                    {case value="cdw"}大彩网{/case}
+                    {/switch}
+                </td>
+                <td>{switch name="$e.use"}
+                    {case value="1"}使用{/case}
+                    {case value="0"}停用{/case}
+                    {/switch}</td>
+                <td>{switch name="$e.use"}
+                    {case value="1"}<a href="{:url('/getCodeForExtension')}?info={:base64_encode(json_encode($k))}" target="_blank">生产推广码</a>{/case}
+                    {case value="0"}停用{/case}
+                    {/switch}</td>
+            </tr>
+            {/foreach}
+
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~VUE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+</body>
+</html>

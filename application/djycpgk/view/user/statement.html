@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/bootstrap.min.css"/} {css href="/static/admin/css/style.css"/} {js href="/static/admin/js/jquery-3.2.1.min.js"/} {js href="/static/admin/layer/layer.js"/}
+    <style type="text/css">
+        .pagination{
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+            float: right;
+        }
+        /*.pagination  a{*/
+
+            /*color: black;*/
+            /*float: left;*/
+            /*padding: 8px 16px;*/
+            /*text-decoration: none;*/
+
+        /*}*/
+        .current {
+            float: left;
+        }
+        /*.pagination  a:hover:not(.current) {*/
+            /*background-color: #ddd;*/
+        /*}*/
+
+
+        .pagination a{
+            float: left;
+            display: inline-block;
+            padding: 7px 16px;
+            margin: 0 1px;
+            border: 1px solid #f0f0f0;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+        .pagination span {
+            line-height:35px;
+            height: 35px;
+            float: left;
+            display: inline-block;
+            padding: 0px 16px;
+            margin: 0 ;
+            border: 1px solid #f0f0f0;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+        }
+
+        .pagination a,
+        .pagination li {
+            display: inline-block;
+            list-style: none;
+            text-decoration: none;
+            color: #58A0D3;
+        }
+
+        .pagination a.first,
+        .pagination a.prev,
+        .pagination a.next,
+        .pagination a.end {
+            margin: 0;
+        }
+
+        .pagination a:hover {
+            border-color: #50A8E6;
+        }
+
+        .pagination span.current {
+            background: #50A8E6;
+            color: #FFF;
+            font-weight: 700;
+            border-color: #50A8E6;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="place">
+        <div class="place">
+            <span>位置：</span>
+            <ul class="placeul">
+                <li><a href="{:url('statement')}">结算报表</a></li>
+            </ul>
+        </div>
+        <div class="rightinfo">
+            <div class="tools">
+                <ul class="seachform" style="">
+                    <form action="{:url('statement')}" id="is_form">
+                        <input type="hidden" name="order_name" value="">
+                        <input type="hidden" name="order" value="">
+                        <!--<input type="hidden" name="action" value="{$action}">-->
+                        <li>用户名：
+                            <input value="{$user_name}" name="user_name" type="text" class="scinput" placeholder="请输入用户账号" />
+                        </li>
+                        <li>日期：
+                            <input type="date" value="{$begin_time|date='Y-m-d'}" class="scinput" name="begin_time" />&nbsp;-&nbsp;
+                            <input type="date" value="{$end_time|date='Y-m-d'}" class="scinput" name="end_time">
+                        </li>
+                        <li>
+                            <label>&nbsp;</label>
+                            <input name="" type="submit" class="scbtn" value="搜索" style="margin-top: -1px;" />
+                        </li>
+                        <li> <label>&nbsp;</label> <a class="btn btn-default btn-sm" href="{:url('statement')}" role="button">刷新</a></li>
+                    </form>
+                </ul>
+            </div>
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <!--<th>用户(下级数量)</th>-->
+                        <th>用户</th>
+                        <th>登录时间</th>
+                        <!--<th><a href="javascript:;" class="order_by" data-order=" ">现余额<img src="/static/admin/images/px.gif" title="排序" /></a></th>-->
+                        <th>现余额</th>
+                        <th><a href="javascript:;" class="order_by" data-px="{$order}" data-order="2">用户充值<img src="/static/admin/images/px.gif" title="排序" /></a></th>
+                        <th><a href="javascript:;" class="order_by" data-px="{$order}" data-order="5">充值赠送<img src="/static/admin/images/px.gif" title="排序" /></a></th>
+                        <th><a href="javascript:;" class="order_by" data-px="{$order}" data-order="1">取款<img src="/static/admin/images/px.gif" title="排序" /></a></th>
+                        <th><a href="javascript:;" class="order_by" data-px="{$order}" data-order="0">消费<img src="/static/admin/images/px.gif" title="排序" /></a></th>
+                        <th><a href="javascript:;" class="order_by" data-px="{$order}" data-order="4">扣款<img src="/static/admin/images/px.gif" title="排序" /></a></th>
+                        <th><a href="javascript:;" class="order_by" data-px="{$order}" data-order="3">中奖<img src="/static/admin/images/px.gif" title="排序" /></a></th>
+                        <th><a href="javascript:;" class="order_by" data-px="{$order}" data-order="8">佣金<img src="/static/admin/images/px.gif" title="排序" /></a></th>
+                        <th><a href="javascript:;" class="order_by" data-px="{$order}" data-order="11">返水<img src="/static/admin/images/px.gif" title="排序" /></a></th>
+                        <th><a href="javascript:;" class="order_by" data-px="{$order}" data-order="200">盈利<img src="/static/admin/images/px.gif" title="排序" /></a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {if count($data)==0}
+                        <tr>
+                            <td colspan="12" align="center">未找到数据</td>
+                        </tr>
+
+                    {else/}
+                        {foreach $data as $vo }
+                       <tr>
+                           <td>
+                               {if $vo.type == 0}
+                                    {$vo.username}
+                               {else/}
+                                    {$vo.username} <b style="color: red;">(内部试玩)</b>
+                               {/if}
+                           </td>
+                           <td>
+                                {if  isset($vo.login_time)}
+                                    {$vo.login_time|date='Y-m-d H:i'}
+                               {else/}
+                                    无登录记录
+                               {/if}
+                           </td>
+                           <td>{$vo.money}</td>
+                           {foreach [2, 5, 1,0, 4, 3,8,11] as $vr }
+                           <td>
+                               {if $vr == 2}
+                                    {$vo.statistics[$vr]+$vo.statistics[7]}
+                               {elseif $vr == 1}
+                                    {$vo.statistics[1]}
+                               {elseif $vr == 0}
+                                    {:abs($vo.statistics[0])}
+                               {else/}
+                                    {$vo.statistics[$vr]}
+                               {/if}
+                           </td>
+                           {/foreach}
+                           <td style="color: red;">{$vo.statistics[0]-$vo.statistics[3]}</td>
+                       </tr>
+                       {/foreach}
+                        <tr>
+                            <td colspan="2" align="center">本页总额</td>
+                            <td> {$money}</td>
+                            {foreach [2, 5, 1,0, 4, 3,8,11] as $vr }
+                            <td>
+                                {if $vr == 2}
+                                    {$tongji[$vr]+$tongji[7]}
+                                {elseif $vr == 1}
+                                    {$tongji[1]}
+                                {elseif $vr == 0}
+                                    {:abs($tongji[0])}
+                                {else/}
+                                    {$tongji[$vr]}
+                                {/if}
+                            </td>
+                            {/foreach}
+                            <td style="color: red;">{$vo.statistics[0]-$vo.statistics[3]}</td>
+                        </tr>
+                    {/if}
+                </tbody>
+            </table>
+            <div class="pagin">
+                {if isset($list['pandu'])}
+                    共
+                    <i class="blue"> {if isset($count[0]['count'])}{$count[0]['count']}{else/} 0{/if}</i>条记录
+                    <div class="pagination">
+                        {$page2|raw}
+                    </div>
+
+                    {else/}
+                    <div class="message">
+                        共
+                        <i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;
+                        <i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页
+                    </div>
+                    {if !$list->isEmpty()} {$list|raw} {/if}
+
+                {/if}
+            </div>
+        </div>
+    </div>
+    <script>
+    $('.order_by').on('click', function(e) {
+        var _this = $(this),
+            _order = _this.data('px'),
+            _orderss = $("input[name='order']"),
+            _order_obj = $("input[name='order_name']");
+            console.log(_order);
+            // return false;
+        if (_order == 'DESC') {
+                _order='ASC';
+            } else {
+                _order='DESC';
+            }
+        _orderss.val(_order);
+        _order_obj.val(_this.data('order'));
+        $('#is_form').submit();
+    });
+    </script>
+</body>
+
+</html>

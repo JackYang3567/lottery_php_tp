@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/iCheck/custom.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/js/iCheck/icheck.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.i-checks').iCheck({
+    checkboxClass: 'icheckbox_square-green',
+    radioClass: 'iradio_square-green',
+    });
+    });
+    </script>
+    <style>
+    .cp_content ul li{
+    width: 28%;
+    float: left;
+    text-align: center;
+    border-top: solid 1px #a7b5bc;
+    border-left: solid 1px #a7b5bc;
+    border-right: solid 1px #ced9df;
+    border-bottom: solid 1px #ced9df;
+    margin-left: 5px;
+    margin-top: 5px;
+    }
+    .cp_content .type_name  input{
+    width: 70px;
+    border-bottom: solid 1px #ced9df;
+    font-size: 15px;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    /* padding-top: 4px; */
+    height: 16px;
+    text-align: center;
+    }
+    .cp_content .detail_config a{
+    color: #3EAFE0;
+    }
+    .cp_content p{
+      margin-top: 5px;
+    }
+    </style>
+  </head>
+  <body>    
+     <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/lottery/statussetting')}">彩种设置</a></li>
+                <li><a href="#">{$name}：玩法设置</a></li>
+                </ul>
+                </div>
+            </div>
+    
+    <div class="rightinfo" style="width: 100%;">
+      <div>
+        &nbsp; <b>赔率同步</b>:<input type="text"  class="dfinput" name="tongbu" style="width: 100px;height: 30px;">&nbsp;&nbsp;<input type="button" class="btn btn_tongbu" value="同步"  style="width: 50px;height: 30px;" />
+        &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn room_config" value="房间设置"  style="width: 100px;height: 30px;" data-id="{$data.type}"/>(<b style="color: red;">修改房间设置后，请重新设置赔率</b>)
+      </div>
+      <div class="cp_content" style="width: 100%;">
+        <form action="{:url('djycpgk/lottery/detail_config')}" method="post">
+          <input type="hidden" name="type_id" value="{$data.type}">
+          
+          <ul>
+            
+            {foreach $data.basic_config.odds as $k=>$value  }
+            <li>
+              <p class="type_name"><b>结果:</b><input type="text"  name="name[{$k}]" value="{$value.name}" /></p>
+              
+              {foreach $value.num as $key=>$v}
+              <p class="type_name"><b style="margin-left: 20px;">{$data.basic_config.room[$key]['name']} 赔率:</b><input type="text" style="color: red;"  class="peilv" name="{$key}[{$k}]" value="{$v}" /><b>(倍)</b></p>
+              {/foreach}
+            </li>
+            {/foreach}
+          </ul>
+          <div style="clear: both; text-align: center;"><br /><br /><input type="submit" class="btn" value="保存" /></div>
+          
+        </form>
+      </div>
+    </div>
+        </div>
+    <script type="text/javascript">
+    $(".btn_tongbu").click(function(){
+    var tongbu = $("input[name='tongbu']").val();
+    if(tongbu == ''){
+    layer.msg('请输入同步数字');
+    return;
+    }
+    $('.peilv').val(tongbu);
+    })
+    $(".room_config").click(function(){
+    
+    var type_id = $(this).attr('data-id');
+    
+    layer.open({
+    type: 2,
+    skin: 'layui-layer-rim', //加上边框
+    title:'房间设置(修改房间设置后，请重新设置赔率)',
+    area: ['900px', '580px'], //宽高
+    content: "{:url('djycpgk/lottery/room_config')}?type_id="+type_id,
+    });
+    })
+    </script>
+  </body>
+</html>

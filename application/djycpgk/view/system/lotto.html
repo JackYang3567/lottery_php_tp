@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+
+    <!-- 饼图 -->
+    {js href="https://code.highcharts.com/highcharts.js"/}
+    <style>
+    .rule input {
+    width: 129pt;
+    }
+    .rule span{
+    display: inline-block;
+    height: 34px;
+    text-align: center;
+    }
+    .rule span img{
+    vertical-align: middle;
+    }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+    $(".select1").uedSelect({
+    width : 345
+    });
+    
+    $(".addRule").click(function(){
+    var html ='';
+    html+= '<li class="rule">奖品名称 <input name="text" type="text" class="dfinput" value=""';
+      html+= 'required="" >';
+      html+= ' 奖品金额 <input name="point" type="number" class="dfinput" value="" required="required"/> ';
+      html+= ' 中奖几率   <input name="percent" type="number" class="dfinput" value="" required="required"  placeholder="百分比" />%';
+      html+=' <span class="dtl_rule"><img src="/static/admin/images/t03.png" /></span>';
+    html+= '</li>';
+    $('.baocun').before(html);
+    })
+    $(document).on('click','.dtl_rule', function(){
+    $(this).parent().remove();
+    })
+    
+    
+    $("input[name='baocun']").click(function(){
+    var  switch_id = $("input[name='switch']:checked").val();
+    var recharge_condition = $("input[name='recharge_condition']").val();
+    var time =  $("input[name='time']").val();
+    var use_point =  $("input[name='use_point']").val();
+    var array=$("[name='text']");//单引号 的name替换为相应的name
+    var begin_array = [];
+    var end_array = [];
+    for(var i=0;i<array.length;i++){
+      begin_array.push($(array[i]).val());
+      }
+      var array1= $("[name='point']");
+      for(var i=0;i<array1.length;i++){
+        end_array.push($(array1[i]).val());
+        }
+        var array2=$("[name='percent']");
+        var percent_array = [];
+        for(var i=0;i<array2.length;i++){
+          percent_array.push($(array2[i]).val());
+          }
+          var final_array = [];
+          final_array = begin_array.map((item,idx,value) => [item, end_array[idx],percent_array[idx]]);
+          //console.log(final_array);return;
+          $.ajax({
+          url:"{:url('djycpgk/system/lotto')}",
+          data:{final_array:final_array,switch_id:switch_id,recharge_condition:recharge_condition,time:time,use_point:use_point},
+          type:"POST",
+          dataType:"JSON",
+          success: function(data){
+          if(data.error == 0){
+          layer.msg(data.msg,{icon:1,time:1000},function(){
+          self.location.reload(); // 父页面刷新
+          self.layer.close();
+          });
+          }else{
+          layer.msg(data.msg, {icon: 5,time:2000});
+          }
+          }
+          })
+          })
+          });
+          </script>
+          
+          <script type="text/javascript">
+          </script>
+        </head>
+        <body>
+          <div class="rightinfo">
+            <div class="tools">
+              
+              <ul class="toolbar">
+                <li class="click addRule"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+              </ul>
+              
+            </div>
+            <div class="formbody" style="padding: 0 0;">
+              
+              
+              <div id="usual1" class="usual">
+                
+                <div id="tab1" class="tabson">
+                  <ul class="forminfo">
+                    <form action="{:url('djycpgk/system/lotto')}" method="post">
+                      <li> 
+                        <div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
+                      </li>
+                      <li ><label>是否开启抽奖<b>*</b></label>
+                      <div style=" line-height: 34px;font-size: 13pt;">
+                        <input type="radio" name="switch" value="1" {if $lotto.switch == 1}checked="checked"{/if}/>开
+                        <input type="radio" name="switch" value="0" {if $lotto.switch == 0}checked="checked"{/if} />关
+                        <span style="color: red;">(关闭后,前台无法抽奖,*奖品数最少设置3个，最多设置16个, 中奖几率总和不能超过100%)</span>
+                      </div>
+                    </li>
+                    <li ><label>抽奖充值条件<b>*</b></label><input name="recharge_condition" type="number" class="dfinput" value="{$lotto.recharge_condition}" required="required"   /><span>(需满足充值条件，才能进行抽奖)</span>
+                  </li>
+                  <li ><label>抽奖所需积分<b>*</b></label><input name="use_point" type="number" class="dfinput" value="{$lotto.use_point}" required="required"   /><span>(每次抽奖，消耗的积分数)</span>
+                </li>
+                <li ><label>抽奖次数<b>*</b></label><input name="time" type="number" class="dfinput" value="{$lotto.time}" required="required"   /><span>(每个会员每天的抽奖次数)</span>
+              </li>
+              
+              {volist name="lotto.data" id="vo"}
+              <li class="rule">奖品名称&nbsp;<input name="text" type="text" class="dfinput" value="{$vo.text}" required="required"   />
+              奖励金额&nbsp;<input name="point" type="number" class="dfinput" value="{$vo.point}" required="required"   />
+              中奖几率&nbsp;<input name="percent" type="number" class="dfinput" value="{$vo.percent}" required="required"   />%
+              <span  class="dtl_rule" ><img src="/static/admin/images/t03.png" /></span>
+            </li>
+            {/volist}
+            
+            <li  class="baocun" style="margin-top: 10px;"><label>&nbsp;</label><input name="baocun" type="button" class="btn" value="保存"/></li>
+          </form>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  $("#usual1 ul").idTabs();
+  </script>
+  
+  <script type="text/javascript">
+  $('.tablelist tbody tr:odd').addClass('odd');
+
+//
+$(document).ready(function() {  
+   var chart = {
+       plotBackgroundColor: null,
+       plotBorderWidth: null,
+       plotShadow: false
+   };
+   var title = {
+      text: '抽奖比例  %'   
+   };      
+   var tooltip = {
+      pointFormat: '{series.name} <b>{point.percentage:.1f}%</b>'
+   };
+   var plotOptions = {
+      pie: {
+         allowPointSelect: true,
+         cursor: 'pointer',
+         dataLabels: {
+            enabled: true,
+            style: {
+               color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+         }
+      }
+   };
+  var mc = "{$mc}".split(',');
+  var bl = "{$bl}".split(',');
+
+   var series = [{
+      type: 'pie',
+      name: ' ',
+      data: [
+      ]
+   }];     
+  for(let i=0,len=mc.length;i<len;i++){
+    series[0]['data'][i] = [ mc[i],parseInt(bl[i]) ];
+  }
+
+   var json = {};   
+   json.chart = chart; 
+   json.title = title;     
+   json.tooltip = tooltip;  
+   json.series = series;
+   json.plotOptions = plotOptions;
+   $('#container').highcharts(json);  
+});
+
+
+  </script>
+  
+  
+  
+  
+  
+</div>
+</body>
+</html>

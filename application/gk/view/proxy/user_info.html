@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+
+    </head>
+<body>
+<ul class="breadcrumb">
+    <li><span href="#">位置</span></li>
+    <li><a href="{:url('gk/proxy/swindex')}">试玩列表</a></li>
+    <li><a href="#">查看用户</a></li>
+</ul>
+<div class="container">
+    <form id="is_data">
+        <input type="hidden" name="id" value="{$baseinfo.id}">
+        <input type="hidden" name="flag" value="base">
+        <div class="form-group">
+            <label for="exampleInputEmail1">账号</label>
+            <input type="text" name="username" class="form-control" id="exampleInputEmail1" value="{$baseinfo.username}" placeholder="账号" readonly>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">密码</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="密码">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword3">注册时间</label>
+            <input type="data" name="password" class="form-control" id="exampleInputPassword3" value="{$baseinfo.create_time}" readonly>
+        </div>
+        <div class="form-group">
+            <label class="radio-inline">
+                <input type="radio" name="status" id="inlineRadio1" value="0"  <?php if($baseinfo['status'] == 0) echo "checked='checked'";?>> 正常
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="status" id="inlineRadio2" value="1"  <?php if($baseinfo['status'] == 1) echo "checked='checked'";?>> 冻结
+            </label>
+        </div>
+        <button type="button" class="btn btn-info sub">修改</button>
+    </form>
+</div>
+<script>
+    $('.sub').on('click',function(){
+        $.post("{:url(request()->module() . '/proxy/info_edit')}",$('#is_data').serializeArray(),function(res){
+            layer.msg(res.msg);
+        });
+    });
+</script>
+
+</body>
+</html>

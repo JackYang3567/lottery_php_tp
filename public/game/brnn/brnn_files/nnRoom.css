@@ -1,0 +1,626 @@
+.lottRstPanel{
+    position: relative;
+    overflow: auto;
+}
+.zhui_details_w{
+    display: none;
+}
+.rstIssue{
+    position: absolute;
+    top: 5px;
+    text-align: center;
+    width: 100%;
+    color: white;
+    z-index: 1;
+}
+.vsBox{
+    position: absolute;
+    top: 40px;
+    z-index: 1;
+    width: 100%;
+    
+}
+.vsBox img{
+    display: block;
+    margin: 0 auto;
+    width: 36px;
+}
+.pageTriangle{
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    background: url('/statics/web/images/niuniu/niuniu_down_icon@2x.png')no-repeat;
+    background-size: 100% 100%;
+    width: 16px;
+    z-index: 1;
+    height: 12px;
+}
+.blueLeft{
+    float: left;
+    background: #2E4167;
+    position: relative;
+    width: 50%;
+}
+.blueTitle{
+    color: #425F97;
+    padding-left: 10px;
+    margin: 5px;
+}
+.bluePoke{
+    width: 80%;
+    margin: 0 auto;
+    overflow: auto;
+    padding: 3px;
+    border-radius: 5px;
+    background: #202d48;
+    margin-bottom: 5px;
+}
+.bluePoke>div{
+    float: left;
+    width: 20%;
+    height: 50px;
+    background-size: 100% 100%;
+}
+.waitRstPoke{
+    background: url('/statics/web/images/niuniu/poker_default@2x.png')no-repeat;
+}
+.redRight{
+    float: left;
+    background: #D22727;
+    width: 50%;
+    position: relative;
+}
+.redPoke{
+    width: 80%;
+    margin: 0 auto;
+    overflow: auto;
+    padding: 3px;
+    border-radius: 5px;
+    background: #202d48;
+    margin-bottom: 5px;
+    
+}
+.redPoke>div{
+    height: 50px;
+    float: left;
+    width: 20%;
+    background-size: 100% 100%;
+}
+.redTitle{
+    color: #EB7057;
+    padding-right: 10px;
+    margin: 5px;
+    text-align: right;
+}
+.bettPanel{
+    display: none;
+}
+.boxShadow{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: .5;
+    display: none;
+}
+.winIndex{
+    z-index: 998;
+    position: relative;
+}
+.lottRstTip{
+    position: absolute;
+    width: 40%;
+    left: 30%;
+    bottom: 5px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    background: url('/statics/web/images/niuniu/niuniu_lab_icon@2x.png')no-repeat;
+    background-size: 100% 100%;
+    z-index: 999;
+}
+
+.checkPanel1{
+    overflow: auto;
+}
+.ckOdds2 span:first-child,.ckOdds4 span:first-child{
+    background-size: 100% 100%;width: 20px;height: 30px;display: block;float: left;
+}
+.oddsExplain{
+    line-height: 40px;
+    display: block;
+}
+.desc{
+    color: #D22727;
+    text-align: center;
+    line-height: 30px;
+}
+.checkPanel1>div{
+    width: 48%;
+    background: #F4F4F6;
+    border: 1px solid #CACACA;
+    margin-right: 4%;
+    margin-top: 10px;
+    border-radius: 5px;
+    height: 36px;
+    line-height: 30px;
+    padding: 2px 4px;
+    float: left;
+}
+.checkPanel1>div:nth-child(2n+0){
+    margin-right: 0px;
+}
+.checkPanel1 .yuanIndex{
+    border-radius: 50%;
+    background: white;
+    text-align: center;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    float: left;
+    margin-top: 3px;
+    font-size: 14px;
+}
+.checkPanel1 .peilv1{
+    float: right;
+    color: #D91D37;
+    font-size: 10px;
+}
+#selectPanel1{
+    text-align: center;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+#selectPanel1 option{
+    text-align: center;
+}
+.checkPanel2{
+    overflow: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.checkPanel2>div{
+    width: 49%;
+    background: #F4F4F6;
+    border: 1px solid #CACACA;
+    margin-top: 10px;
+    border-radius: 5px;
+    height: 26px;
+    line-height: 20px;
+    padding: 2px 4px;
+    overflow: auto;
+}
+.checkPanel2>div span:first-child{float: left;}
+.checkPanel2>div span:last-child{float: right;color: #D91D37}
+.ckedOdds1{
+    border: 1px solid #D22727 !important;
+}
+
+/* 投注操作区 */
+.bettPanel{
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 999;
+    background: #F2F2F2;
+    padding: 2px 4px;
+    box-shadow: -1px -2px 3px #ccc;
+    display: none;
+}
+.bpTop{
+    overflow: auto;
+    padding-top: 5px;
+}
+.cmPanel{
+    position: absolute;
+    bottom: 50px;
+    z-index: 1000;
+    display: none;
+}
+.cmPanel>div{
+    float: left;
+    
+    background-size: 100% 100%;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    font-size: 10px;
+}
+.ybBg0{
+    background: url('/statics/web/images/chip-1.png')no-repeat;
+}
+.ybBg1{
+    background: url('/statics/web/images/chip-2.png')no-repeat;
+}
+.ybBg2{
+    background: url('/statics/web/images/chip-5.png')no-repeat;
+}
+.ybBg3{
+    background: url('/statics/web/images/chip-10.png')no-repeat;
+}
+.ybBg4{
+    background: url('/statics/web/images/chip-50.png')no-repeat;
+}
+.ybBg5{
+    background: url('/statics/web/images/chip-100.png')no-repeat;
+}
+.ckedYuanbao{
+    position: relative;
+    bottom: 6px;
+}
+.bet-min{
+    float: right;
+    width: 20%;
+    height: 28px;
+    margin-top: 4px;
+    background: #0090DB;
+    font-size: 12px;
+}
+.bpTop p{
+    clear: both;
+    font-size: 12px;
+    color: #999;
+    margin: 2px;
+}
+.bpTop p span{
+    color: #D91D37;
+}
+.bpBottom{
+    overflow: auto;
+    margin-bottom: 4px;
+}
+.moneyInput{
+    float: left;
+    width: 40%;
+}
+.moneyInput input{
+    height: 24px;
+    border-radius: 5px;
+    width: 100%;
+}
+.bpBtnPanel{
+    float: right;
+    display: flex;
+    justify-content: space-between;
+    width: 58%;
+    margin-left: 2%;
+}
+.bpBtnPanel button{
+    height: 24px;
+    width: 30%;
+    font-size: 12px;
+}
+.bettBtn{
+    background: #FF8624;
+}
+.add-list{
+    background: #D22727;
+}
+.bettCancel{
+    background: #666;
+}
+.betRight{
+    padding-bottom: 10px;
+}
+.issueStyle{
+    color: #2aa7f6;
+}
+.lottery li{
+    overflow: auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0px;
+    font-size: 12px;
+}
+.rstPanel{
+    overflow: auto;
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+}
+.rstPanel>div{
+    width: 19%;
+    height: 34px;
+    background-size: 100% 100%;
+}
+.lottery{
+    top: 198px;
+}
+.tit{
+    text-align: center;
+}
+.chase-table{
+    max-height: 120px;
+    overflow: scroll;
+}
+/* 扑克动画 */
+@keyframes poke1{
+    0%{transform: rotateY(0deg);}
+    100%{transform: rotateY(360deg)}
+}
+/* .bluePoke>div:nth-child(1){
+    animation: poke1 1s forwards;    
+}
+.bluePoke>div:nth-child(2){
+    animation: poke1 1s forwards .3s;
+}
+.bluePoke>div:nth-child(3){
+    animation: poke1 1s forwards .6s;    
+}
+.bluePoke>div:nth-child(4){
+    animation: poke1 1s forwards .9s;    
+}
+.bluePoke>div:nth-child(5){
+    animation: poke1 1s forwards 1.2s;    
+}
+.redPoke>div:nth-child(1){
+    animation: poke1 1s forwards 1.5s;    
+}
+.redPoke>div:nth-child(2){
+    animation: poke1 1s forwards 1.8s;
+}
+.redPoke>div:nth-child(3){
+    animation: poke1 1s forwards 2.1s;    
+}
+.redPoke>div:nth-child(4){
+    animation: poke1 1s forwards 2.4s;    
+}
+.redPoke>div:nth-child(5){
+    animation: poke1 1s forwards 2.7s;    
+} */
+.bluepokeDh1{
+    animation: poke1 1s forwards .3s;
+}
+.bluepokeDh2{
+    animation: poke1 1s forwards .6s;
+}
+.bluepokeDh3{
+    animation: poke1 1s forwards .9s;
+}
+.bluepokeDh4{
+    animation: poke1 1s forwards 1.2s;
+}
+.redpokeDh0{
+    animation: poke1 1s forwards 1.5s;
+}
+.redpokeDh1{
+    animation: poke1 1s forwards 1.8s;
+}
+.redpokeDh2{
+    animation: poke1 1s forwards 2.1s;
+}
+.redpokeDh3{
+    animation: poke1 1s forwards 2.4s;
+}
+.redpokeDh4{
+    animation: poke1 1s forwards 2.7s;
+}
+
+/* 扑克url */
+.poker1_1{
+    background: url('/statics/web/images/niuniu/poker1_1@2x.png')no-repeat;
+}
+.poker1_2{
+    background: url('/statics/web/images/niuniu/poker1_2@2x.png')no-repeat;
+}
+.poker1_3{
+    background: url('/statics/web/images/niuniu/poker1_3@2x.png')no-repeat;
+}
+.poker1_4{
+    background: url('/statics/web/images/niuniu/poker1_4@2x.png')no-repeat;
+}
+.poker2_1{
+    background: url('/statics/web/images/niuniu/poker2_1@2x.png')no-repeat;
+}
+.poker2_2{
+    background: url('/statics/web/images/niuniu/poker2_2@2x.png')no-repeat;
+}
+.poker2_3{
+    background: url('/statics/web/images/niuniu/poker2_3@2x.png')no-repeat;
+}
+.poker2_4{
+    background: url('/statics/web/images/niuniu/poker2_4@2x.png')no-repeat;
+}
+.poker3_1{
+    background: url('/statics/web/images/niuniu/poker3_1@2x.png')no-repeat;
+}
+.poker3_2{
+    background: url('/statics/web/images/niuniu/poker3_2@2x.png')no-repeat;
+}
+.poker3_3{
+    background: url('/statics/web/images/niuniu/poker3_3@2x.png')no-repeat;
+}
+.poker3_4{
+    background: url('/statics/web/images/niuniu/poker3_4@2x.png')no-repeat;
+}
+.poker4_1{
+    background: url('/statics/web/images/niuniu/poker4_1@2x.png')no-repeat;
+}
+.poker4_2{
+    background: url('/statics/web/images/niuniu/poker4_2@2x.png')no-repeat;
+}
+.poker4_3{
+    background: url('/statics/web/images/niuniu/poker4_3@2x.png')no-repeat;
+}
+.poker4_4{
+    background: url('/statics/web/images/niuniu/poker4_4@2x.png')no-repeat;
+}
+.poker5_1{
+    background: url('/statics/web/images/niuniu/poker5_1@2x.png')no-repeat;
+}
+.poker5_2{
+    background: url('/statics/web/images/niuniu/poker5_2@2x.png')no-repeat;
+}
+.poker5_3{
+    background: url('/statics/web/images/niuniu/poker5_3@2x.png')no-repeat;
+}
+.poker5_4{
+    background: url('/statics/web/images/niuniu/poker5_4@2x.png')no-repeat;
+}
+.poker6_1{
+    background: url('/statics/web/images/niuniu/poker6_1@2x.png')no-repeat;
+}
+.poker6_2{
+    background: url('/statics/web/images/niuniu/poker6_2@2x.png')no-repeat;
+}
+.poker6_3{
+    background: url('/statics/web/images/niuniu/poker6_3@2x.png')no-repeat;
+}
+.poker6_4{
+    background: url('/statics/web/images/niuniu/poker6_4@2x.png')no-repeat;
+}
+.poker7_1{
+    background: url('/statics/web/images/niuniu/poker7_1@2x.png')no-repeat;
+}
+.poker7_2{
+    background: url('/statics/web/images/niuniu/poker7_2@2x.png')no-repeat;
+}
+.poker7_3{
+    background: url('/statics/web/images/niuniu/poker7_3@2x.png')no-repeat;
+}
+.poker7_4{
+    background: url('/statics/web/images/niuniu/poker7_4@2x.png')no-repeat;
+}
+.poker8_1{
+    background: url('/statics/web/images/niuniu/poker8_1@2x.png')no-repeat;
+}
+.poker8_2{
+    background: url('/statics/web/images/niuniu/poker8_2@2x.png')no-repeat;
+}
+.poker8_3{
+    background: url('/statics/web/images/niuniu/poker8_3@2x.png')no-repeat;
+}
+.poker8_4{
+    background: url('/statics/web/images/niuniu/poker8_4@2x.png')no-repeat;
+}
+.poker9_1{
+    background: url('/statics/web/images/niuniu/poker9_1@2x.png')no-repeat;
+}
+.poker9_2{
+    background: url('/statics/web/images/niuniu/poker9_2@2x.png')no-repeat;
+}
+.poker9_3{
+    background: url('/statics/web/images/niuniu/poker9_3@2x.png')no-repeat;
+}
+.poker9_4{
+    background: url('/statics/web/images/niuniu/poker9_4@2x.png')no-repeat;
+}
+.poker10_1{
+    background: url('/statics/web/images/niuniu/poker10_1@2x.png')no-repeat;
+}
+.poker10_2{
+    background: url('/statics/web/images/niuniu/poker10_2@2x.png')no-repeat;
+}
+.poker10_3{
+    background: url('/statics/web/images/niuniu/poker10_3@2x.png')no-repeat;
+}
+.poker10_4{
+    background: url('/statics/web/images/niuniu/poker10_4@2x.png')no-repeat;
+}
+.poker11_1{
+    background: url('/statics/web/images/niuniu/poker11_1@2x.png')no-repeat;
+}
+.poker11_2{
+    background: url('/statics/web/images/niuniu/poker11_2@2x.png')no-repeat;
+}
+.poker11_3{
+    background: url('/statics/web/images/niuniu/poker11_3@2x.png')no-repeat;
+}
+.poker11_4{
+    background: url('/statics/web/images/niuniu/poker11_4@2x.png')no-repeat;
+}
+.poker12_1{
+    background: url('/statics/web/images/niuniu/poker12_1@2x.png')no-repeat;
+}
+.poker12_2{
+    background: url('/statics/web/images/niuniu/poker12_2@2x.png')no-repeat;
+}
+.poker12_3{
+    background: url('/statics/web/images/niuniu/poker12_3@2x.png')no-repeat;
+}
+.poker12_4{
+    background: url('/statics/web/images/niuniu/poker12_4@2x.png')no-repeat;
+}
+.poker13_1{
+    background: url('/statics/web/images/niuniu/poker13_1@2x.png')no-repeat;
+}
+.poker13_2{
+    background: url('/statics/web/images/niuniu/poker13_2@2x.png')no-repeat;
+}
+.poker13_3{
+    background: url('/statics/web/images/niuniu/poker13_3@2x.png')no-repeat;
+}
+.poker13_4{
+    background: url('/statics/web/images/niuniu/poker13_4@2x.png')no-repeat;
+}
+.paimianA{
+    background: url('/statics/web/images/niuniu/niuniu_a_icon@2x.png')no-repeat;    
+}
+.paimian2{
+    background: url('/statics/web/images/niuniu/niuniu_2_icon@2x.png')no-repeat;    
+}
+.paimian3{
+    background: url('/statics/web/images/niuniu/niuniu_3_icon@2x.png')no-repeat;    
+}
+.paimian4{
+    background: url('/statics/web/images/niuniu/niuniu_4_icon@2x.png')no-repeat;    
+}
+.paimian5{
+    background: url('/statics/web/images/niuniu/niuniu_5_icon@2x.png')no-repeat;    
+}
+.paimian6{
+    background: url('/statics/web/images/niuniu/niuniu_6_icon@2x.png')no-repeat;    
+}
+.paimian7{
+    background: url('/statics/web/images/niuniu/niuniu_7_icon@2x.png')no-repeat;    
+}
+.paimian8{
+    background: url('/statics/web/images/niuniu/niuniu_8_icon@2x.png')no-repeat;    
+}
+.paimian9{
+    background: url('/statics/web/images/niuniu/niuniu_9_icon@2x.png')no-repeat;    
+}
+.paimian10{
+    background: url('/statics/web/images/niuniu/niuniu_10_icon@2x.png')no-repeat;    
+}
+.paimianJ{
+    background: url('/statics/web/images/niuniu/niuniu_11_icon@2x.png')no-repeat;    
+}
+.paimianQ{
+    background: url('/statics/web/images/niuniu/niuniu_12_icon@2x.png')no-repeat;    
+}
+.paimianK{
+    background: url('/statics/web/images/niuniu/niuniu_13_icon@2x.png')no-repeat;    
+}
+.paimianht{
+    background: url('/statics/web/images/niuniu/niuniu_heitao_pic@2x.png')no-repeat;    
+    width: 25px !important;
+}
+.paimianhx{
+    background: url('/statics/web/images/niuniu/niuniu_hongtao_pic@2x.png')no-repeat;    
+    width: 25px !important;    
+}
+.paimianmh{
+    background: url('/statics/web/images/niuniu/niuniu_meihua_pic@2x.png')no-repeat;    
+    width: 25px !important;    
+}
+.paimianfk{
+    background: url('/statics/web/images/niuniu/niuniu_fangkuai_pic@2x.png')no-repeat;    
+    width: 25px !important;    
+}
+.redRight,.blueLeft{position: relative;padding-top: 25px;}
+.rightWinImg{position: absolute;right: 0;top: 0;width: 30px;}
+.leftWinImg{position: absolute;left: 0;top: 0;width: 30px;}
+.betWarp .list-con p{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

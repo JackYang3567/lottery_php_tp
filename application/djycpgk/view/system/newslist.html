@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style type="text/css">
+        </style>
+        <script type="text/javascript">
+        var callbackdata = function () {
+        var data = $("input[name='img_href']:checked").val();
+        return data;
+        }
+        </script>
+    </head>
+    <body style="min-width:0;">
+        <table class="tablelist"  style="width: 700px;">
+            <thead>
+                <tr>
+                    
+                    <th>编号<i class="sort"><img src="/static/admin/images/px.gif" /></i></th>
+                    <th>标题</th>
+                    <th>勾选</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {volist name="articles" id="vo"}
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.title}</td>
+                    <td><input type="radio" name="img_href"  value="{$vo.id}"></td>
+                </tr>
+                {/volist}
+                
+            </tbody>
+            
+        </table>
+        <!--        <div style="margin-top: 3px;text-align: center;">
+            <button class="btn choose">选择</button>
+        </div> -->
+    </body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+      <link rel="stylesheet" >
+      {css href="/static/admin/css/bootstrap.min.css"/}
+    {css href="/static/admin/css/style.css"/}
+    {js href="/static/admin/js/jquery-3.2.1.min.js"/}
+    {js href="/static/admin/layer/layer.js"/}
+      <style>
+          .biankuang{
+              background-color: rgb(237,237,237);
+              padding:8px;
+              border-radius:5px;
+              margin-bottom: 5px;
+          }
+      </style>
+  </head>
+
+  <body>
+
+    <div class="place">
+      <div class="ibox-content" style="margin-left: 30px;">
+
+        <div class="place">
+          <span>位置：</span>
+          <ul class="placeul">
+            {if $set_data.type== 2}
+              <li>
+                <a href="{:url('index')}?type={$set_data.type}&page={$set_data.page}">
+                  试玩列表
+                </a>
+              </li>
+              {else/}
+              <li>
+                <a href="{:url('index')}?type={$set_data.type}&page={$set_data.page}">
+                  会员列表
+                </a>
+              </li>
+            {/if}
+
+          </ul>
+        </div>
+        <div class="rightinfo">
+            <div class="biankuang">
+            <div class="tools" style="margin-top: 5px">
+                <ul class="toolbar">
+                    <label>&nbsp;</label>
+                    {if $set_data.type== 2}
+                    <li class="click"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+                    {/if}
+
+                    <a class="btn btn-default btn-sm" href="{:url('index')}?type={$set_data.type}&page={$set_data.page}" role="button">刷新</a>
+                </ul>
+            </div>
+            <div class="tools">
+
+                <ul class="seachform" >
+                    <li>
+                        <select class="form-control" style="width: 110px" name="xuanxiang">
+                            {if $set_data.xuanxiang == 0}
+                            <option value ="0">用户名</option>
+                            <option value ="1">电话号码</option>
+                            <option value ="2">ID</option>
+                            {elseif $set_data.xuanxiang == 1/}
+                            <option value ="0">用户名</option>
+                            <option value ="1" selected = "selected">电话号码</option>
+                            <option value ="2">ID</option>
+                            {else/}
+                            <option value ="0">用户名</option>
+                            <option value ="1" >电话号码</option>
+                            <option value ="2" selected = "selected">ID</option>
+                            {/if}
+                        </select>
+                    </li>
+                    <li><input name="keywords" type="text" class="scinput" style="" page="{$set_data.page}" value="{$set_data.user_name}" is_type="{$set_data.type}" placeholder="请输入" /></li>
+                    <li>所属代理:<input name="agent" type="text" class="scinput"  value="{$set_data.agent}"  placeholder="请输入代理名称" /></li>
+                    <li>注册日期：<input  type="date"  name="start_time"  class="scinput"  value="{$set_data.start_time}"/>&nbsp;-&nbsp;<input  type="date" name="end_time" class="scinput" value="{$set_data.end_time}"> 状态：</li>
+                    <li>
+                        <select class="form-control" style="width: 110px" name="zhuangtai">
+                            <option value ="-1">全部</option>
+                            <option value ="0">正常</option>
+                            <option value ="1">冻结</option>
+                        </select>
+                    </li>
+                    <li><label>&nbsp;</label><input name="" type="button" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+                </ul>
+            </div>
+            </div>
+            <table class="tablelist">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>用户</th>
+                <th>所属上级</th>
+                <th>分组</th>
+                <th>积分</th>
+                <th>余额</th>
+                <th>冻结金额</th>
+                <th>累积中奖</th>
+                <th>状态</th>
+                <th>类型</th>
+                <th>电话</th>
+                <th>注册时间</th>
+                <th>上次活动时间</th>
+                <th>上次登录IP</th>
+                <th>最后登录设备</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+            {if $list->isEmpty() }
+              <tr><td colspan="15" align="center">没 有 查 找 到 数 据 !</td></tr>
+            {else/}
+                {volist name="list" id='user'}
+                  <tr>
+                    <td>{$user.id}</td>
+                    <td>{$user.username}{if $user.is_online == 1}(<b style="color: red;">在线</b>){else/}(<b style="color: black;">离线</b>){/if}</td>
+                    <td>{$user.parent}</td>
+                      <td>{if $user.group==0 } <b style="color: green;">A组</b> {else/} <b style="color: red">B组</b> {/if}</td>
+                    <td>{$user.point}</td>
+                    <td> {if $user.money == 0 } <b>{$user.money}</b>{else/} <b style="color: red;">{$user.money}</b> {/if}</td>
+                    <td ><b>{$user.no_money}</b></td>
+                    <td>{$user.accumulated_winning?:'0.00'}</td>
+                    <td>{if $user.status == 0}正常{else}<b style="color:green;">冻结</b>{/if}</td>
+                    <td>
+                      {if $user.type == 0}
+                        {if $user.dengji ==null}
+                        <img src="/static/admin/images/level2.svg" alt="" style="display:block">
+                        {else}
+                        <img src="{$user.dengji}" alt="" style="display:block">
+
+                        {/if}
+
+                      {elseif $user.type == 2}
+                        <b style="color:blue;">
+                          内部试玩
+                        </b>
+                      {else}
+                        <b style="color:blue;">
+                          试玩用户
+                        </b>
+                      {/if}
+                    </td>
+                    <td>{$user.dian_hua} </td>
+                    <td>{$user.create_time|date='Y-m-d H:i:s'}</td>
+                    <td>{$user.active_time|date='Y-m-d H:i:s'}</td>
+                    <td>{$user.active_ip?$user.active_ip:'未知'}</td>
+                    <td>{$user.shebei}</td>
+                    <td>
+                      <a href="{:url('info_edit')}?user_id={$user.id}&type={$set_data.type}&page={$set_data.page}" class="tablelink">查看详情</a>
+                      &nbsp;<a href="{:url('messagelist')}?user_id={$user.id}&type={$set_data.type}&page={$set_data.page}" class="tablelink">消息管理</a>
+                      &nbsp;<a href="javascript:;" class="tablelink xufei" data-id="{$user.id}">续费</a>
+                      {if $user.status == 0}
+                        &nbsp;<a href="javascript:;" class="tablelink frozen" data-status="{$user.status}" data-id="{$user.id}" data-user="{$user.username}">冻结</a>&nbsp;
+                      {else/}
+                        &nbsp;<a href="javascript:;" class="tablelink frozen" data-status="{$user.status}" data-id="{$user.id}" data-user="{$user.username}"> <b style="color: red;">解冻</b></a>&nbsp;
+                      {/if}
+                      {if $user.type == 0}
+                        <a href="javascript:;" class="tablelink transfer" data-id="{$user.id}" data-user="{$user.username}">转移</a>
+                      {/if}
+                      {if $set_data.type== 2}
+                        <a href="javascript:;" class="tablelink shanchu" data-id="{$user.id}" data-user="{$user.username}">删除</a>
+                        {/if}
+                        {if $user.type == 0}
+                        <a href="javascript:;" class="tablelink fenzu" data-id="{$user.id}" >改变分组</a>
+                        {/if}
+                        {if $user.type == 0 && $user.off_money > 0}
+                        <a href="javascript:;" class="tablelink yxtx" data-off="{$user.off_money}" data-id="{$user.id}" >允许提现</a>
+                        {/if}
+                    </td>
+                  </tr>
+              {/volist}
+
+            {/if}
+            </tbody>
+          </table>
+          <div class="pagin">
+            <div class="message">
+              共
+              <i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;
+              <i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页
+            </div>
+            {if !$list->isEmpty()} {$list|raw} {/if}
+          </div>
+      </div>
+    </div>
+    <template id="fenzu">
+        <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-addon"> 方式 :</span>
+                    <select class="form-control m-b" name="group">
+                        <option value="0">A组(拥有所有福利)</option>
+                        <option value="1">B组(取消所有福利 包括：签到，转盘抽奖，反水，返佣，红包。)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </template>
+    <template id="actionMoney">
+      <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+        <div class="col-sm-12">
+          <div class="input-group">
+            <span class="input-group-addon"> 方式 :</span>
+            <select class="form-control m-b" name="category">
+              <option value="7">在线充值</option>
+              <option value="5">彩金赠送</option>
+            </select>
+          </div><br/>
+          <div class="input-group">
+            <span class="input-group-addon"> 金额   :</span>
+            <input id="rebate_rate"  name ="money" type="number" class="form-control" placeholder="0">
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="transfer">
+      <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+        <div class="col-sm-12">
+          <div class="input-group">
+            <span class="input-group-addon"> 转移至用户   :</span>
+            <input id="rebate_rate2"  name ="p_id" type="number" class="form-control" placeholder="">
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      // 刷新、搜索执行的方法
+      function action(){
+        var _obj = $("input[name='keywords']"),
+             _objx = $("select[name='xuanxiang']"),
+             _agent = $("input[name='agent']"),
+             _start_time = $("input[name='start_time']"),
+             _end_time = $("input[name='end_time']"),
+             _zhuangtai = $("select[name='zhuangtai']"),
+            query = [ 'user_name=' + _obj.val(),'type=' + _obj.attr('is_type'),'page=' + _obj.attr('page') ,'xuanxiang='+_objx.val(),'agent='+_agent.val(),'start_time='+_start_time.val(),'end_time='+_end_time.val(),'zhuangtai='+_zhuangtai.val()];
+          // console.log(query);
+
+          location.href = "{:url('index')}?" + query.join('&');
+      }
+      // 刷新、搜索事件
+      $('.scbtn').on('click',function(){
+        action();
+      });
+      // 冻结、解冻
+      $('.frozen').on('click',function(){
+          var $this = $(this);
+          layer.confirm('您确定要 ' + $this.text() + ' ' + $this.data('user') + ' 这个会员吗', {
+            title: $this.text(),
+          }, function(){
+            $.post('{:url("userFrozen")}',{ id: $this.data('id'),status: $this.data('status') },function(res){
+              layer.msg(res.msg,false,function(){ action(); });
+            });
+          }, function(){
+          });
+      });
+      // 试玩删除
+      $('.shanchu').on('click',function(){
+          var $this = $(this);
+          layer.confirm('您确定要 ' + $this.text() + ' ' + $this.data('user') + ' 这个会员吗', {
+              title: $this.text(),
+          }, function(){
+              $.post('{:url("sw_delete")}',{ id: $this.data('id')},function(res){
+                  layer.msg(res.msg,false,function(){ action(); });
+              });
+          }, function(){
+          });
+      });
+      //允许提现
+      $('.yxtx').on('click',function(){
+          var $this = $(this);
+          layer.confirm('当前用户提现需要达到'+$this.data('off')+'元的流水限制，允许提现后，本次流水限制将会清0.', {
+              title: $this.text(),
+          }, function(){
+              $.post('{:url("djycpgk/Wqxfw/yxtx")}',{ uid: $this.data('id')},function(res){
+                  if(res.error == 1){
+                      layer.msg(res.msg,false,function(){ action(); });
+                  }else{
+                      layer.msg(res.msg);
+                    }
+
+              });
+          }, function(){
+          });
+      });
+      // 续费
+      $('.xufei').on('click',function() {
+        var user_id = $(this).data('id');
+        var bool = false;
+        layer.open({
+          type: 1,
+          title: '分组改变',
+          area: ['450px', '230px'],
+          content: $('#actionMoney').html(),
+          btn: ['保存','取消'],
+          btn1: function (index,layero) {
+              if(!bool) {
+                  bool = true;//锁住
+                  var money = $(layero).find("input[name='money']").val(),
+                      category = $(layero).find("select[name='category']").val();
+                  if(money == '' || money < 1){ layer.msg('请输入金额');return; }
+                  $.post('{:url("renew")}',{ id:user_id,type:category,money:money },function(res){
+                      if (res){
+                          layer.msg(res.msg,false,function(){ window.location.reload() });
+                      }
+
+                  });
+              }
+
+          },
+          btn2:function (index,layero) {}
+        });
+      });
+      //改变分组
+      $('.fenzu').on('click',function() {
+          var user_id = $(this).data('id');
+          var bool = false;
+          layer.open({
+              type: 1,
+              title: '改变分组',
+              area: ['450px', '200px'],
+              content: $('#fenzu').html(),
+              btn: ['保存','取消'],
+              btn1: function (index,layero) {
+                  if(!bool) {
+                      bool = true;//锁住
+                      var group = $(layero).find("select[name='group']").val();
+                      $.post('{:url("group")}',{ id:user_id,group:group },function(res){
+                          if (res){
+                              layer.msg(res.msg,false,function(){ action(); });
+                          }
+
+                      });
+                  }
+
+              },
+              btn2:function (index,layero) {}
+          });
+      });
+      // 代理转移
+      $('.transfer').click(function(){
+        var user_id = $(this).data('id');
+        layer.open({
+          type: 1,
+          title:'用户:' + $(this).data('user') + '的代理转移(请输入要转移代理用户的ID)',
+          area:['450px', '200px'],
+          content: $('#transfer').html(),
+          btn:['保存','取消'],
+          btn1: function (index,layero) {
+            var p_id = $(layero).find("input[name='p_id']").val();
+            if(p_id == ''){ layer.msg('请输入要转移代理用户的ID');return; }
+            $.post('{:url("transfer")}',{ user_id:user_id,p_id:p_id },function(res){
+              layer.msg(res.msg,false,function(){ action(); });
+            });
+          },
+          btn2:function (index,layero) {}
+        });
+      });
+      $(".click").click(function(){
+          window.location.href="{:url('user_add')}?type={$set_data.type}";
+      });
+    </script>
+  </body>
+</html>

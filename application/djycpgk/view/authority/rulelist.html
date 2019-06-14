@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/style.css" /}
+        {css href="/static/admin/css/select.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/select-ui.min.js" /}
+        <script type="text/javascript">
+        $(document).ready(function(){
+        $(".select3").uedSelect({
+        width : 100
+        });
+        $(".scbtn").click(function(){
+        var keywords = $("input[name='keywords']").val();
+        var type = $("select[name='type']").val();
+        window.location.href="{:url('djycpgk/authority/rulelist')}?keywords="+keywords+"&type="+type;
+        })
+        });
+        </script>
+    </head>
+    <body>
+         <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/authority/rulelist')}">节点列表   </a></li>
+               
+                </ul>
+                </div>
+            </div>
+
+        <div class="rightinfo">
+            
+            <div class="tools">
+                
+                <ul class="toolbar">
+                    <li class="addRule"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+                </ul>
+                
+                <ul class="seachform" style="float: right;">
+                    
+                    <li><label>节点名</label><input name="keywords" type="text" class="scinput"  {if isset($keywords)}value="{$keywords}"{/if}/></li>
+                    <li><label>分类</label>
+                    <div class="vocation">
+                        <select class="select3" name="type">
+                            <option value="0"
+                                <?php
+                                if($type == 0 || $type ==''){
+                                echo "selected='selected'";
+                                }
+                                ?>
+                            >请选择分类</option>
+                            <option value="1" <?php
+                                if($type == 1){
+                                echo "selected='selected'";
+                                }
+                            ?>>会员</option>
+                            <option value="2" <?php
+                                if($type == 2){
+                                echo "selected='selected'";
+                                }
+                            ?>>彩票</option>
+                            <option value="3" <?php
+                                if($type == 3){
+                                echo "selected='selected'";
+                                }
+                            ?>>系统</option>
+                            <option value="4" <?php
+                                if($type == 4){
+                                echo "selected='selected'";
+                                }
+                            ?>>后台代理</option>
+                            <option value="5" <?php
+                                if($type == 5){
+                                echo "selected='selected'";
+                                }
+                            ?>>文章</option>
+                            
+                        </select>
+                    </div>
+                </li>
+                
+                
+                <li><label>&nbsp;</label><input name="" type="button" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+                
+            </ul>
+            
+        </div>
+        
+        
+        <table class="tablelist">
+            <thead>
+                <tr>
+                    
+                    <th>编号<i class="sort"><img src="/static/admin/images/px.gif" /></i></th>
+                    <th>分类</th>
+                    <th>节点名</th>
+                    <th>节点链接</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {volist name="list" id="vo"}
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.type}</td>
+                    <td>{$vo.title}</td>
+                    <td>{$vo.name}</td>
+                    <td><a href="{:url('djycpgk/authority/rule_edit')}?id={$vo.id}" class="tablelink">查看</a>     <a href="javascript:;" class="tablelink rule_dlt" data-id="{$vo.id}"> 删除</a></td>
+                </tr>
+                {/volist}
+                
+            </tbody>
+        </table>
+        
+        
+        <div class="pagin">
+            <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+            
+            {if !$list->isEmpty()} {$list|raw}{/if}
+            
+        </div>
+        
+        
+        <div class="tip">
+            <div class="tiptop"><span>提示信息</span><a></a></div>
+            
+            <div class="tipinfo">
+                <span><img src="/static/admin/images/ticon.png" /></span>
+                <div class="tipright">
+                    <p>是否确认对信息的修改 ？</p>
+                    <cite>如果是请点击确定按钮 ，否则请点取消。</cite>
+                </div>
+            </div>
+            
+            <div class="tipbtn">
+                <input name="" type="button"  class="sure" value="确定" />&nbsp;
+                <input name="" type="button"  class="cancel" value="取消" />
+            </div>
+            
+        </div>
+        </div>
+        
+        
+        
+    </div>
+    
+    <script type="text/javascript">
+    //$('.tablelist tbody tr:odd').addClass('odd');
+    $('.addRule').click(function(){
+    window.location.href="{:url('djycpgk/authority/rule_add')}";
+    })
+    $('.rule_dlt').click(function(){
+    var data_id = $(this).attr('data-id');
+    layer.confirm('确定删除该节点吗?', {
+    btn: ['是','否'] //按钮
+    }, function(){
+    $.ajax({
+    url:"{:url('djycpgk/authority/rule_delete')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{data_id:data_id},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    layer.msg('删除成功',{icon:1,time:1000},function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    }else{
+    layer.msg('删除失败', {icon: 5,time:2000});
+    }
+    }
+    })
+    }, function(){
+    
+    });
+    })
+    </script>
+</body>
+</html>

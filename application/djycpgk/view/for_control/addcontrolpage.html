@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加单控设置</title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {css href="/static/admin/css/boot/style.css" /}
+
+    {js href="/static/admin/js/boot/jquery.min.js" /}
+    {js href="/static/admin/js/boot/bootstrap.min.js" /}
+    {js href="/static/admin/js/boot/layer/layer.min.js" /}
+</head>
+<body>
+
+
+{if condition="isset($canControl) AND $canControl==1"}
+<script>
+    layer.msg("抱歉，你选中的彩票 <span style='color: red'>"+"{$name}"+"</span> 暂时不支持单控设置！",{
+        icon:2,
+        time:2000
+    });
+    setTimeout("parent.layer.closeAll();",2000);
+</script>
+{elseif condition="isset($canShuCuoWu) AND $canShuCuoWu==1" /}
+<script>
+
+    layer.msg("抱歉，参数错误，不能继续操作！",{
+        icon:2,
+        time:2000
+    });
+    setTimeout("parent.layer.closeAll();",2000);
+
+</script>
+
+{else /}
+<style>
+    ul{
+        margin-top: 15px;
+    }
+    ul>li{
+        list-style: disc;
+        color: red;
+    }
+    ul>li>label{
+        font-size: 15px;
+        color: #343434 !important;
+    }
+    ul>li>label>input{
+        border: 1px solid #343434;
+    }
+    .show-dan-kong-title{
+        width: 50%;
+        background: #eee;
+        padding: 5px 0 5px 25px;
+        color: #343434;
+        font-size: 15px;
+    }
+    .forminfo{
+        width: 50%;
+    }
+    .btn-for-select-user{
+        background: #0b8fff;
+    }
+    .show-all-user-div{
+        width: 49%;
+        position: fixed;
+        top: 0;
+        left: 50%;
+        height: auto;
+        overflow-y: auto;
+    }
+    .show-all-user table{
+        width: 100%;
+    }
+    .show-all-user table thead tr th{
+        text-align: center;
+        background: #343434;
+        color: #fff;
+    }
+    .show-all-user table tbody tr td{
+        text-align: center;
+        border-bottom: 1px solid #ccc;
+    }
+    .show-all-user table tbody tr:hover{
+        background: #ccc;
+    }
+    .the-user-has-be-selected{
+        width: 50%;
+        padding: 5px 8px;
+        word-wrap: break-word;
+    }
+    .the-user-has-be-selected>span{
+        display: inline-block;
+        margin: 2px 3px;
+        border: 1px solid #ccc;
+        padding: 2px 3px;
+    }
+    .addBtn{
+        position: fixed;
+        bottom: 10px;
+        left: 20%;
+        background: #2e8ded;
+        padding: 3px 10px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+    }
+</style>
+<ul class="forminfo">
+    <li>
+        <label>彩票名称：
+            <input name="" type="text" class="dfinput" value="{$name}" readonly="readonly">
+            <input name="type_id" type="hidden" class="dfinput" value="{$type_id}">
+        </label>
+    </li>
+
+    <li>
+        <label>单控阈值：
+            <input name="mony" type="text" class="dfinput" value="" required="required">
+        </label>
+    </li>
+</ul>
+<div class="show-dan-kong-title">
+    被单控的会员
+</div>
+<input type="hidden" name="uid" value="">
+<input type="hidden" name="username" value="">
+<div class="the-user-has-be-selected">
+
+</div>
+<div class="show-all-user-div">
+    <div style="width: 100%;margin-bottom:5px;">
+        搜索会员：<input type="text" id="check_user" placeholder="请输入会员名称" value="{if condition='isset($keyword)'}{$keyword}{/if}">
+    </div>
+    <div class="show-all-user">
+
+    </div>
+</div>
+
+<button class="addBtn" onclick="addDanKongUser()">添加</button>
+<script>
+$.get("{:url(request()->module().'/forControl/canJoinDanKong')}?type_id={$type_id}",{},function (data) {
+    $(".show-all-user").html(data);
+});
+
+$("#check_user").bind("input propertychange",function(event){
+    var keyword = $("#check_user").val();
+    $.get("{:url(request()->module().'/forControl/canJoinDanKong')}?type_id={$type_id}",{keyword:keyword},function (data) {
+        $(".show-all-user").html(data);
+    });
+});
+
+function addDanKongUser()
+{
+    var type_id = $("input[name='type_id']").val();
+    var uid = $("input[name='uid']").val();
+    var money = $("input[name='money']").val();
+    if(!uid)
+    {
+        layer.alert('请选择需要被单控的用户',{
+            icon:2
+        });
+        return false;
+    }
+    $.post("{:url(request()->module().'/forControl/addAction')}",{type_id:type_id,uid:uid,money:money},function (data) {
+        if(data == 1)
+        {
+            layer.msg("添加成功！",{
+                icon:1,
+                time:1500
+            });
+            setTimeout("parent.location.reload();",1500);
+        }
+        else
+        {
+            layer.alert(data,{
+                icon:2
+            })
+        }
+    });
+}
+</script>
+{/if}
+</body>
+</html>

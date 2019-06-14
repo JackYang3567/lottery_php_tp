@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+
+  </head>
+  <body>
+    <div class="rightinfo">
+          <div class="tools">
+                  <ul class="seachform" style="">
+                    <form action="{:url('djycpgk/Match/search')}" onSubmit="return confirm();"  method="POST">
+                        
+                        
+                       
+                         <li><input name="content" type="text" class="scinput"  placeholder="输入对名" /></li>
+                       
+                        <li>比赛日期：<input type="date"  name="start_time"  class="scinput" {if isset($start_time)}value="{$start_time}"{/if}/>&nbsp;-&nbsp;<input type="date" name="end_time" class="scinput" {if isset($end_time)}value="{$end_time}"{/if}></li>
+                        <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+                         <li>
+                            <span class="tishi" style="color: red;margin-top: 10px" ></span>
+                        </li>
+                        <li style="margin-top: 10px;">
+                          共有： <i style="color: red;">{$shuliang}</i>条记录
+
+                        </li>
+                        
+                    </form>
+                </ul>
+            </div>
+
+      <table class="tablelist">
+          <thead>
+          <tr>
+            <th><input name="checkall" type="checkbox" value=""  /></th>
+            <th>比赛日期</th>
+            <th>主队</th>
+            <th>VS</th>
+            <th>客队</th>
+            <th>封盘时间</th>
+            <th>操作</th>
+            
+
+            
+          </tr>
+        </thead>
+        <tbody>
+          {if empty($list)}
+
+            <tr>
+              <td colspan="7" style=" text-align:center;">没有数据</td>
+            </tr>
+          {else /} 
+        
+              {volist name="list" id="vo" key="k"}
+            <tr>
+            <td><input name="id" type="checkbox" value="{$vo.order_id}" /></td>
+            <td>{$vo.over_time|date='Y-m-d H:i:s'}</td>
+            <td>{$arr[$k-1]['hostName']}</td>
+            <td>VS</td>
+            <td>{$arr[$k-1]['guestName']}</td>
+            <td>{$arr[$k-1]['startTime']/1000|date='Y-m-d H:i:s'}</td>
+            <td>
+                <a href="{:url('djycpgk/Match/details')}?id={$vo.order_id}" style="color: blue;">详情</a>
+            </td>
+          </tr>
+              {/volist}
+         
+          </div>
+          {/if} 
+    
+        </tbody>
+        </table>
+      
+         
+    </div>
+    
+   
+  </body>
+</html>

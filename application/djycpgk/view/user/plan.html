@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/vueJs/vue.min.js" /}
+        <style type="text/css">
+            [v-cloak]{
+                display:none;
+            }
+            .place{
+                height:40px;
+                margin-bottom:10px;
+            }
+            .form_center{
+                text-align: center;
+                margin-bottom:20px;
+            }
+            .w_home{
+                margin:0 auto;
+                border:1px solid #eee;
+                border-radius: 10px;
+                max-width:80%;
+                /* text-align: center; */
+                padding:5px;
+            }
+            .col-sm-10{
+                width:40%;
+            }
+            .form-group{
+                text-align: center;
+            }
+            .w_list{
+                margin:0 auto;
+                border:1px solid #eee;
+                border-radius: 10px;
+                max-width:90%;
+                /* text-align: center; */
+                padding:5px;
+            }
+            .w_btn{
+                padding:.5rem .8rem;
+                border-radius: 5px ;
+                color:#fff;
+            }
+            .w_btn:hover{
+                font-weight:bold; 
+            }
+            .w_btn:active{
+                font-weight: normal;
+            }
+            .w_btn_open{
+                background-color:green;
+            }
+            .w_btn_close{
+                background-color: red;
+            }
+            .w_btn_del{
+                color:#000;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="place">
+            <span>位置：</span>
+            <ul class="placeul">
+            <li><a href="javascript:;">彩票计划</a></li>
+            </ul>
+        </div>
+        <div id="app"  v-cloak>
+            
+            <form class="form-inline form_center">
+                <div class="form-group" v-if="Object.keys(lottery_all).length">
+                    <label for="exampleInputEmail2"><h3>添加计划-请先选择彩票种类：</h3></label>
+                    <select class="form-control" v-model="sel_type">
+                        <option v-for="(vo,key) in lottery_all" :value="key">{{vo}}</option>
+                    </select>
+                </div>
+            </form>
+        <div class="w_home" v-if="Object.keys(plan_config).length">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">计划方案类型</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" v-model="form.plan_bet">
+                            <option :value="key" v-for="(vo,key) in plan_config['plan']">{{vo['name']}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" v-if="form.plan_bet == 'code'">
+                    <label for="inputEmail3" class="col-sm-2 control-label">计划数字个数</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" v-model="form.num">
+                            <option :value="vo" v-for="vo in (plan_config['data']['max'] - plan_config['data']['min']) ">{{vo}}个数</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" v-if="form.plan_bet != ''">
+                    <label for="exampleInputEmail2" class="col-sm-2 control-label">计划玩法位置</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" v-model="form.plan_code">
+                            <option :value="key" v-for="(vo,key) in plan_config['plan'][form['plan_bet']]['content'] ">{{vo}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputEmail2" class="col-sm-2 control-label">发言者id,默认为(0系统)</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" v-model="form.uid" placeholder="默认0">
+                        <select class="form-control" v-model="form.uid_type" v-if="form.uid > 0">
+                            <option value="1">此id是用户</option>
+                            <option value="2">此id是后台管理员</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputEmail2" class="col-sm-2 control-label">一个响亮的称号</label>
+                    <div class="col-sm-10">
+                        <input type="text" v-model.trim="form.note" class="form-control" placeholder="称号选填">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" @click="planOn()" class="btn btn-default">添加</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr/>
+        <!--已设置的内容-->
+        <div class="w_list" v-if="set_up.length">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>彩票类型</th>
+                        <th>方案类型</th>
+                        <th>玩法位置</th>
+                        <th>发言者id</th>
+                        <th>方案名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(vo,key) in set_up">
+                        <td> {{vo['type']}} </td>
+                        <td> {{vo['plan_bet_name']}} {{ vo['plan_bet'] == 'code' ? '(预测'+vo['num']+'个)':'' }} </td>
+                        <td> {{vo['plan_code_name']}} </td>
+                        <td> {{vo['uid']}} </td>
+                        <td> {{vo['note']}} </td>
+                        <td> 
+                            <div class="" role="group" >
+                                <button type="button" class="w_btn w_btn_open" v-if="vo['switch'] == 1" @click="operation(key,'switch')">开启</button>
+                                <button type="button" class="w_btn w_btn_close" @click="operation(key,'switch')" v-else>关闭</button>
+                                <button type="button" class="w_btn w_btn_del" @click="operation(key,'delete')">删除</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    </body>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            mounted(){
+                this.LotteryAll();
+            },
+            data:function(){
+                return { 
+                    form:{
+                        type: '',
+                        num: 1,
+                        plan_bet: '',
+                        plan_code: '',
+                        uid: 0,
+                        uid_type: 1,
+                        note: "",
+                        switch: 1
+                    },
+                    lottery_all:{},  //请求的所有开启的彩种
+                    //--初始值使用--//
+                    sel_type:'',     //选择彩种的type
+                    set_up:[],       //已设置的计划
+                    //--初始值使用完--//
+                    //添加计划时
+                    plan_config:{},  //选择好彩种后的各项配置
+                }
+            },
+            watch:{
+                sel_type:function(){
+                    let _this = this;
+                    if(_this.sel_type == ''){return;}
+                    layer.load(2);
+                    $.post('/djycpgk/user/plan',{type:'lottery_config',code:_this.sel_type},function(res){
+                        if(res['code'] < 0){
+                            layer.msg(res.msg);
+                            _this.plan_config = {};
+                        }else{
+                            _this.$set(_this,'plan_config',res);
+                            // _this.form['type'] = _this.sel_type;
+                            let set = {
+                                type: _this.sel_type,
+                                num: 1,
+                                plan_bet: '',
+                                plan_code: '',
+                                uid: 0,
+                                uid_type: 1,
+                                note: "",
+                                switch: 1
+                            };
+                            _this.$set(_this,'form',set);
+                        }
+                        layer.closeAll('loading');
+                    });
+                }
+            },
+            methods:{
+                //查询开启的彩种
+                LotteryAll:function(){
+                    let _this = this;
+                    layer.load(2);
+                    $.post('/djycpgk/user/plan',{type:'lottery'},function(res){
+                        // console.log(res);
+                        if(res['code'] > 0){
+                            _this.$set(_this,'lottery_all',res['lottery']);
+                            _this.$set(_this,'set_up',res['set']);
+                        }
+                        layer.closeAll('loading');
+                    });
+                },
+                //添加计划
+                planOn:function(){
+                    let _this = this;
+                    if(_this.form['type'] == ''){
+                        return false;
+                    }else if( _this.form['plan_bet'] == '' ){
+                        layer.msg('请选择计划方案类型');
+                        return false;
+                    }else if( _this.form['plan_code'] === '' ){
+                        console.log(_this.form);
+                        layer.msg('请选择计划玩法位置');
+                        return false;
+                    }else if( _this.form['uid'] === ''){
+                        layer.msg('聊天室发言者id,填写错误');
+                        return false;
+                    }
+                    layer.load(2);
+                    $.post('/djycpgk/user/plan',{type:'on_plan',data:_this.form},function(res){
+                        layer.closeAll('loading');
+                        layer.msg(res.msg);
+                        if(res.code > 0){
+                            _this.sel_type = '';
+                            _this.plan_config = {};
+                            _this.$set(_this,'set_up',res.data);
+                        }
+                    });
+                },
+                //删除与修改操作
+                operation:function(key,type){
+                    let _this = this;
+                    layer.load(2);
+                    let rs = JSON.parse(JSON.stringify(_this.set_up));
+                    $.post('/djycpgk/user/plan',{type:'change',data:{key:key,type:type}},function(res){
+                        layer.closeAll('loading');
+                        if(res.code > 0){
+                            if(type == 'switch'){
+                                _this.$set(_this,'set_up',res['set']);
+                                if(rs[key]['switch'] == 1){
+                                    layer.msg('关闭成功');
+                                    rs[key]['switch'] = 0;
+                                }else{
+                                    layer.msg('已开启');
+                                    rs[key]['switch'] = 1;
+                                }
+                            }else{
+                                layer.msg('删除成功');
+                                _this.set_up = {};
+                                rs.splice(key,1);
+                            }
+                            _this.$set(_this,'set_up',rs);
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</html>

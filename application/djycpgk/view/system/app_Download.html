@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    <style>
+    .rule input {
+    width: 129pt;
+    }
+    .rule span{
+    display: inline-block;
+    height: 34px;
+    text-align: center;
+    }
+    .rule span img{
+    vertical-align: middle;
+    }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+    $(".select1").uedSelect({
+    width : 345
+    });
+    
+    
+    
+    $("input[name='baocun']").click(function(){
+    var switc = $("input[name='switch']:checked").val();
+    var apk   = $("input[name='apk']").val();
+    var ipa   = $("input[name='ipa']").val();
+    
+      $.ajax({
+        url:"{:url('djycpgk/system/app_Download')}",
+        data:{apk:apk,switch:switc,ipa:ipa},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+            if(data.error == 0){
+              layer.msg(data.msg,{icon:1,time:1000},function(){
+              self.location.reload(); // 父页面刷新
+              self.layer.close();
+              });
+            }else{
+              layer.msg(data.msg, {icon: 5,time:2000});
+            }
+        }
+      })
+    })
+    });
+    </script>
+  </head>
+  <body>
+      <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/system/index')}">网站系统设置</a></li>
+                <li><a href="">app下载开关</a></li>
+                </ul>
+                </div>
+            </div>
+      </div>
+    <div class="rightinfo">
+      <div class="formbody" style="padding: 0 0;">
+        
+        
+        <div id="usual1" class="usual">
+          
+          <div id="tab1" class="tabson">
+            <ul class="forminfo">
+                <li ><label>app下载开关<b>*</b></label>
+                    <div style=" line-height: 34px;font-size: 13pt;">
+                      <input type="radio" name="switch" value="1" {if $jx.switch == 1}checked="checked"{/if}/>开启
+                      <input type="radio" name="switch" value="0" {if $jx.switch == 0}checked="checked"{/if} />关闭
+                      <b>(如开启：注册成功后会自动识别安卓还是苹果，并跳转到相应下载地址，如果未开启或者未设置相应地址，则不会跳转)</b>
+                    </div>
+
+                </li>
+                <li ><label>安卓下载地址<b>*</b></label>
+                      <div >
+                        <input type="text" name="apk" class="dfinput" value="{$jx.apk}">
+                      </div>
+                </li>
+                <li ><label>苹果下载地址<b>*</b></label>
+                      <div >
+                        <input type="text" name="ipa" class="dfinput" value="{$jx.ipa}">
+                      </div>
+                </li>
+                <li class="baocun" style="margin-top: 10px;"><label>&nbsp;</label><input name="baocun"  type="button" class="btn" value="保存"/></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+ 
+  
+  
+  
+  
+  
+</div>
+</body>
+</html>

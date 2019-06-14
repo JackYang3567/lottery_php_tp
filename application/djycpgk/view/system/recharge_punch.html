@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    <style>
+    .rule input {
+    width: 129pt;
+    }
+    .rule span{
+    display: inline-block;
+    height: 34px;
+    text-align: center;
+    }
+    .rule span img{
+    vertical-align: middle;
+    }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+    $(".select1").uedSelect({
+    width : 345
+    });
+    
+    $(".addRule").click(function(){
+    var html ='';
+    html+= ' <li class="rule"><label>新规则</label><input name="begin" type="number" class="dfinput" value=""';
+    html+= 'required="" placeholder="开始值">&nbsp;-&nbsp; ';
+    html+= '<input name="end" type="number" class="dfinput" value="" required="required" placeholder="结束值"/> ';
+    html+= '<input name="percent" type="number" class="dfinput" value="" required="required"  placeholder="元" />元';
+    html+=' <span class="dtl_rule"><img src="/static/admin/images/t03.png" /></span>';
+  html+= '</li>';
+  $('.baocun').before(html);
+  })
+  $(document).on('click','.dtl_rule', function(){
+  $(this).parent().remove();
+  })
+  
+  
+  $("input[name='baocun']").click(function(){
+  var array=$("[name='begin']");//单引号 的name替换为相应的name
+  var begin_array = [];
+  var end_array = [];
+  for(var i=0;i<array.length;i++){
+    begin_array.push($(array[i]).val());
+    }
+    var array1= $("[name='end']");
+    for(var i=0;i<array1.length;i++){
+      end_array.push($(array1[i]).val());
+      }
+      var array2=$("[name='percent']");
+      var percent_array = [];
+      for(var i=0;i<array2.length;i++){
+        percent_array.push($(array2[i]).val());
+        }
+        var final_array = [];
+        final_array = begin_array.map((item,idx,value) => [item, end_array[idx],percent_array[idx]]);
+        //console.log(final_array);return;
+        $.ajax({
+        url:"{:url('djycpgk/system/recharge_punch')}",
+        data:{final_array:final_array},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        if(data.error == 0){
+        layer.msg(data.msg,{icon:1,time:1000},function(){
+        self.location.reload(); // 父页面刷新
+        self.layer.close();
+        });
+        }else{
+        layer.msg(data.msg, {icon: 5,time:2000});
+        }
+        }
+        })
+        })
+        });
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+      </head>
+      <body>
+          <div class="place">
+         
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/system/recharge')}">充值提现设置 </a></li>
+                <li><a href="#">首冲赠送规则 </a></li>
+                </ul>
+                </div>
+            </div>
+        <div class="rightinfo">
+          <div class="tools">
+            
+            <ul class="toolbar">
+              <li class="click addRule"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+            </ul>
+            
+          </div>
+          <div class="formbody" style="padding: 0 0;">
+            
+            
+            <div id="usual1" class="usual">
+              
+              <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                      {volist name="rules" id="vo"}
+                    <li class="rule"><label>规则{$key+1}</label><input name="begin" type="number" class="dfinput" value="{$vo.begin}" required="required"   />&nbsp;-&nbsp;
+                    <input name="end" type="number" class="dfinput" value="{$vo.end}" required="required"   />
+                    <input name="percent" type="number" class="dfinput" value="{$vo.percent}" required="required"   />元
+                    <span  class="dtl_rule" ><img src="/static/admin/images/t03.png" /></span>
+                  </li>
+                  {/volist}
+                  
+                  <li  class="baocun" style="margin-top: 10px;"><label>&nbsp;</label><input name="baocun" type="button" class="btn" value="保存"/></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+        <script type="text/javascript">
+        $("#usual1 ul").idTabs();
+        </script>
+        
+        <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+        </script>
+        
+        
+        
+        
+        
+      </div>
+    </body>
+  </html>

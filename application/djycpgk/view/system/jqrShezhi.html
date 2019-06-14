@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".click").click(function(){
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function(){
+                $(".tip").fadeOut(200);
+            });
+            $(".sure").click(function(){
+                $(".tip").fadeOut(100);
+            });
+            $(".cancel").click(function(){
+                $(".tip").fadeOut(100);
+            });
+            $("input[name='checkall']").click(function(){
+                var    CheckBox=document.getElementsByName('article_id');
+                if($(this).is(':checked') ==false){
+                    for(i=0;i<CheckBox.length;i++){
+                        CheckBox[i].checked=false;
+                    };
+                }else{
+                    for(i=0;i<CheckBox.length;i++){
+                        CheckBox[i].checked=true;
+                    };
+                }
+            })
+
+        });
+    </script>
+</head>
+<body>
+<div class="place">
+    <div class="ibox-content" style="margin-left: 30px;">
+        <div class="place">
+            <span>位置：</span>
+            <ul class="placeul">
+                <li><a href="{:url(request()->module() . '/system/jqrshezhi')}">机器人设置  </a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="rightinfo">
+        <div class="tools">
+            <ul class="toolbar">
+                <li class="addbank"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+            </ul>
+        </div>
+        <table class="tablelist">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>名称</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {volist name="jqr" id="vo"}
+            <tr>
+                <td>{$vo.id}</td>
+                <td>{$vo.name}</td>
+                <td>
+
+                    <a href="{:url(request()->module() . '/system/jqrTianjia')}?id={$vo.id}" class="tablelink">修改</a>
+                    <a href="javascript:;" class="tablelink bank_dlt" data-id="{$vo.id}"> 删除</a>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+        <div class="pagin">
+            <div class="message">共<i class="blue"> {if !$jqr->isEmpty()}{$jqr->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$jqr->isEmpty()}{$jqr->currentPage()}{/if}&nbsp;</i>页</div>
+            {if !$jqr->isEmpty()} {$jqr|raw}{/if}
+        </div>
+
+
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    //$('.tablelist tbody tr:odd').addClass('odd');
+    $('.addbank').click(function(){
+        window.location.href="{:url(request()->module() . '/system/jqrTianjia')}";
+    })
+    $('.bank_dlt').click(function(){
+        var data_id = $(this).attr('data-id');
+        var type = 1;
+        layer.confirm('确定删除该机器人吗?', {
+            btn: ['是','否'] //按钮
+        }, function(){
+            $.ajax({
+                url:"{:url(request()->module() . '/system/jqrShezhi')}",//这里指向的就不再是页面了，而是一个方法。
+                data:{id:data_id,type:type},
+                type:"POST",
+                dataType:"JSON",
+                success: function(data){
+                    if(data.error == 0){
+                        layer.msg('删除成功',{icon:1,time:1000},function(){
+                            self.location.reload(); // 父页面刷新
+                            self.layer.close();
+                        });
+                    }else{
+                        layer.msg('删除失败', {icon: 5,time:2000});
+                    }
+                }
+            })
+        }, function(){
+
+        });
+    })
+</script>
+</body>
+</html>

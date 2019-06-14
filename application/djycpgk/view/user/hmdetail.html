@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>合买详情</title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/font-awesome.css" /}
+        {css href="/static/admin/css/animate.css" /}
+        {css href="/static/admin/css/boot/style.css" /}
+        {js href="/static/admin/js/jquery-1.11.3.min.js" /}
+        {js href="/static/admin/js/boot/bootstrap.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style>
+        
+        </style>
+        <script type="text/javascript">
+        $(document).ready(function(e) {
+        });
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+        <div class="rightinfo">
+            
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="wrapper wrapper-content animated fadeInUp">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <div class="row" style="font-size: 16px;">
+                                    <div class="col-sm-12">
+                                        <div class="m-b-md">
+                                            <!--   <a href="project_detail.html#" class="btn btn-white btn-xs pull-right">编辑项目</a> -->
+                                            <h2>合买详情</h2>
+                                        </div>
+                                        <dl class="dl-horizontal">
+                                            <dt>方案状态：</dt>
+                                            <dd>
+                                            {if condition="$basicdata['state'] eq 0"}
+                                            <span class="label label-primary">进行中</span>
+                                            {elseif condition="$basicdata['state'] eq 1" /}
+                                            <span class="label label-success"> 已结束</span>
+                                            {elseif condition="$basicdata['state'] eq 2"/}
+                                            <span class="label label-warning"> 已撤单</span>
+                                            {else/}
+                                            <span class="label label-info"> 追号中</span>
+                                            {/if}
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="row" style="font-size: 16px;">
+                                    <div class="col-sm-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>中奖宣言：</dt>
+                                            <dd>{$hmdata.explain}</dd>
+                                            <dt>中奖金额：</dt>
+                                            <dd>{$basicdata.win}</dd>
+                                            <dt>发起时间：</dt>
+                                            <dd>{$basicdata.create_time|date='Y-m-d H:i:s'}
+                                            </dd>
+                                                <dt>彩票期号：</dt>
+                                                <dd>({$basicdata.lottery_name}){$basicdata.expect}</dd>
+                                        </dl>
+                                    </div>
+                                    <div class="col-sm-7" id="cluster_info">
+                                        <dl class="dl-horizontal">
+                                            <dt>总金额：</dt>
+                                            <dd>{$hmdata.all}</dd>
+                                            <dt>剩余金额：</dt>
+                                            <dd>{$hmdata.all-$hmdata.buy}</dd>
+                                            <dt>保底金额：</dt>
+                                            <dd>{$hmdata.bd}</dd>
+                                            <dt>购买方案(注数):</dt>
+                                            <dd>{$betting_cou}</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <dl class="dl-horizontal">
+                                            <dt>方案进度</dt>
+                                            <dd>
+                                            <div class="progress progress-striped active m-b-sm" >
+                                                <div style="width: {$hmdata.jindu}%;" class="progress-bar"></div>
+                                            </div>
+                                            <small><strong>{$hmdata.jindu}%</strong></small>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--选项卡-->
+                    <div class="col-sm-12">
+                        <div class="tabs-container">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">参与用户</a>
+                            </li>
+                            <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">期号详情</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                              <div class="ibox-content">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>用户名</th>
+                                            <th>认购金额（元）</th>
+                                            <th>中奖金额（元）</th>
+                                            <th>参与时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {volist name="gendata" id="vo"}
+                                        <tr>
+                                            <td>{$vo.id}</td>
+                                            <td>{$vo.username}</td>
+                                            <td>{$vo.money}</td>
+                                            <td>{$vo.win}</td>
+                                            <td>{$vo.create_time|date='Y-m-d H:i:s'}</td>
+                                        </tr>
+                                        {/volist}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                     
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                                 <div class="ibox-content">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        {if $basicdata.money == 0 && $basicdata.expect == 0}
+                                        <tr>
+                                            <th>期号</th>
+                                            <th>奖金</th>
+                                            <th>开奖号码</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {volist name="zhdata" id="vo"}
+                                        <tr>
+                                            
+                                            <td>{$vo.expect}</td>
+                                            <td>{$vo.win}</td>
+                                            <td>{$vo.content}</td>
+                                            
+                                        </tr>
+                                        {/volist}
+                                        {else/}
+                                        <tr>
+                                            <th>期号</th>
+                                            <th>金额</th>
+                                            <th>开奖号码</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{$basicdata.expect}</td>
+                                            <td>{$hmdata.all}</td>
+                                            <td>{$basicdata.opencode}</td>
+                                        </tr>
+                                        {/if}
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+    
+    
+    
+</div>
+<script type="text/javascript">
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    {js href="/static/admin/ueditor/ueditor.config.js" /}
+    {js href="/static/admin/ueditor/ueditor.all.min.js" /}
+    <style>
+    .forminfo span{
+    display: inline-block;
+    height: 34px;
+    
+    line-height: 34px;
+    padding-left: 5px;
+    }
+    .img_url{
+    height: 30px;
+    width: 150px;
+    
+    }
+    .img_url input{
+    height: 30px;
+    width: 100%;
+    margin-top: 3px;
+    border-top: solid 1px #a7b5bc;
+    border-left: solid 1px #a7b5bc;
+    border-right: solid 1px #ced9df;
+    border-bottom: solid 1px #ced9df;
+    }
+    .del{
+    margin-top: 10px;
+    }
+    .sm{
+    height: 35px;
+    line-height: 35px;
+    }
+    .p_link{
+    position: relative;
+    top: 13px;
+    left: 15px;
+    }
+    .forminfo li label{
+    width: 106px;
+    }
+    </style>
+    <script type="text/javascript">
+    </script>
+    
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+   
+    var ue = UE.getEditor('container', {
+    wordCount:false, //关闭字数统计
+    elementPathEnabled:false//关闭elementPath
+    });
+
+   
+    });
+    </script>
+  </head>
+  <body>
+    <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/lottery/statussetting')}?category={$cate}">彩种设置</a></li>
+                <li><a href="#">{$type_name}:规则说明</a></li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    <div class="formbody">
+
+      
+      <div id="usual1" class="usual">
+        
+     
+   
+
+<div id="tab4" class="tabson">
+
+<ul class="forminfo">
+<form action="{:url('djycpgk/lottery/guize')}" method="post">
+<li><label>开户条约<b>*</b></label>
+  <input type="Hidden" name="type_id" value="{$type_id}">
+  <input type="Hidden" name="type_name" value="{$type_name}">
+<script id="container" type="text/plain" name="explain" style="width:700px;height:250px;float: left;padding-bottom : 20px;">{$guize|raw}</script>
+</li>
+<li   style="margin-top: 20px;"><label>&nbsp;</label><input  type="submit" class="btn" value="保存"/></li>
+</form>
+</ul>
+</div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+</div>
+</body>
+</html>

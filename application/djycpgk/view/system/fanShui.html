@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+
+    <style>
+    .forminfo span {
+        display: inline-block;
+        height: 34px;
+        line-height: 34px;
+        padding-left: 5px;
+    }
+
+    .forminfo label {
+        width: 125px !important;
+    }
+
+    .line {
+        display: inline-block;
+        width: 50%;
+        height: 1pt;
+        background: #D5D5D5;
+    }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $(".select1").uedSelect({
+                width : 345
+            });
+        })
+    </script>
+</head>
+
+<body>
+    <div class="place">
+        <div class="ibox-content" style="margin-left: 30px;">
+            <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                    <li><a href="{:url(request()->module() . '/system/fanShui')}">会员返水设置</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="rightinfo">
+            <div class="formbody" style="padding: 0 0;">
+                <div id="usual1" class="usual">
+                    <div id="tab1" class="tabson">
+                        <ul class="forminfo">
+                            <form id="is_data" method="post">
+                                <li>
+                                    <label>{$fanshui['switch']['name']}<b>*</b></label>
+                                    <div style=" line-height: 34px;font-size: 11pt;">
+                                        <input type="radio" name="switch" value="1" {if $fanshui['switch']['value']==1}checked="checked"{/if} >开
+                                        <input type="radio" name="switch" value="0" {if $fanshui['switch']['value']==0}checked="checked"{/if} >关
+                                        <span>&nbsp;&nbsp;</span>
+                                    </div>
+                                    <br>
+                                </li>
+
+                                <!--反水方式-->
+                                <li>
+                                    <label>{$fanshui['return_type']['name']}<b>*</b></label>
+                                    <div class="vocation">
+                                        <select class="select1 fs" name="return_type" >
+
+                                            {volist name="$fanshui['return_type']['rule']"  id="vo"}
+                                            <option value="{$key}" {if  $fanshui['return_type']['value']==$key} selected = "selected" {/if} >{$vo[0]} </option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </li>
+
+
+                                <!--下注流水-->
+                                <li class="xzls">
+                                    <label>{$fanshui['return_type']['rule'][1][0]}<b>*</b></label>
+                                    <a href="javascript:;"  class="odds_setting" >选择要反水的游戏</a>
+                                </li>
+
+                                <!--反水时间-->
+                                <li>
+                                    <label>{$fanshui['return_time']['name']}<b>*</b></label>
+                                    <div class="vocation">
+                                        <select class="select1" name="return_time" >
+
+                                            {volist name="$fanshui['return_time']['rule']"  id="vo"}
+                                            <option value="{$key}"  {if  $fanshui['return_time']['value']==$key} selected = "selected" {/if}>{$vo}</option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </li>
+                                <!--返水按照那种方式-->
+                                <li>
+                                    <label>{$fanshui['return_rule']['name']}<b>*</b></label>
+                                    <div class="vocation">
+                                        <select class="select1 fsfs" name="return_rule_vale" >
+
+                                            {volist name="$fanshui['return_rule']['rule']"  id="vo"}
+                                            <option value="{$key}"  {if  $fanshui['return_rule']['value']==$key} selected = "selected" {/if}>{$vo[0]}</option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </li>
+                                <!--固定比例-->
+                                <li id="gdbl">
+                                    <label>{$fanshui['return_rule']['rule'][0][0]}<b>*</b></label>
+                                    <input name="rule" type="number" class="dfinput" value="{$fanshui['return_rule']['rule'][0][1]}"/>%
+                                </li>
+                                <!--不同条件比例-->
+                                <li id="btbl">
+
+                                    <label>{$fanshui['return_rule']['rule'][1][0]}<b>*</b></label>
+
+                                    <div class="hy">
+                                        <ul class="toolbar">
+                                            <li class="click addRule"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+                                        </ul>
+                                        {foreach $fanshui['return_rule']['rule'][1][1][0] as $key=>$vo }
+                                        <p class="ds">
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <input name="return_rule[{$key}][min]" type="number" class="dfinput" style="width: 100px" value="{$vo['min']}" required="required"   />&nbsp;-&nbsp;
+                                            <input name="return_rule[{$key}][max]" type="number" class="dfinput" style="width: 100px" value="{$vo['max']}" required="required"   />返水比例
+                                            <input name="return_rule[{$key}][value]" type="number" class="dfinput" style="width: 100px" value="{$vo['value']}" required="required"   />%真人比例(龙虎，百家，牛牛,棋牌游戏)
+                                            <input name="return_rule[{$key}][value1]" type="number" class="dfinput" style="width: 100px" value="{$vo['value1']}" required="required"   />%（棋牌游戏-返水方式是“会员充值”棋牌游戏将无法返水）
+                                            <span  class="dtl_rule" ><img src="/static/admin/images/t03.png" /></span>
+                                        </p>
+                                        {/foreach}
+                                        <span class="baocun"></span>
+
+                                    </div>
+
+
+                                    <div class="xz">
+
+                                    <ul class="toolbar">
+                                        <li class="click addRule2"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+                                    </ul>
+                                    {foreach $fanshui['return_rule']['rule'][1][1][1] as $key=>$vo }
+
+                                        <p class="ds2">
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <input name="return_rule_1[{$key}][min]" type="number" class="dfinput" style="width: 100px" value="{$vo['min']}" required="required"   />&nbsp;-&nbsp;
+                                            <input name="return_rule_1[{$key}][max]" type="number" class="dfinput" style="width: 100px" value="{$vo['max']}" required="required"   />返水比例
+                                            <input name="return_rule_1[{$key}][value]" type="number" class="dfinput" style="width: 100px" value="{$vo['value']}" required="required"  />%真人比例(龙虎，百家，牛牛,棋牌游戏)
+                                            <input name="return_rule_1[{$key}][value1]" type="number" class="dfinput" style="width: 100px" value="{$vo['value1']}" required="required"   />%（棋牌游戏-“返水方式”是会员充值棋牌游戏将无法返水）
+                                            <span  class="dtl_rule2" ><img src="/static/admin/images/t03.png" /></span>
+                                        </p>
+                                    {/foreach}
+                                        <span class="baocun2"></span>
+
+                                    </div>
+
+
+
+                                </li>
+                                <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="button" class="btn is_go" value="保存"/></li>
+                            </form>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+
+            window.onload = function () {
+                var fs=$(".fs").val();
+                var fsfs=$(".fsfs").val();
+
+                if (fsfs == 0){
+                    $("#gdbl").attr("style","display:block;");
+                    $("#btbl").attr("style","display:none;");
+                }else {
+                    $("#gdbl").attr("style","display:none;");
+                    $("#btbl").attr("style","display:block;");
+                }
+
+
+                if (fs == 0){
+                    $(".hy").attr("style","display:block;");
+                    $(".xz").attr("style","display:none;");
+
+                    $(".xzls").attr("style","display:none;");
+                }else if (fs == 1){
+                    $(".hy").attr("style","display:none;");
+                    $(".xz").attr("style","display:block;");
+
+                    $(".xzls").attr("style","display:block;");
+                }
+            };
+            $(".fsfs").click(function(){
+                var fsfs=$(".fsfs").val();
+                var fs=$(".fs").val();
+
+                if (fsfs == 0){
+                    $("#gdbl").attr("style","display:block;");
+                    $("#btbl").attr("style","display:none;");
+                }else {
+
+                    $("#gdbl").attr("style","display:none;");
+                    $("#btbl").attr("style","display:block;");
+                    if (fs == 0){
+                        $(".hy").attr("style","display:block;");
+                        $(".xz").attr("style","display:none;");
+                    }else {
+                        $(".hy").attr("style","display:none;");
+                        $(".xz").attr("style","display:block;");
+                    }
+                }
+            });
+            $(".fs").click(function(){
+                var fs=$(".fs").val();
+                if (fs == 0){
+                    $(".hy").attr("style","display:block;");
+                    $(".xz").attr("style","display:none;");
+                    $(".xzls").attr("style","display:none;");
+
+                }else{
+
+                    $(".hy").attr("style","display:none;");
+                    $(".xz").attr("style","display:block;");
+                    $(".xzls").attr("style","display:block;");
+
+                }
+            })
+
+            $(".addRule").click(function(){ //规则
+                var  ds = $('.ds').length;
+                var html ='';
+                html+='<p class="ds"><br><br><br>';
+                html+= '<input name="return_rule['+ds+'][min]" type="number" class="dfinput" style="width: 100px" value=""';
+                html+= 'required="" placeholder="开始值">&nbsp;-&nbsp; ';
+                html+= '<input name="return_rule['+ds+'][max]" type="number" class="dfinput"   style="width: 100px" value="" required="required" placeholder="结束值"/> ';
+                html+= '返水比例 <input name="return_rule['+ds+'][value]" type="number" class="dfinput" style="width: 100px" value="" required="required"  placeholder="百分比" />%';
+                html+= '真人比例(龙虎，百家，牛牛,棋牌游戏)<input name="return_rule['+ds+'][value1]" type="number" class="dfinput" style="width: 100px" value="" required="required"   />%（棋牌游戏-“返水方式”是会员充值棋牌游戏将无法返水）';
+                html+=' <span class="dtl_rule"><img src="/static/admin/images/t03.png" /></span></p>';
+                $('.baocun').before(html);
+            });
+            $(document).on('click','.dtl_rule', function(){
+                $(this).parent().remove();
+            });
+
+            $(".addRule2").click(function(){ //规则
+                var  ds = $('.ds2').length;
+                var html ='';
+                html+='<p class="ds2"><br><br><br>';
+                html+= '<input name="return_rule_1['+ds+'][min]" type="number" class="dfinput" style="width: 100px" value=""';
+                html+= 'required="" placeholder="开始值">&nbsp;-&nbsp; ';
+                html+= '<input name="return_rule_1['+ds+'][max]" type="number" class="dfinput"   style="width: 100px" value="" required="required" placeholder="结束值"/> ';
+                html+= '返水比例 <input name="return_rule_1['+ds+'][value]" type="number" class="dfinput" style="width: 100px" value="" required="required"  placeholder="百分比" />%';
+                html+= '真人比例(龙虎，百家，牛牛,棋牌游戏)<input name="return_rule_1['+ds+'][value1]" type="number" class="dfinput" style="width: 100px" value="" required="required"   />%（棋牌游戏-“返水方式”是会员充值棋牌游戏将无法返水）';
+                html+=' <span class="dtl_rule2"><img src="/static/admin/images/t03.png" /></span></p>';
+                $('.baocun2').before(html);
+            });
+            $(document).on('click','.dtl_rule2', function(){
+                $(this).parent().remove();
+            });
+
+            $(".odds_setting").click(function(){
+
+                layer.open({
+                    type: 2,
+                    skin: 'layui-layer-rim', //加上边框
+                    title:' (下注流水彩种选择)',
+                    area: ['900px', '500px'], //宽高
+                    content: "{:url(request()->module() .'/System/xiazhuliushui')}",
+                });
+            });
+
+
+
+
+
+            $('.is_go').on('click',function(){
+                $.post("{:url(request()->module() . '/system/fanShui')}",$('#is_data').serializeArray(),function(res){
+                    layer.msg(res.msg);
+                });
+            });
+
+
+        </script>
+    </div>
+</body>
+
+</html>

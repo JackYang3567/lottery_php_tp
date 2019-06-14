@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/js/multiselect.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <style type="text/css">
+    .sort{
+    cursor: pointer;
+    }
+    </style>
+    
+  </head>
+  <body>
+    
+    <div class="rightinfo">
+      
+      <div class="tools">
+        <ul class="toolbar">
+          
+          <li class="click"><span><img src="/static/admin/images/t01.png" /></span>发送</li>
+        </ul>
+        
+      </div>
+      <dir style="width: 500px;margin-left: 17px;">
+           <p>标题：</p>
+          <input class="form-control" style="width: 250px;" type="text" name="type" id="type"></input>
+      </dir>
+     
+      
+      <div class="row">
+
+        <div class="col-xs-5" style="width: 300px;margin-left: 15px;">
+          <label>消息内容</label>
+          <textarea class="form-control" id="message" rows="8.5"></textarea>
+          
+        </div>
+      </div>
+    </div>
+    
+    
+    <script type="text/javascript">
+    jQuery(document).ready(function($) {
+    $('#search').multiselect({
+    search: {
+    left: '<input type="text" name="q" class="form-control" placeholder="搜索..." />',
+    
+    },
+    });
+    $(".click").click(function(){
+    //  var send_list = new Array();
+    //  $('#search_to option').each(function(value){
+    //          send_list.push($(this).attr("value"));
+    //  })
+    // if(send_list.length == 0){
+    //        layer.msg('请选择发送信息的会员!',{icon:5});
+    //        return;
+    //  }
+    var content = $("#message").val();
+    var type = $("#type").val();
+    if(content == ''){
+    layer.msg('请输入要发送的内容!',{icon:5});
+    return;
+    }
+    $.ajax({
+    url:"{:url('djycpgk/user/group_send')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{content:content,type:type},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    layer.msg(data.msg,{icon:1});
+    //self.location.reload(); // 父页面刷新
+    }else{
+    layer.msg('data.msg',{icon:6});
+    }
+    }
+    })
+    })
+    });
+    </script>
+  </body>
+</html>

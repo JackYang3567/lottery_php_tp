@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style type="text/css">
+        .sort{
+        cursor: pointer;
+        }
+        </style>
+        
+        <script type="text/javascript">
+        $(document).ready(function(){
+        
+        
+        
+        
+        });
+        </script>
+    </head>
+    <body>
+        <div class="place">
+            <span>普通用户列表</span>
+        </div>
+        
+        <div class="rightinfo">
+            
+            <div class="tools">
+                
+                <ul class="toolbar">
+                </ul>
+                
+                <ul class="seachform" style="">
+                    <form action="{:url('gk/user/capitalDetail')}" method="GET">
+                        <li>用户名：<input name="keywords" type="text" class="scinput"  {if isset($keywords)}value="{$keywords}"{/if} placeholder="请输入用户账号或姓名" /></li>
+                        
+                        <li>日期：<input type="date"  name="start_time"  class="scinput" {if isset($start_time)}value="{$start_time}"{/if}/>&nbsp;-&nbsp;<input type="date" name="end_time" class="scinput" {if isset($end_time)}value="{$end_time}"{/if}></li>
+                        <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+                    </form>
+                </ul>
+            </div>
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>用户名称</th>
+                        
+                        <th>输赢</th>
+                        <th>派奖</th>
+                        <th>消费</th>
+                        <th>反水</th>
+                        <th>充值</th>
+                        <th>赠金</th>
+                        <th>提现</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {if !$list->isEmpty()}
+                    {volist name="list" id='vo' key='k'}
+                    <tr>
+                        <td>{$vo.id}</td>
+                        <td>{$vo.username}</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                    {/volist}
+                    {/if}
+                </tbody>
+            </table>
+            
+            
+            <div class="pagin">
+                <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+                {if !$list->isEmpty()} {$list|raw}{/if}
+            </div>
+            
+            
+            
+            
+            
+            
+        </div>
+        
+        <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+        </script>
+    </body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery.js" /}
+
+       
+    </head>
+    <body>
+
+            
+
+
+        <style type="text/css">
+        
+        .tongji{
+        text-align: center;
+        }
+        .tongji >div{
+        margin-left: 3px;
+        color: black;
+        margin-top: 5px;
+        background: #02F78E;
+        border-radius: 20px;
+        height: 115px;
+        }
+        .tongji >div h2{
+        font-size: 20px;
+        }
+        </style>
+        <div class="mainindex">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('djycpgk/index/childindex')}">首页</a></li>
+                <li><a href="#">筛选 </a></li>
+                </ul>
+                </div>      
+        <div class="row">
+            
+                <div class="tabs-container">
+                 <div class="tab-content">
+                        <div class="col-sm-12">
+                            <div class="ibox">  
+
+                                
+                                <div class="ibox-content">
+                                    <form role="form" class="form-inline" action="{:url('djycpgk/index/search')}" method="get">
+                                        <div class="form-group">
+
+                                            <label >开始时间:</label>
+                                            <input type="date" id="start_time" name="start_time" class="form-control" value="{$start_time}"
+                                            >
+                                        </div>
+                                        <div class="form-group">
+                                            <label >结束时间:</label>
+                                            <input type="date"  id="end_time" name="end_time" class="form-control" value="{$end_time}">
+                                        </div>
+                                        
+                                        <button class="btn btn-primary " type="submit" style="margin-top: 3px;">筛选</button>
+                                        
+                                        <!--
+                                        <a href="{: U('admin/proxy/excelout',array('proxy_id'=>$proxy_id))}"> <button  type="button" class="btn btn-sm btn-primary excelout" style="float: right;">导出</button></a> -->
+                                        <!--  <button class="btn btn-primary del_all " type="button" style="float: right;">批量删除</button> -->
+                                    </form>
+                                </div>
+                                <div class="tongji"">
+                                    <div class="col-md-3">
+                                        <h2>存款</h2>
+                                        <p>{$cz_count}笔</p>
+                                        <p>{$cz_money}点</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2>取款</h2>
+                                        <p>{$tx_count}笔</p>
+                                        <p>{$tx_money}点</p>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <h2>返水</h2>
+                                        <p>{$fs_count}笔</p>
+                                        <p>{$fs_money}点</p>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <h2>返佣</h2>
+                                        <p>{$commission_count}笔</p>
+                                        <p>{$comission_money}点</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2>彩金</h2>
+                                        <p>{$give_count}笔</p>
+                                        <p>{$give_money}点</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2>代理商</h2>
+                                        <p>&nbsp;</p>
+                                        <p>{$dls_zc}点</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2>盈利</h2>
+                                        <p>&nbsp;</p>
+                                        <p>{$yl}点</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2>消费</h2>
+                                        <p>{$betting_count}笔</p>
+                                        <p>{$betting_money}点</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h2>派奖</h2>
+                                        <p>{$pj_count}笔</p>
+                                        <p>{$pj_money}点</p>
+                                    </div>
+                                <div class="col-md-3">
+                                    <h2>注册人数</h2>
+                                    <p>{$zhuce}人</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2>提现笔数</h2>
+                                    <p>{$tx_rs}笔</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2>线下充值笔数</h2>
+                                    <p>{$cz_rs}笔</p>
+                                </div>
+                                    
+                                </div>                             </div>
+</div>                     </div>                 </div>             </div>
+</div>         <script src="__PUBLIC__/js/jquery-3.2.1.min.js"></script>
+<script>         $(function(){         var start_time = "{$start_time}";
+var end_time = "{$end_time}";         var d = new Date();
+if(start_time =='' && end_time == ''){
+document.getElementById('start_time').valueAsDate =new
+Date(d.getTime()-86400000*7); ;
+document.getElementById('end_time').valueAsDate =d;         }         })
+</script>
+        
+    </body>
+</html>

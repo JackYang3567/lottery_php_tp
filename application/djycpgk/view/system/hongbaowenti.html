@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <script type="text/javascript">
+    $(document).ready(function(){
+    $(".click").click(function(){
+    $(".tip").fadeIn(200);
+    });
+    
+    $(".tiptop a").click(function(){
+    $(".tip").fadeOut(200);
+    });
+    $(".sure").click(function(){
+    $(".tip").fadeOut(100);
+    });
+    $(".cancel").click(function(){
+    $(".tip").fadeOut(100);
+    });
+    $("input[name='checkall']").click(function(){
+    var    CheckBox=document.getElementsByName('article_id');
+    if($(this).is(':checked') ==false){
+    for(i=0;i<CheckBox.length;i++){
+    CheckBox[i].checked=false;
+    };
+    }else{
+    for(i=0;i<CheckBox.length;i++){
+    CheckBox[i].checked=true;
+    };
+    }
+    })
+    
+    });
+    </script>
+  </head>
+  <body>
+      <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url(request()->module() . '/system/hongbaowenti')}">红包问题设置  </a></li>
+                </ul>
+                </div>
+            </div>
+    
+    <div class="rightinfo">
+      
+      <div class="tools">
+        
+        <ul class="toolbar">
+          <li class="addbank"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+          
+        </ul>
+        
+      </div>
+      
+      
+      <table class="tablelist">
+        <thead>
+          <tr>
+            <th>问题</th>
+            <th>答案</th>
+            <th>红包标题(一个字)</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {volist name="list" id="vo"}
+          <tr>
+            <td>{$vo.problem}</td>
+            <td>{$vo.answer}</td>
+            <td>{$vo.title}</td>           
+            <td>
+              <a href="{:url(request()->module() . '/system/hongbao_edit')}?id={$vo.Id}" class="tablelink">修改</a>
+              <a href="javascript:;" class="tablelink bank_dlt" data-id="{$vo.Id}"> 删除</a>
+            </td>
+          </tr>
+          {/volist}
+        </tbody>
+        
+      </table>
+      
+      <div class="pagin">
+        <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+        
+        {if !$list->isEmpty()} {$list|raw}{/if}
+        
+      </div>
+      
+     
+      
+      
+      <div class="tip">
+        <div class="tiptop"><span>提示信息</span><a></a></div>
+        
+        <div class="tipinfo">
+          <span><img src="/static/admin/images/ticon.png" /></span>
+          <div class="tipright">
+            <p>是否确认对信息的修改 ？</p>
+            <cite>如果是请点击确定按钮 ，否则请点取消。</cite>
+          </div>
+        </div>
+        
+        <div class="tipbtn">
+          <input name="" type="button"  class="sure" value="确定" />&nbsp;
+          <input name="" type="button"  class="cancel" value="取消" />
+        </div>
+        
+      </div>
+      
+      
+      </div>
+      
+    </div>
+    
+    <script type="text/javascript">
+    //$('.tablelist tbody tr:odd').addClass('odd');
+    $('.addbank').click(function(){
+      window.location.href="{:url(request()->module() . '/system/wentitianjia')}";
+    })
+    $('.bank_dlt').click(function(){
+    var data_number = $(this).attr('data-id');
+    layer.confirm('确定删除该问题吗?', {
+    btn: ['是','否'] //按钮
+    }, function(){
+    $.ajax({
+    url:"{:url(request()->module() . '/system/hongbao_delete')}",//这里指向的就不再是页面了，而是一个方法。
+    data:{data_number:data_number},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    layer.msg('删除成功',{icon:1,time:1000},function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    }else{
+    layer.msg('删除失败', {icon: 5,time:2000});
+    }
+    }
+    })
+    }, function(){
+    
+    });
+    })
+    </script>
+  </body>
+</html>

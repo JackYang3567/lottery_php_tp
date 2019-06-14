@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <title>Gk网投--代理</title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/font-awesome.css" /}
+        {css href="/static/admin/css/animate.css" /}
+        {css href="/static/admin/css/boot/style.css" /}
+        {css href="/static/admin/css/boot/login.css" /}
+        <!--[if lt IE 9]>
+        <meta http-equiv="refresh" content="0;ie.html" />
+        <![endif]-->
+        <script>
+        if (window.top !== window.self) {
+        window.top.location = window.location;
+        }
+        </script>
+    </head>
+    <body class="signin">
+        <div class="signinpanel">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="signin-info">
+                        <div class="logopanel m-b">
+                            <h1>[ GK ]</h1>
+                        </div>
+                        <div class="m-b"></div>
+                        <h4>欢迎使用 <strong>GK网投——代理后台</strong></h4>
+                        
+                        
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <form method="post" action="{:url('gk/login/login')}">
+                        <h4 class="no-margins">登录：</h4>
+                        <p class="m-t-md">登录到GK网投代理后台</p>
+                        <input type="text" class="form-control uname" placeholder="用户名"  name="username" required="" />
+                        <input type="password" class="form-control pword m-b" placeholder="密码"  name="password" required="" />
+                        <input name="verify" type="text" class="form-control pword" value="" placeholder="验证码" style="width: 120px;"/> <img src="{:url('/djycpgk/login/verify')}"   style="position: absolute;height: 33px;width: 100px;right: 48px;top: 197px;" class="check"/>
+                        <button class="btn btn-success btn-block">登录</button>
+                    </form>
+                </div>
+            </div>
+            <div class="signup-footer">
+                <div class="pull-left">
+                    &copy; 2018 All Rights Reserved. 天下纵横
+                </div>
+            </div>
+        </div>
+    </body>
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    <script type="text/javascript">
+    function change(){
+    $.post('/djycpgk/login/verify', null, function() {
+    var turl = "/djycpgk/login/verify?rnd=" + Math.random();
+    $('.check').prop('src',turl);
+    });
+    }
+    $(".check").on('click',function(){
+    change();
+    });
+    </script>
+</html>

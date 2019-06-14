@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/bootstrap.min.css"/}
+
+        {css href="/static/admin/css/style.css" /}
+
+        <!--{css href="/static/admin/css/select.css" /}-->
+
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/jquery.idTabs.min.js" /}
+        {js href="/static/admin/js/select-ui.min.js" /}
+        <style>
+        .forminfo span{
+        display: inline-block;
+        height: 34px;
+        line-height: 34px;
+        padding-left: 5px;
+        }
+        .forminfo label{
+        width: 125px !important;
+        }
+        .line{
+        display: inline-block;
+        width: 50%;
+        height: 1pt;
+        background: #D5D5D5;
+        }
+        </style>
+        <script type="text/javascript">
+        $(document).ready(function(e) {
+        $(".select1").uedSelect({
+        width : 345
+        });
+        
+        $('.recharge_rule').click(function(){
+        window.location.href="{:url('djycpgk/system/recharge_rule')}";
+        })
+        $('.recharge_punch').click(function(){
+            window.location.href="{:url('djycpgk/system/recharge_punch')}";
+        })
+        });
+
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+        <link rel="stylesheet"
+              href="../../../../../../../gitee/gk_entertainment/php/public/static/admin/css/bootstrap-multiselect.css">
+        <link rel="stylesheet" href="../../../../../../../gitee/gk_entertainment/php/public/static/admin/css/style.css">
+    </head>
+    <body>
+          <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/system/recharge')}">充值提现设置 </a></li>
+                </ul>
+                </div>
+            </div>
+        <div class="rightinfo">
+            <div class="tools">
+                
+                <ul class="toolbar">
+                    <li class="click recharge_rule"><span><img src="/static/admin/images/gz.png"  style="width: 20px ;height:20px;" /></span>充值赠送规则</li>
+                </ul>
+                <ul class="toolbar">
+                    <li class="click recharge_punch"><span><img src="/static/admin/images/gz.png"  style="width: 20px ;height:20px;" /></span>首冲赠送规则</li>
+                </ul>
+            </div>
+            <div class="formbody" style="padding: 0 0;">
+                
+                
+                <div id="usual1" class="usual">
+                    <div id="tab1" class="tabson">
+                        <ul class="forminfo">
+                            <form action="{:url('djycpgk/system/recharge_setting')}" method="post">
+                                <li ><label>是否开启充值赠送<b>*</b></label>
+                                <div style=" line-height: 34px;font-size: 11pt;">
+                                    <input type="radio" name="recharge_give_open" value="1" {if $systemInfo.recharge_give_open == 1}checked="checked"{/if}/>开
+                                    <input type="radio" name="recharge_give_open" value="0" {if $systemInfo.recharge_give_open == 0}checked="checked"{/if} />关
+                                    <span>(关闭后,用户充值按原金额返现)</span>
+                                </div>
+                            </li>
+                                <li ><label>是否开启首冲赠送<b>*</b></label>
+                                <div style=" line-height: 34px;font-size: 11pt;">
+                                    <input type="radio" name="recharge_give_punch" value="1" {if $systemInfo.recharge_give_punch == 1}checked="checked"{/if}/>开
+                                    <input type="radio" name="recharge_give_punch" value="0" {if $systemInfo.recharge_give_punch == 0}checked="checked"{/if} />关
+                                    <span><a class="fenzu" style="color: red">（点击设置首冲条件）</a></span>
+                                </div>
+                            </li>
+                            <li><label>最高充值金额<b>*</b></label><input name="max_recharge_day" type="text" class="dfinput" value="{$systemInfo.max_recharge_day}" required="required"   /><span>(每天至多充值金额，设置为“0”则不限制)</span></li>
+                            
+                            <li><label>至少充值金额<b>*</b></label><input name="min_recharge_day" type="text" class="dfinput" value="{$systemInfo.min_recharge_day}" required="required" /><span>(单次至少充值金额)</span></li>
+                            <li><label>充值赠送次数<b>*</b></label><input name="recharge_give_time" type="text" class="dfinput" value="{$systemInfo.recharge_give_time}" required="required" /><span>(每天每个会员帐号充值最多赠送多少次，设置为“0”则不限制)</span></li>
+                            <li><label>充值最多赠送金额<b>*</b></label><input name="recharge_give_max" type="text" class="dfinput" value="{$systemInfo.recharge_give_max}" required="required" /><span>(每天每个会员帐号充值最多赠送多少金额，设置为“0”则不限制)</span></li>
+                            <li class="line"><span></span></li>
+                            <li><label>是否开启提现<b>*</b></label>  <div style=" line-height: 34px;font-size: 11pt;">开&nbsp;<input type="radio" name="cash_switch" {if $systemInfo.cash_switch == 1}checked=checked{/if} value="1">&nbsp;关&nbsp;<input type="radio" name="cash_switch" {if $systemInfo.cash_switch == 0}checked=checked{/if} value="0"></div>
+                        </li>
+                        <li><label>提现时间限制<b>*</b></label>每天&nbsp;<input  name="start_time" type="datetime" class="dfinput" value="{$systemInfo.cash_time.start_time}"    style="width:88px;"/>&nbsp;点 &nbsp; 至&nbsp;<input name="end_time" type="datetime" class="dfinput" value="{$systemInfo.cash_time.end_time}"   style="width:88px;" />&nbsp;点</li>
+                        
+                        <li><label>提现流水条件<b>*</b></label><input name="cash_ls_condition" type="text" class="dfinput" value="{$systemInfo.cash_ls_condition}" required="required"   />%<span>(流水需达到存款的百分之{$systemInfo.cash_ls_condition})</span></li>
+                        
+                        <li><label>提现说明<b>*</b></label><input name="cash_explain" type="text" class="dfinput" value="{$systemInfo.cash_explain}" required="required"   /><span>(提现说明)</span></li>
+                        <li><label>至少提现金额<b>*</b></label><input name="min_cash_day" type="text" class="dfinput" value="{$systemInfo.min_cash_day}" required="required"   /><span>(每次至少提现金额，设置为“0”则不限制)</span></li>
+                        <li><label>最高提现金额<b>*</b></label><input name="max_cash_day" type="text" class="dfinput" value="{$systemInfo.max_cash_day}" required="required"   /><span>(每次最多提现金额，设置为“0”则不限制)</span></li>
+                        <li><label>提现次数<b>*</b></label><input name="cash_time_day" type="text" class="dfinput" value="{$systemInfo.cash_time_day}" required="required"   /><span>(每天最多提现次数，设置为“0”则不限制)</span></li>
+                        <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="保存"/></li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+  <template id="fenzu">
+      <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+          <div class="col-sm-12">
+              <div class="input-group">
+                  <span class="input-group-addon"> 方式 :</span>
+                  <select class="form-control" name="sezhi">
+                      <option value="0" {if $systemInfo.recharge_give_condition == 0}selected = "selected"{/if}>一次(用户账号第一次充值，会首冲赠送)</option>
+                      <option value="1" {if $systemInfo.recharge_give_condition == 1}selected = "selected"{/if}>每天（用户每天第一次充值，会首冲赠送）</option>
+                      <option value="2" {if $systemInfo.recharge_give_condition == 2}selected = "selected"{/if}>每周（用户没周星期一的第一次充值，会首冲赠送）</option>
+                      <option value="3" {if $systemInfo.recharge_give_condition == 3}selected = "selected"{/if}>每月（用户每月第一次充值，会首冲赠送）</option>
+                      <option value="4" {if $systemInfo.recharge_give_condition == 4}selected = "selected"{/if}>每季度（用户每季度第一次充值，会首冲赠送）</option>
+                  </select>
+              </div>
+          </div>
+      </div>
+  </template>
+    <script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    </script>
+    
+    <script type="text/javascript">
+    $('.tablelist tbody tr:odd').addClass('odd');
+    //改变分组
+    $('.fenzu').on('click',function() {
+        layer.open({
+            type: 1,
+            title: '设置首冲条件',
+            area: ['450px', '200px'],
+            content: $('#fenzu').html(),
+            btn: ['保存','取消'],
+            btn1: function (index,layero) {
+                var sezhi = $(layero).find("select[name='sezhi']").val();
+                $.post("{:url('djycpgk/system/recharge_setting')}",{ type:1,sezhi:sezhi },function(res){
+                    if (res){
+                        layer.msg(res.msg,false,function(){ window.location.reload(); });
+                    }
+                });
+            },
+            btn2:function (index,layero) {}
+        });
+    });
+    </script>
+    
+    
+    
+    
+    
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/style.css" /}
+        {css href="/static/admin/css/select.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/js/jquery.idTabs.min.js" /}
+        {js href="/static/admin/js/select-ui.min.js" /}
+        {js href="/static/admin/ueditor/ueditor.config.js" /}
+        {js href="/static/admin/ueditor/ueditor.all.min.js" /}
+        <script type="text/javascript">
+        $(document).ready(function(e) {
+        var ue = UE.getEditor('container', {
+        wordCount:false, //关闭字数统计
+        elementPathEnabled:false//关闭elementPath
+        });
+        
+        $(".select1").uedSelect({
+        width : 345
+        });
+        
+        });
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+        
+        <div class="formbody">
+            <div id="usual1" class="usual">
+                <div id="tab1" class="tabson">
+                    <ul class="forminfo">
+                        <form action="{:url('djycpgk/Football/edit')}" enctype="multipart/form-data" method="post">
+                            <li><label>联赛名<b>*</b></label>
+                                <input name="name" type="text" class="dfinput" required="required" value="{$data.name}"  />
+                            </li>
+                            <input type="hidden" name="id" value="{$data.id}">
+                            <li>
+                                <label>LOGO<b>*</b></label>
+                                 <img src="{$data.logo}" width="50" height="50"> 
+                                  <input type="file"   name='image' />
+                            </li>
+                           
+                            <li><label>是否显示<b>*</b></label>
+                           <div class="vocation">
+                                    <select class="select1" name="is_show">
+                                         {if $data.is_show == 1 }
+                                                <option value ="1" selected>是</option>
+                                                <option value ="0">否</option>
+                                             {elseif $data.is_show == 0 /}
+                                                <option value ="1" >是</option>
+                                                <option value ="0" selected>否</option>
+                                         {/if}
+                                        
+                                        
+                                    </select>
+                            </div>
+                        </li>
+                    <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="保存"/>
+                        <a href="{:url('djycpgk/Football/index')}" class="tablelink" style="size: 25px" >返回</a>
+                </form>
+            </ul>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    </script>
+    
+    
+</div>
+</body>
+</html>

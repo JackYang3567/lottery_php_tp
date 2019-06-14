@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {css href="/static/admin/css/bootstrap.min.css"/}
+    {js href="/static/admin/js/jquery-3.2.1.min.js"/}
+    {js href="/static/admin/layer/layer.js"/}
+    {js href="/static/admin/ueditor/ueditor.config.js" /}
+    {js href="/static/admin/ueditor/ueditor.all.min.js" /}
+
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            var ue = UE.getEditor('container', {
+                wordCount:false, //关闭字数统计
+                elementPathEnabled:false//关闭elementPath
+            });
+
+        });
+
+    </script>
+</head>
+<body class="body">
+<ul class="breadcrumb">
+    <li><a href="{:url('djycpgk/system/index')}">网站系统设置</a></li>
+    <li><a href="{:url('djycpgk/system/notice')}">弹出公告</a></li>
+    <li><a href="#">弹出公告添加</a></li>
+</ul>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label   >标题</label>
+                <input type="text" class="form-control bt" id="exampleInputEmail1" name="bt">
+            </div>
+            <script id="container" type="text/plain" name="content" style="width:700px;height:250px;padding-bottom : 20px;"></script>
+            <label>&nbsp;</label><input id="bc" type="button" class="btn" value="保存"/>
+        </div>
+    </div>
+</div>
+
+ <script>
+    $('#bc').click(function () {
+        var bt = $("input[name='bt']").val();
+        var content = UE.getEditor('container').getContent()
+        $.post("{:url(request()->module() . '/system/noticeadd')}",{bt:bt,content:content},function(res){
+            if(res.error == 1){
+                layer.msg(res.msg,false,function(){ window.location.reload() });
+            }else {
+                layer.msg(res.msg);
+            }
+
+        });
+    })
+ </script>
+</body>
+</html>

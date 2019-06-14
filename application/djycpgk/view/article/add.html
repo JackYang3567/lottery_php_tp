@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/style.css" /}
+        {css href="/static/admin/css/select.css" /}
+
+        <link rel="stylesheet" href="/static/caijian/css/cropper.min.css">
+        <link rel="stylesheet" href="/static/caijian/css/ImgCropping.css">
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/js/jquery.idTabs.min.js" /}
+        {js href="/static/admin/js/select-ui.min.js" /}
+        {js href="/static/admin/ueditor/ueditor.config.js" /}
+        {js href="/static/admin/ueditor/ueditor.all.min.js" /}
+        <link type="text/css" rel="stylesheet" href="/static/date/test/jeDate-test.css">
+        <link type="text/css" rel="stylesheet" href="/static/date/skin/jedate.css">
+        <script type="text/javascript" src="/static/date/src/jedate.js"></script>
+
+        <script src="/static/caijian/js/cropper.min.js"></script>
+        <script type="text/javascript">
+        $(document).ready(function(e) {
+        var ue = UE.getEditor('container', {
+        wordCount:false, //关闭字数统计
+        elementPathEnabled:false,//关闭elementPath
+        allHtmlEnabled:false,
+        });
+        $(".select1").uedSelect({
+        width : 345
+        });
+        
+        });
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+        <style>
+            .jedate-header{
+
+            }
+            .jedate-header>.ymbtn{
+                display: inline-block;
+                padding-top: 0!important;
+            }
+        </style>
+    </head>
+    <body>
+        
+          <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url(request()->module().'/article/index')}">文章列表   </a></li>
+                <li><a href="#">添加文章</a></li>
+               
+                </ul>
+                </div>
+            </div>
+        
+        <div class="formbody">
+            
+            
+            <div id="usual1" class="usual">
+                
+                
+                <div id="tab1" class="tabson">
+                    
+                    
+                    
+                    <ul class="forminfo">
+                        <form method="post" action="{:url(request()->module().'/article/add')}" enctype="multipart/form-data">
+                        <!--<form onsubmit="return false;">-->
+                            <li><label>文章标题<b>*</b></label><input name="title" type="text" class="dfinput" value="" required="required"  /></li>
+                            
+                            <li><label>文章分类<b>*</b></label>
+                            <div class="vocation">
+                                <select class="select1" name="cat_id">
+                                    {volist name="catelist"  id="vo"}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                        </li>
+
+                        <li><label>选择日期<b>*</b></label><input name="date" type="text" class="dfinput" value="{$date}"  id="test11"  /></li>
+
+                        <li><label>文章简介<b>*</b></label><input name="brief" type="text" class="dfinput" value=""  required="required" /></li>
+                        <li><label>文章封面<b>*</b></label><button type="button" id="replaceImg" class="l-btn">选择封面</button>
+                            <div style="width: 340px;height: 110px;border: solid 1px #555;position: absolute;top: 160px;left: 485px;">
+                                <img id="finalImg" src="" width="100%">
+                            </div>
+                        </li>
+                        <li><label>文章内容<b>*</b></label>
+                        <textarea id="container" type="text/plain" name="content" style="width:700px;height:250px;float: left;padding-bottom : 20px;"></textarea>
+                    </li>
+                            <input type="hidden" name="img" id="img_base64"/>
+                    <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="马上发布"/></li>
+                </form>
+            </ul>
+            
+        </div>
+        
+        
+        </div>
+    </div>
+</div>
+          <div style="display: none" class="tailoring-container">
+              <div class="black-cloth" onclick="closeTailor(this)"></div>
+              <div class="tailoring-content">
+                  <div class="tailoring-content-one">
+                      <label title="上传图片" for="chooseImg" class="l-btn choose-btn">
+
+                          选择图片
+                      </label>
+                      <input type="file" accept="image/jpg,image/jpeg,image/png" name="file" id="chooseImg" class="hidden" onchange="selectImg(this)">
+                      <div class="close-tailoring" style="background: #000;color: white;font-weight: bold;font-size: 30px;line-height: 24px" title="关闭" onclick="closeTailor(this)">×</div>
+                  </div>
+                  <div class="tailoring-content-two">
+                      <div class="tailoring-box-parcel">
+                          <img id="tailoringImg">
+                      </div>
+                      <div class="preview-box-parcel">
+                          <p>图片预览：</p>
+                          <div class="square previewImg"></div>
+                      </div>
+                  </div>
+                  <div class="tailoring-content-three" style="position: absolute;top: 52%;left: 70%;width: 215px;">
+                      <button class="l-btn cropper-reset-btn">复位</button>
+                      <button class="l-btn cropper-rotate-btn">旋转</button>
+                      <button class="l-btn cropper-scaleX-btn">换向</button>
+                      <button class="l-btn sureCut" id="sureCut">确定</button>
+                  </div>
+              </div>
+          </div>
+          <script type="text/javascript">
+              $("#usual1 ul").idTabs();
+          </script>
+
+          <script type="text/javascript">
+              $('.tablelist tbody tr:odd').addClass('odd');
+          </script>
+
+          <script>
+
+              //弹出框水平垂直居中
+              (window.onresize = function () {
+                  var win_height = $(window).height();
+                  var win_width = $(window).width();
+                  if (win_width <= 768){
+                      $(".tailoring-content").css({
+                          "top": (win_height - $(".tailoring-content").outerHeight())/2,
+                          "left": 0
+                      });
+                  }else{
+                      $(".tailoring-content").css({
+                          "top": (win_height - $(".tailoring-content").outerHeight())/2,
+                          "left": (win_width - $(".tailoring-content").outerWidth())/2
+                      });
+                  }
+              })();
+
+              //弹出图片裁剪框
+              $("#replaceImg").on("click",function () {
+                  $(".tailoring-container").toggle();
+              });
+              //图像上传
+              function selectImg(file) {
+                  if (!file.files || !file.files[0]){
+                      return;
+                  }
+                  var reader = new FileReader();
+                  reader.onload = function (evt) {
+                      var replaceSrc = evt.target.result;
+                      //更换cropper的图片
+                      $('#tailoringImg').cropper('replace', replaceSrc,false);//默认false，适应高度，不失真
+                  }
+                  reader.readAsDataURL(file.files[0]);
+              }
+              //cropper图片裁剪
+              $('#tailoringImg').cropper({
+                  aspectRatio: 34/11,//默认比例
+                  preview: '.previewImg',//预览视图
+                  guides: false,  //裁剪框的虚线(九宫格)
+                  autoCropArea: 0.5,  //0-1之间的数值，定义自动剪裁区域的大小，默认0.8
+                  movable: false, //是否允许移动图片
+                  dragCrop: true,  //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+                  movable: true,  //是否允许移动剪裁框
+                  resizable: true,  //是否允许改变裁剪框的大小
+                  zoomable: true,  //是否允许缩放图片大小
+                  mouseWheelZoom: true,  //是否允许通过鼠标滚轮来缩放图片
+                  touchDragZoom: true,  //是否允许通过触摸移动来缩放图片
+                  rotatable: true,  //是否允许旋转图片
+                  crop: function(e) {
+                      // 输出结果数据裁剪图像。
+                  }
+              });
+              //旋转
+              $(".cropper-rotate-btn").on("click",function () {
+                  $('#tailoringImg').cropper("rotate", 45);
+              });
+              //复位
+              $(".cropper-reset-btn").on("click",function () {
+                  $('#tailoringImg').cropper("reset");
+              });
+              //换向
+              var flagX = true;
+              $(".cropper-scaleX-btn").on("click",function () {
+                  if(flagX){
+                      $('#tailoringImg').cropper("scaleX", -1);
+                      flagX = false;
+                  }else{
+                      $('#tailoringImg').cropper("scaleX", 1);
+                      flagX = true;
+                  }
+                  flagX != flagX;
+              });
+
+              //裁剪后的处理
+              $("#sureCut").on("click",function () {
+                  if ($("#tailoringImg").attr("src") == null ){
+                      return false;
+                  }else{
+                      var cas = $('#tailoringImg').cropper('getCroppedCanvas');//获取被裁剪后的canvas
+                      var base64url = cas.toDataURL('image/png'); //转换为base64地址形式
+                      $("#finalImg").prop("src",base64url);//显示为图片的形式
+                      $("#img_base64").val(base64url);
+
+                      //关闭裁剪框
+                      closeTailor();
+                  }
+              });
+              //关闭裁剪框
+              function closeTailor() {
+                  $(".tailoring-container").toggle();
+              }
+
+
+
+          </script>
+
+          <script>
+              jeDate("#test11",{
+                  format: "YYYY-MM-DD",
+                  multiPane:false,
+                  range:" 至 ",
+                  isinitVal: true,
+              });
+          </script>
+</body>
+</html>

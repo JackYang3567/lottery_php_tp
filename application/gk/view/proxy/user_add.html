@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+    </head>
+<body>
+<ul class="breadcrumb">
+    <li><span href="#">位置</span></li>
+    <li><a href="{:url('gk/proxy/demo')}">试玩列表</a></li>
+    <li><a >试玩添加</a></li>
+    <li><a href="{:url('gk/proxy/demo')}">返回</a></li>
+</ul>
+<div class="container">
+    <form id="is_data">
+        <div class="form-group">
+            <label for="exampleInputEmail1">账号</label>
+            <input type="text" name="username" class="form-control" id="exampleInputEmail1" required="required" placeholder="账号">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">密码</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1"  required="required" placeholder="密码">
+        </div>
+        <button type="button" class="btn btn-info sub">提交</button>
+    </form>
+</div>
+<script>
+    $('.sub').on('click',function(){
+        $.post("{:url(request()->module() . '/Proxy/user_add')}",$('#is_data').serializeArray(),function(res){
+            layer.msg(res.msg);
+        });
+    });
+</script>
+
+</body>
+</html>

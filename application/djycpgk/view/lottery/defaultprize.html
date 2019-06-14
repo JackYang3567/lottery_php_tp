@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style type="text/css">
+        .sort{
+        cursor: pointer;
+        }
+        </style>
+        
+        <script type="text/javascript">
+        $(document).ready(function(){
+        
+        
+        $('.typechoose').change(function(){
+        var type = $(this).val();
+        window.location.href="{:url('djycpgk/lottery/defaultprize')}?type="+type;
+        })
+        function p(s) {
+        return s < 10 ? '0' + s: s;
+        }
+        var myDate = new Date();
+        //获取当前年
+        var year=myDate.getFullYear();
+        //获取当前月
+        var month=myDate.getMonth()+1;
+        //获取当前日
+        var date=myDate.getDate();
+        var h=myDate.getHours();       //获取当前小时数(0-23)
+        var m=myDate.getMinutes();     //获取当前分钟数(0-59)
+        var s=myDate.getSeconds();
+        
+        var now=year+'-'+p(month)+"-"+p(date)+" "+p(h)+':'+p(m)+":"+p(s);
+        $("input[name='create_time']").val(now);
+        $('.paijiang').click(function(){
+        var type = $("select[name='type']").val();
+        var create_time = $("input[name='create_time']").val();
+        var content = $("input[name='content']").val();
+        if(type == 0){
+        alert('请选择彩种');return;
+        }
+        if(content == ''){
+        alert('请输入开奖结果');return;
+        }
+        var expect = $("input[name='expect']").val();
+        
+        if(expect == ''){
+        alert('请输入期号');
+        return;
+        }
+        $.ajax({
+        url:"{:url('djycpgk/lottery/prejk')}",//这里指向的就不再是页面了，而是一个方法。
+        data:{type:type,expect:expect,create_time:create_time,content:content},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        alert(data.msg);
+        window.location.reload(); // 父页面刷新
+        }
+        })
+        })
+        
+        
+        });
+        </script>
+    </head>
+    <body>
+             <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/lottery/defaultprize')}">系统彩票中奖</a></li>
+                </ul>
+                </div>
+            </div>
+        
+        <div class="rightinfo">
+            
+            <div class="tools">
+                
+                <ul class="toolbar">
+                    
+                </ul>
+                
+                <ul class="seachform" style="">
+                  
+                        <li>彩种：
+                            <select class="scinput typechoose" name="type">
+                                <option value="">请选择</option>
+                                {volist name="lottery_array" id="vo"}
+                                <option value="{$vo.type}" {if isset($type) && $type==$vo.type}selected="selected"{/if}>{$vo.name} </option>
+                                {/volist}
+                            </select>
+                        </li>
+                        
+                        <li>期号：<input name="expect" type="text" class="scinput"  placeholder="期号" /></li>
+                        <li>开奖号码：<input name="content" type="text" class="scinput"  placeholder="开奖号码" /></li>
+                        <li>开奖号码：<input name="create_time" type="text" class="scinput"  value="" /></li>
+                        <li><label>&nbsp;</label><input name="" type="button" class="scbtn paijiang" value="添加" style="margin-top: -1px;" /></li>
+                        <li><label>&nbsp;</label><input name="" type="button" class="scbtn refresh " value="刷新" style="margin-top: -1px;" /></li>
+           
+                </ul>
+            </div>
+            
+            
+            <table class="tablelist">
+                <thead>
+                    <h5><b>近5期,开奖结果</b></h5>
+                    <tr>
+                        <th>彩种</th>
+                        <th>期号</th>
+                        <th>开奖号码</th>
+                        <th>类型</th>
+                        <th>开奖时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {volist name="list" id='vo' key='k'}
+                    <tr>
+                        <td>{$vo.lottery_name}</td>
+                        <td>{if $vo.is_preset == 1}<b style="color: red;">{$vo.expect}</b>{else/}{$vo.expect}{/if}</td>
+                        <td>{$vo.content}</td>
+                        <td>{if $vo.is_preset == 1}<b style="color: red;">预设开奖</b>{else/}系统开奖{/if}</td>
+                        <td>{$vo.create_time||date='Y-m-d H:i:s'}</td>
+                        <td>
+                            {if $vo.is_preset == 1}
+                                <a href="javascript:;" class="tablelink shanchu" data-expect="{$vo.expect}"  data-type="{$vo.type}" >删除</a>
+                                {else/}
+                            {/if}
+                        </td>
+                    </tr>
+                    {/volist}
+                    
+                </tbody>
+            </table>
+            
+            
+            </div>
+            
+            
+            
+            
+        </div>
+        
+        <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+        
+         $('.refresh').click(function(){
+        window.location.reload();
+        })
+
+           $('.shanchu').click(function(){
+            var data_expect = $(this).attr('data-expect');
+            var data_type = $(this).attr('data-type');
+            layer.confirm('确定删除?', {
+            btn: ['是','否'] //按钮
+            }, function(){
+                $.ajax({
+                    url:"{:url('djycpgk/lottery/defaultPrize')}",//这里指向的就不再是页面了，而是一个方法。
+                    data:{expect:data_expect,type:data_type},
+                    type:"POST",
+                    dataType:"json",
+                    success: function(data){
+                        // console.log('ss');
+                        if(data.error == 0){
+                            layer.msg(data.msg,{icon:1,time:1000},function(){
+                            self.location.reload(); // 父页面刷新
+                            self.layer.close();
+                            });
+                        }else{
+                            layer.msg(data.msg, {icon: 5,time:2000});
+                        }
+                    }
+                    // error:function(data){
+                    //     console.log(data);
+                    // }
+                });
+            }, function(){
+        
+                });
+            })
+        </script>
+    </body>
+</html>

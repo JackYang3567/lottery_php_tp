@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/style.css" /}
+        {css href="/static/admin/css/select.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/js/jquery.idTabs.min.js" /}
+        {js href="/static/admin/js/select-ui.min.js" /}
+        <script type="text/javascript">
+        $(document).ready(function(e) {
+        $(".select1").uedSelect({
+        width : 345
+        });
+        
+        });
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+         <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/authority/rulelist')}">节点列表   </a></li>
+                <li><a href="#">添加节点</a></li>
+               
+                </ul>
+                </div>
+            </div>
+        <div class="formbody">
+            
+            
+            <div id="usual1" class="usual">
+                
+                
+                <div id="tab1" class="tabson">
+                    
+                    
+                    
+                    <ul class="forminfo">
+                        <form action="{:url('djycpgk/authority/rule_add')}" method="post">
+                            <li><label>节点名<b>*</b></label><input name="title" type="text" class="dfinput" value="" required="required"  /></li>
+                            
+                            <li><label>节点分类<b>*</b></label>
+                            <div class="vocation">
+                                <select class="select1" name="type">
+                                    <option value="1">会员</option>
+                                    <option value="2">彩票</option>
+                                    <option value="3">系统</option>
+                                    <option value="4">后台代理</option>
+                                    <option value="5">文章</option>
+                                    <option value="6">棋牌游戏</option>
+                                </select>
+                            </div>
+                        </li>
+                        <li><label>节点链接<b>*</b></label><input name="name" type="text" class="dfinput" value=""  required="required" /></li>
+                        <li><label>节点说明<b>*</b></label>
+                        <textarea  name="condition" style="width:345px;height:150px;border: 1px solid #a7b5bc"></textarea>
+                    </li>
+                    
+                    <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="添加"/></li>
+                </form>
+            </ul>
+            
+        </div>
+        
+        </div>
+        
+    </div>
+    
+    <script type="text/javascript">
+    $("#usual1 ul").idTabs();
+    </script>
+    
+    <script type="text/javascript">
+    $('.tablelist tbody tr:odd').addClass('odd');
+    </script>
+    
+    
+    
+    
+    
+</div>
+</body>
+</html>

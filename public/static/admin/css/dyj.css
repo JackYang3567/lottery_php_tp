@@ -1,0 +1,104 @@
+a{text-decoration: none;} /* 链接无下划线,有为underline */ 
+a:link {color: #000000;} /* 未访问的链接 */
+a:visited {color: #000000;} /* 已访问的链接 */
+a:hover{color: #FF0000;text-decoration: underline;} /* 鼠标在链接上 */ 
+a:active {color: #FF0000;} /* 点击激活链接 */
+td	{font-size:12px; }
+body  {  margin:0px; font:9pt 宋体; FONT-SIZE: 9pt;text-decoration: none;
+	SCROLLBAR-FACE-COLOR: #278BC6;
+	SCROLLBAR-HIGHLIGHT-COLOR: #278BC6;
+	SCROLLBAR-SHADOW-COLOR: #fff;
+	SCROLLBAR-3DLIGHT-COLOR: #fff;
+	SCROLLBAR-ARROW-COLOR: #02338A;
+	SCROLLBAR-trACK-COLOR: #278BC6;
+	SCROLLBAR-DARKSHADOW-COLOR: #278BC6;
+ OVERFLOW-X: hidden;
+	OVERFLOW-y: scroll;}
+	
+
+/*头部*/
+.head{background:url("../images/bg-nav.jpg"); height:86px;}  /*背景色*/
+.logo {	color: #ffffff;	font-size: 20px;font-family: Georgia, "Times New Roman", Times, serif;font-weight: bold; text-align:center}
+.fonttext{font-size: 12px;line-height: 20px;color: #ffffff;text-decoration: none;padding-left:88px;}
+.font_text{font-size: 12px;line-height: 20px;color: #ffffff;text-decoration: none;padding-right:20px;}
+a.white:link,a.white:active,a.white:visited,a.white:hover {font-size: 13px;line-height: 20px;color: #ffffff;text-decoration: none;}
+/*头部结束*/
+
+/*底部*/
+#foot{position:relative;font-size:12px;background:url("../images/bg-nav.jpg");width:auto;height:45px;}
+#foot #color{position:absolute;left:100px;top:12px;color:#fff}
+#foot #co{position:absolute;left:8px;top:12px;color:#fff}
+#footmenu{position:absolute;left:20px;top:12px;color:#fff}
+#footmenu a{margin:5px;color:#ffffff}
+#footcopyright{position:absolute;right:5px;top:10px;filter:shadow(Color=#000000,direction=180);font-weight:bolder;color:#fff}
+/* 底部结束*/
+
+div,form,img,ul,ol,li,dl,dt,dd {margin: 0; padding: 0; border: 0;}
+ul{list-style-type:none}
+
+
+/*左边*/
+.leftbody{background:#fff;}    /*背景色*/
+.hid {DISPLAY: none}
+.show {}
+li {list-style:none;}
+.lefttop{border-left:1px solid #3877AE;z-index:335;position:relative;float:right;background:url("../images/tbg.gif");margin-right:-1px;width:47px;height:33px;}
+.leftdaohang{background:url("../images/tbg.gif") no-repeat -47px;width:138px;height:33px;}
+.left_noselect{background:url("../images/tabup.gif") no-repeat right bottom;HEIGHT: 65px}
+.left_select{background:url("../images/tabon.gif") no-repeat right bottom;HEIGHT: 65px}
+
+#TabPage {border-right:0px solid #106BA4;float:right;width:45px;background:transparent;padding:0 2px 0 0px;}
+#TabPage li {color:#fff;clear:both;font-weight:400;height:59px;_height:64px;margin-top:4px !important;margin-top:2px;line-height:25px;padding-top:3px;padding-right:10px;_padding:4px 15px 1px 15px;background:#278BC6;margin-bottom:4px !important;margin-bottom:0px;margin-top:4px;border-left:#106BA4 1px solid;border-top:#106BA4 1px solid;border-bottom:1px solid #106BA4;CURSOR: pointer;position:relative;z-index:1;}
+#TabPage li.Selected {z-index:332;float:right;margin-right:-3px !important;margin-right:-3px;width:47px;height:59px;_height:64px;padding-top:3px;padding-right:10px;_padding:4px 15px 1px 15px;font-weight:bold;color:#333;background:#fff;display:inline}
+/* 菜单列表 */
+#menubox {padding-left:38px !important;width:100px !important;padding-left:3px;width:138px; background:url(../images/bg.gif) repeat-y;}
+#menubox ul{margin:1px;}
+#menubox .left_menu {background:url(../images/kslbg.gif) no-repeat;height:28px; line-height:28px;padding-left:30px;text-align:left;font-weight: bold;}
+#menubox .left_menu_selected {background:url(../images/kslbg.gif) no-repeat;height:28px; line-height:28px;margin-top:3px;padding-left:30px;text-align:left;font-weight:bold;}
+#menubox #dleft_tab1{margin-left:-31px;_margin-left:2px;}
+#menubox #dleft_tab1 li {background: url("../images/bullet.gif") no-repeat left 5px !important;background: url("../images/bullet.gif") no-repeat left 2px;padding-left:12px !important;margin-left:0px; padding-top:3px !Important; padding-top:0px;padding-left:0px;margin:0;text-align:left;line-height:20px !important;line-height:15px;}
+#menubox #dleft_tab1 li a {padding-top:12px !important;padding-top:2px; height:23; padding-left:5px !important;padding-left:0px;}
+#menubox #dleft_tab1 li a:hover {color:#ff6600;}
+
+#menubox #dleft_tab2{margin-left:-31px !important;margin-left:2px; }
+#menubox #dleft_tab2 .dt{ background:url(../images/kslbg.gif) no-repeat;height:28px; line-height:28px;margin-top:3px;padding-left:30px;text-align:left;font-weight:bold;}
+#menubox #dleft_tab2 .dc{margin:5px 0px 0px 10px;}
+#menubox #dleft_tab2 .dc li{background: url("../images/bullet1.gif") no-repeat left 5px !important;background: url("../images/bullet1.gif") no-repeat left 5px;margin-left:0px; padding-top:3px !Important; padding-top:3px;padding-left:0px;margin:0;text-align:left;line-height:20px;}
+#menubox #dleft_tab2 .dc li a{height:20px; padding-left:15px;}
+#menubox #dleft_tab2 .dc li a:hover{color:#ff6600;}
+
+#menubox #dleft_tab3{margin-left:-31px !important;margin-left:2px;}
+#menubox #dleft_tab3 .dt{ background:url(../images/kslbg.gif) no-repeat;height:28px; line-height:28px;margin-top:3px; padding-left:30px;text-align:left;font-weight:bold;}
+#menubox #dleft_tab3 .dc{margin:5px 0px 0px 10px;}
+#menubox #dleft_tab3 .dc li{background: url("../images/bullet1.gif") no-repeat left 5px !important;background: url("../images/bullet1.gif") no-repeat left 5px;margin-left:0px; padding-top:3px !Important; padding-top:3px;padding-left:0px;margin:0;text-align:left;line-height:20px}
+#menubox #dleft_tab3 .dc li a{height:20px; padding-left:15px;}
+#menubox #dleft_tab3 .dc li a:hover{color:#ff6600;}
+
+#menubox #dleft_tab4{margin-left:-31px !important;margin-left:2px;}
+#menubox #dleft_tab4 .dt{ background:url(../images/kslbg.gif) no-repeat;height:28px; line-height:28px;margin-top:3px;padding-left:30px;text-align:left;font-weight:bold;}
+#menubox #dleft_tab4 .dc{margin:5px 0px 0px 10px;}
+#menubox #dleft_tab4 .dc li{background: url("../images/bullet1.gif") no-repeat left 5px !important;background: url("../images/bullet1.gif") no-repeat left 5px;margin-left:0px; padding-top:3px !Important; padding-top:3px;padding-left:0px;margin:0;text-align:left;line-height:20px;}
+#menubox #dleft_tab4 .dc li a{height:20px; padding-left:15px;}
+#menubox #dleft_tab4 .dc li a:hover{color:#ff6600;}
+
+#menubox #dleft_tab5{margin-left:-31px !important;margin-left:2px;}
+#menubox #dleft_tab5 .dt{ background:url(../images/kslbg.gif) no-repeat;height:28px; line-height:28px;margin-top:3px;padding-left:30px;text-align:left;font-weight:bold;}
+#menubox #dleft_tab5 .dc{margin:5px 0px 0px 10px;}
+#menubox #dleft_tab5 .dc li{background: url("../images/bullet1.gif") no-repeat left 5px !important;background: url("../images/bullet1.gif") no-repeat left 5px;margin-left:0px; padding-top:3px !Important; padding-top:3px;padding-left:0px;margin:0;text-align:left;line-height:20px;}
+#menubox #dleft_tab5 .dc li a{height:20px; padding-left:15px;}
+#menubox #dleft_tab5 .dc li a:hover{color:#ff6600;}
+
+#menubox #dleft_tab6{margin-left:-31px !important;margin-left:2px;}
+#menubox #dleft_tab6 .dt{ background:url(../images/kslbg.gif) no-repeat;height:28px; line-height:28px;margin-top:3px;padding-left:30px;text-align:left;font-weight:bold;}
+#menubox #dleft_tab6 .dc{margin:5px 0px 0px 10px;}
+#menubox #dleft_tab6 .dc li{background: url("../images/bullet1.gif") no-repeat left 5px !important;background: url("../images/bullet1.gif") no-repeat left 5px;margin-left:0px; padding-top:3px !Important; padding-top:3px;padding-left:0px;margin:0;text-align:left;line-height:20px}
+#menubox #dleft_tab6 .dc li a{height:20px; padding-left:15px;}
+#menubox #dleft_tab6 .dc li a:hover{color:#ff6600;}
+
+#menubox #dleft_tab7{margin-left:-31px !important;margin-left:2px;}
+#menubox #dleft_tab7 .dt{ background:url(../images/kslbg.gif) no-repeat;height:28px; line-height:28px; margin-top:3px;padding-left:30px;text-align:left;font-weight:bold;}
+#menubox #dleft_tab7 .dc{margin:5px 0px 0px 10px;}
+#menubox #dleft_tab7 .dc li{background: url("../images/bullet1.gif") no-repeat left 5px !important;background: url("../images/bullet1.gif") no-repeat left 5px;margin-left:0px; padding-top:3px !Important; padding-top:3px;padding-left:0px;margin:0;text-align:left;line-height:20px}
+#menubox #dleft_tab7 .dc li a{height:20px; padding-left:15px;}
+#menubox #dleft_tab7 .dc li a:hover{color:#ff6600;}
+/*左边结束*/

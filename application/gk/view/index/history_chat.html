@@ -1,0 +1,32 @@
+{css href="/static/admin/css/bootstrap.min.css" /}
+{css href="/static/admin/css/style.css" /}
+{css href="/static/admin/css/animate.css" /}
+{css href="/static/admin/css/font-awesome.min.css" /}
+{css href="/static/admin/css/boot/style.css" /}
+<div class="row">
+    <div class="col-md-9 ">
+        <div class="">
+            {volist name="list" id="vo"}
+            <div class="">
+                
+                <div class="message">
+                    <a class="message-author" href="#"> <b style="font-size: 15px;">{$vo.username}</b></a>
+                    <span class="message-date"> {$vo.create_time} </span>
+                    <span class="message-content" style="width: 500px;">
+                        内容:  {$vo.content|raw}
+                    </span>
+                </div>
+            </div>
+            {/volist}
+            
+            
+            
+        </div>
+    </div>
+    
+</div>
+
+<div class="pagin" style="width: 325px;">
+    
+    {if !$list->isEmpty()} {$list|raw}{/if}
+</div>

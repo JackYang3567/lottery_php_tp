@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery.js" /}
+        <style type="text/css">
+        
+        .today_data span{
+        margin-top: 3px;
+        letter-spacing: 2px;
+        height: 30px;
+        font-size: 15px;
+        }
+        .today_data div{
+        
+        float: left;
+        margin-top: 5px;
+        text-align: center;
+        background: #02F78E;
+        border-radius: 5px;
+        }
+        .today_data div p{
+        font-size: 20px;
+        font-weight: bolder;
+        }
+        .c_1{
+        width: 45%;
+        height: 150px;
+        margin-left: 2%;
+        }
+        .c_1 p{
+        font-size: 15px;
+        font-weight: bolder;
+        line-height: 73px
+        }
+        .c_2{
+        width: 30%;
+        height: 150px;
+        margin-left: 26px;
+        }
+        .c_2 p{
+        line-height: 80px
+        }
+        .c_3{
+        width: 30%;
+        height: 100px;
+        margin-left: 25px;
+        }
+        .c_3 p{
+        line-height: 36px;
+        }
+        .p1 b{
+        font-size: 15px;
+        }
+        </style>
+    </head>
+    <body>
+        
+         <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('djycpgk/index/childindex')}">首页</a></li>
+                </ul>
+                </div>
+
+                <form role="form" class="form-inline" action="{:url('djycpgk/index/search')}" method="get"  >
+                    
+                    <div class="form-group">
+                        <label >开始时间:</label>
+                        <input type="date" id="start_time" name="start_time" class="form-control" value="{$start_time}"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label >结束时间:</label>
+                        <input type="date"  id="end_time" name="end_time" class="form-control" value="{$end_time}">
+                    </div>
+                    
+                    <button class="btn btn-primary search" type="submit" style="margin-top: 3px;">筛选</button>
+                    
+                    <!--
+                    <a href="{: U('admin/proxy/excelout',array('proxy_id'=>$proxy_id))}"> <button  type="button" class="btn btn-sm btn-primary excelout" style="float: right;">导出</button></a> -->
+                    <!--  <button class="btn btn-primary del_all " type="button" style="float: right;">批量删除</button> -->
+                </form>
+            </div>
+            
+            <!--   <div class="xline"></div> -->
+            {if $Think.session.auth.type == 0}
+            <div class="weliinfo today_data">
+                <!--   <p style="font-size: 15px;font-weight: bolder;">程序信息:</p> -->
+             
+            <div class="c_3">
+                <p>今日存款</p>
+                <span>{$today_recharge_count}笔</span>
+                <span>{$today_recharge_money}点</span>
+            </div>
+            <div class="c_3">
+                <p>今日取款</p>
+                <span>{$today_cash_count}笔</span>
+                <span>{$today_cash_money}点</span>
+            </div>
+            <div class="c_3">
+                <p>昨日(28彩票)返水</p>
+                <span>{$today_fs_count}笔</span>
+                <span>{$today_fs_money}点</span>
+            </div>
+            <div class="c_3">
+                <p>代理商</p>
+                <span>{$dls_zc}点</span>
+            </div>
+            <div class="c_3">
+                <p>昨日返佣</p>
+                <span>{$today_commission_count}笔</span>
+                <span>{$today_commission_money}点</span>
+            </div>
+            
+            <div class="c_3">
+                <p>今日彩金</p>
+                <span>{$today_give_count}笔</span>
+                <span>{$today_give_money}点</span>
+            </div>
+            <div class="c_3">
+                <p>今日盈利</p>
+                <span>&nbsp;</span>
+                <span>{$today_yl}</span>
+            </div>
+            <div class="c_3">
+                <p>今日流水</p>
+                <span>{$today_betting_count}笔</span>
+                <span>{$today_betting_money}点</span>
+            </div>
+            <div class="c_3">
+                <p>今日中奖</p>
+                <span>{$today_pj_count}笔</span>
+                <span>{$today_pj_money}点</span>
+            </div>
+            <div class="c_3">
+                <p>今日注册人数</p>
+                <span>{$zhuce}人</span>
+            </div>
+            <div class="c_3">
+                <p>今日提现笔数</p>
+                <span>{$tx_rs}笔</span>
+            </div>
+            <div class="c_3">
+                <p>今日线下充值笔数</p>
+                <span>{$cz_rs}笔</span>
+            </div>
+            
+            
+            
+            
+            
+        </div>
+        {/if}
+    </div>
+    <script type="text/javascript">
+    
+    $(function(){
+    var start_time = "{$start_time}";
+    var end_time = "{$end_time}";
+    var d = new Date();
+    if(start_time =='' && end_time == ''){
+    document.getElementById('start_time').valueAsDate =new Date(d.getFullYear(), d.getMonth(), 2);
+    document.getElementById('end_time').valueAsDate =d;
+    }
+    // var user = new Array();
+    // user.push('1');
+    // user.push('2');
+    // localStorage.user=user;
+    // console.log(typeof(localStorage.user))
+    // console.log(localStorage.user);
+    });
+    </script>
+</body>
+</html>

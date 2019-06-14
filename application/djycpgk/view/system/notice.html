@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {css href="/static/admin/css/bootstrap.min.css"/}
+    {js href="/static/admin/js/jquery-3.2.1.min.js"/}
+    {js href="/static/admin/layer/layer.js"/}
+    {js href="/static/admin/ueditor/ueditor.config.js" /}
+    {js href="/static/admin/ueditor/ueditor.all.min.js" /}
+    <style>
+        .body{
+            background-color: rgb(237,237,238);
+        }
+        li{
+            list-style: none;
+        }
+        .pagin{
+            position: relative;
+            margin-top: 10px;
+            padding: 0 12px;
+        }
+        .pagin .paginList {
+            position: absolute;
+            right: 12px;
+            top: -5px;
+        }
+        .pagin .paginList .paginItem {
+            float: left;
+        }
+        .pagin .paginList .paginItem.current, .pagin .paginList .paginItem.current a {
+            background: #f5f5f5;
+            cursor: default;
+            color: #737373;
+        }
+        .pagin .paginList .paginItem:first-child a {
+            border-bottom-left-radius: 5px;
+            border-top-left-radius: 5px;
+        }
+
+        .pagin .paginList .paginItem:first-child a {
+            border-left: 1px solid #DDD;
+        }
+        .pagin .paginList .paginItem a {
+            float: left;
+            width: 31px;
+            height: 28px;
+            border: 1px solid #DDD;
+            text-align: center;
+            line-height: 30px;
+            border-left: none;
+            color: #3399d5;
+        }
+    </style>
+
+</head>
+<body class="body">
+<ul class="breadcrumb">
+    <li><a href="{:url('djycpgk/system/index')}">网站系统设置</a></li>
+    <li><a href="#">弹出公告</a></li>
+</ul>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{:url('djycpgk/system/noticeadd')}" type="button"  class="btn btn-success xufei">添加</a>
+        </div>
+        <br>
+        <br>
+        <br>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>名称</th>
+                    <th>设置默认公告</th>
+                    <th>添加时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            <label>弹窗状态修改<b>*</b>  </label>
+            <div style=" line-height: 34px;font-size: 11pt;">
+                <input type="radio" name="value" value="1" {if $dialog_kg == 1}checked="checked"{/if}/>开
+                <input type="radio" name="value" value="0" {if $dialog_kg == 0}checked="checked"{/if} />关
+                <span>(关闭后,网站将无法出现弹窗框)</span>
+            </div>
+            {foreach $list as $key=>$vo }
+                <tr>
+                    <th scope="row">{$vo.id}</th>
+                    <th scope="row">{$vo.name}</th>
+                    <td>
+                        <div class="radio-inline">
+                            <label>
+                                <input type="radio"   name="moren"   value="{$vo.id}" {if $vo.type == 1}checked="checked"  {/if}><b style="color: green" >默认</b>
+                            </label>
+                        </div>
+                    </td>
+                    <td>{$vo.adding_time|date='Y-m-d H:i:s'}</td>
+                    <td><a href="{:url('djycpgk/system/notice_edit')}?id={$vo.id}">修改</a> <a class="sc" data-id="{$vo.id}">删除</a></td>
+                </tr>
+            {/foreach}
+
+            </tbody>
+        </table>
+            <button type="button" class="btn btn-success" id="bc"> 保存 </button>
+        <div class="pagin">
+            <div class="message">
+                共
+                <i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;
+                <i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页
+            </div>
+            {if !$list->isEmpty()} {$list|raw} {/if}
+        </div>
+    </div>
+</div>
+<script>
+    $('#bc').click(function () {
+        var id = $("input[name='moren']:checked").val();
+        var kg = $("input[name='value']:checked").val();
+        $.post("{:url(request()->module() . '/system/notice')}",{id:id,kg:kg,type:1},function(res){
+            if(res.error == 1){
+                layer.msg(res.msg,false,function(){ window.location.reload() });
+            }else {
+                layer.msg(res.msg);
+            }
+
+        });
+    })
+    $('.sc').click(function () {
+        var $this = $(this);
+        layer.confirm('确定删除', {
+            title: $this.text(),
+        }, function(){
+            $.post('{:url(request()->module()."/system/notice")}',{ id: $this.data('id'),type:2 },function(res){
+                if(res.error == 1){
+                    layer.msg(res.msg,false,function(){ window.location.reload() });
+                }else {
+                    layer.msg(res.msg);
+                }
+            });
+        }, function(){
+        });
+        //
+        // $.post("{:url(request()->module() . '/system/notice')}",{id:id,type:2},function(res){
+        //
+        //
+        // });
+    })
+</script>
+</body>
+</html>

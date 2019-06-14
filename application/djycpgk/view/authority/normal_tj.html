@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+{css href="/static/admin/css/bootstrap.min.css" /}
+{css href="/static/admin/css/style.css" /}
+{js href="/static/admin/js/jquery-3.2.1.min.js" /}
+{js href="/static/admin/layer/layer.js" /}
+<style type="text/css">
+    .sort{
+        cursor: pointer;
+    }
+
+
+
+</style>
+
+    
+<script type="text/javascript">
+$(document).ready(function(){
+  
+  
+
+
+
+    
+
+    
+});
+
+
+</script>
+
+
+</head>
+
+
+<body>
+       <div class="place">
+            <div class="ibox-content" >
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url(request()->module().'/authority/proxylist_tj')}?start_time={$start_time}&end_time={$end_time}">代理统计列表</a></li>
+                <li><a href="{:url(request()->module().'/authority/secondlist_tj')}?top_id={$top_id}&start_time={$start_time}&end_time={$end_time}"> 二级代理统计</a></li>
+                <li><a href="{:url(request()->module().'/authority/normal_tj')}?second_id={$second_id}&top_id={$top_id}">普通用户统计</a></li>
+                </ul>
+                </div>
+            </div>
+        </div>
+ 
+    
+    <div class="rightinfo">
+    
+    <div class="tools">
+    
+        <ul class="toolbar">
+
+        </ul>
+        
+        <ul class="seachform" style="">
+        <form action="{:url(request()->module().'/authority/normal_tj')}" method="GET">
+            <input type="hidden" name="second_id"  value="{$second_id}">
+        <li>用户名：<input name="keywords" type="text" class="scinput"  {if isset($keywords)}value="{$keywords}"{/if} placeholder="请输入用户账号或姓名" /></li>
+        
+        <li>日期：<input type="date"  name="start_time"  class="scinput" {if isset($start_time)}value="{$start_time}"{/if}/>&nbsp;-&nbsp;<input type="date" name="end_time" class="scinput" {if isset($end_time)}value="{$end_time}"{/if}></li>
+          <li><label>&nbsp;</label><input name="" type="submit" class="scbtn" value="搜索" style="margin-top: -1px;" /></li>
+          </form>
+        </ul>
+
+    </div>
+
+    <table class="tablelist">
+        <thead>
+        <tr>
+          <th>编号</th>
+        <th>用户名</th>
+        <th>用户余额</th>
+
+        <th>存款</th>
+        <th>取款</th>
+        <th>返水</th>
+        <th>返佣</th>
+        <th>彩金</th>
+        <th>下注</th>
+        <th>中奖</th>
+   <!--      <th>盈利</th>
+        <th>操作</th> -->
+        </tr>
+        </thead>
+        <tbody>
+            {if !$list->isEmpty()}
+            {volist name="list" id='vo' key='k'}
+                <tr>
+                 <td>{$vo.id}</td>
+                <td>{$vo.username}</td>
+                <td>{$vo.money}</td>
+                <td>{$vo.total_cz}</td>
+                <td>{$vo.total_tx}</td>
+                <td>{$vo.total_fs}</td>
+                <td>{$vo.total_fy}</td>
+                <td>{$vo.total_zs}</td>
+                <td>{:abs($vo.total_xz)}</td>
+                <td>{$vo.total_zj}</td>
+             <!--    <td><a href="javascript:;" class="tablelink normal_tj" data-id="{$vo.id}"> 查看详情</a></td> -->
+                </tr> 
+            {/volist}
+            <tr style="border-top:  1px solid  rgb(203,203,203);">
+                <td colspan='3'style="text-align: center;">统计</td>
+                <td>{$zg.total_cz}</td>
+                <td>{$zg.total_tx}</td>
+                <td>{$zg.total_fs}</td>
+                <td>{$zg.total_fy}</td>
+                <td>{$zg.total_zs}</td>
+                <td>{:abs($zg.total_xz)}</td>
+                <td>{$zg.total_zj}</td>
+
+            </tr>
+            {/if}
+
+        </tbody>
+    </table>
+    
+   
+    <div class="pagin">
+        <div class="message">共<i class="blue"> {if !$list->isEmpty()}{$list->total()}{/if}</i>条记录，当前显示第&nbsp;<i class="blue"> {if !$list->isEmpty()}{$list->currentPage()}{/if}&nbsp;</i>页</div>
+           {if !$list->isEmpty()} {$list|raw}{/if}
+    </div>
+    
+    
+
+    
+    
+    
+    
+    </div>
+    
+    <script type="text/javascript">
+    $('.tablelist tbody tr:odd').addClass('odd');
+
+    $('.normal_tj').click(function(){
+            var second_id = $(this).attr('data-id');
+            
+            window.location.href="{:url(request()->module().'/authority/normal_tj')}?second_id="+second_id;
+
+    })
+    
+
+        $('.secondlist').click(function(){
+        var top_id = $(this).attr('data-id');
+        window.location.href="{:url(request()->module().'/authority/secondlist_tj')}?top_id="+top_id;
+        })
+    </script>
+</body>
+</html>

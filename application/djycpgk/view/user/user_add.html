@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>无标题文档</title>
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/jquery.idTabs.min.js" /}
+        <script type="text/javascript">
+        $(document).ready(function(e) {
+        
+        
+        });
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+    </head>
+    <body>
+          <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('djycpgk/user/index')}?type=2">试玩列表</a></li>
+                <li><a href="#">试玩添加</a></li>
+                </ul>
+                </div>
+            </div>
+        <div class="rightinfo">
+            <!--         <div class="tools">
+                
+                <ul class="toolbar">
+                    <li class="click"><span><img src="__PUBLIC__/admin/images/t04.png" /></span>添加</li>
+                </ul>
+                
+            </div> -->
+            <div class="formbody" style="padding: 0 0;">
+                
+                
+                <div id="usual1" class="usual">
+                    
+                    <div id="tab1" class="tabson">
+                        
+                        
+                        
+                        <ul class="forminfo">
+                            <form action="{:url('djycpgk/user/user_add')}" method="post">
+                                <li><label>账号<b>*</b></label><input name="username" type="text" class="dfinput" value="" required="required"   /></li>
+                                <li><label>密码<b>*</b></label><input name="password" type="password" class="dfinput" value="" required="required" /></li>
+                                <!--    <li><label>姓名<b>*</b></label><input name="nickname" type="text" class="dfinput" value="" required="required"  /></li> -->
+                                <li><label>类型<b>*</b></label>
+                                <select style="height: 34px;    border-top: solid 1px #a7b5bc;
+                                    border-left: solid 1px #a7b5bc;
+                                    border-right: solid 1px #ced9df;
+                                    border-bottom: solid 1px #ced9df;" name="type">
+                                    <option value="2" >内部试玩会员</option>
+                                    
+                                </select>
+                            </li>
+                            
+                            <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="添加"/></li>
+                        </form>
+                    </ul>
+                    
+                </div>
+                
+            </div>
+        </div>
+        <script type="text/javascript">
+        $("#usual1 ul").idTabs();
+        </script>
+        
+        <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+        </script>
+        
+        
+        </div>
+        
+        
+    </div>
+</body>
+</html>

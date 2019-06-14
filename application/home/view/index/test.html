@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="http://passport.cnblogs.com/scripts/jsencrypt.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var encrypt = new JSEncrypt();
+            encrypt.setPublicKey($("#tra").val());
+            var encrypted = encrypt.encrypt('yisu');
+            $("#btn").click(function () {
+                $.ajax({
+                    url: "{:url('/jiemi')}",
+                    data: "password=" + encodeURI(encrypted).replace(/\+/g, '%2B'),  //+号的处理：因为数据在网络上传输时，非字母数字字符都将被替换成百分号（%）后跟两位十六进制数，而base64编码在传输到后端的时候，+会变成空格，因此先替换掉。后端再替换回来
+                    type: 'post',
+                    success: function (msg) {
+
+                    }
+                });
+            });
+
+        });
+
+
+    </script>
+</head>
+<body>
+<div>
+    <input type="button" id="btn" value="点我" />
+    <textarea id="tra" rows="15" cols="65" style="display: none">{$pk}</textarea>
+    <hr/>
+    注意+好的处理
+</div>
+</body>
+</html>

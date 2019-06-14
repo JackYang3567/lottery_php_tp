@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title></title>
+    {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/boot/jquery.min.js" /}
+    {js href="/static/admin/js/jquery.qrcode.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+</head>
+<body>
+	<button class="btn  btn-normal sc"  data-id="2" style="margin-top: 10px">生成二维码</button>
+
+
+
+	 <script type="text/javascript">
+	 	
+	 	  $('.sc').click(function(){
+
+       var id = $(this).attr('data-id');
+
+
+           parent.layer.open({
+               type: 2,  
+               title:'用户二维码',  
+               skin:'layui-layer-rim',  
+               area:['450px', '450px'],  
+               content: "{:url('djycpgk/Authority/qrcode')}?id="+id,  
+               btn:['取消'],
+            });
+
+
+
+
+    })
+	 </script>
+</body>
+
+</html>

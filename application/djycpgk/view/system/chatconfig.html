@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    <style>
+    .rule input {
+    width: 129pt;
+    }
+    .rule span{
+    display: inline-block;
+    height: 34px;
+    text-align: center;
+    }
+    .rule span img{
+    vertical-align: middle;
+    }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+    $(".select1").uedSelect({
+    width : 345
+    });
+    
+
+    $(document).on('click','.dtl_rule', function(){
+    $(this).parent().remove();
+    })
+    
+    
+    $("input[name='baocun']").click(function(){
+    var  is_open = $("input[name='is_open']:checked").val();
+    var explain = $("input[name='explain']").val();
+    var say_id = $("input[name='say_id']").val();
+
+    //console.log(final_array);return;
+    $.ajax({
+    url:"{:url('djycpgk/system/chatconfig')}",
+    data:{explain:explain,is_open:is_open,say_id:say_id},
+    type:"POST",
+    dataType:"JSON",
+    success: function(data){
+    if(data.error == 0){
+    layer.msg(data.msg,{icon:1,time:1000},function(){
+    self.location.reload(); // 父页面刷新
+    self.layer.close();
+    });
+    }else{
+    layer.msg(data.msg, {icon: 5,time:2000});
+    }
+    }
+    })
+    })
+    });
+    </script>
+    
+    <script type="text/javascript">
+    </script>
+  </head>
+  <body>
+    <div class="rightinfo">
+      <div class="formbody" style="padding: 0 0;">
+        
+        
+        <div id="usual1" class="usual">
+          
+          <div id="tab1" class="tabson">
+            <ul class="forminfo">
+              <form  method="post">
+                <li ><label>聊天室开关<b>*</b></label>
+                <div style=" line-height: 34px;font-size: 13pt;">
+                  <input type="radio" name="is_open" value="1" {if $chat.is_open == 1}checked="checked"{/if}/>开启
+                  <input type="radio" name="is_open" value="0" {if $chat.is_open == 0}checked="checked"{/if} />关闭
+                </div>
+              </li>
+              <li ><label>聊天室说明<b>*</b></label>
+              <div >
+                <input type="text" name="explain" class="dfinput" value="{$chat.explain}">
+              </div>
+            </li>
+                <li ><label>允许聊天用户:<b>*</b></label>
+                  <div >
+                    <input type="text" name="say_id" class="dfinput" value="{$chat.say_id}" placeholder="输入用户id">
+                    (<b style="color: red">聊天室在关闭的时候允许聊天的用户,输入用户id，多用户请以英文逗号分割</b>)
+                  </div>
+                </li>
+            <li  class="baocun" style="margin-top: 10px;"><label>&nbsp;</label><input name="baocun" type="button" class="btn" value="保存"/></li>
+          </form>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+  $("#usual1 ul").idTabs();
+  </script>
+  
+  <script type="text/javascript">
+  $('.tablelist tbody tr:odd').addClass('odd');
+  </script>
+  
+  
+  
+  
+  
+</div>
+</body>
+</html>

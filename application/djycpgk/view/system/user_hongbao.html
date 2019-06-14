@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    <style>
+        .forminfo span{
+            display: inline-block;
+            height: 34px;
+
+            line-height: 34px;
+            padding-left: 5px;
+        }
+        .forminfo label{
+            width: 200px !important;
+        }
+        .line{
+            display: inline-block;
+            width: 50%;
+            height: 1pt;
+            background: #D5D5D5;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $(".select1").uedSelect({
+                width : 345
+            });
+
+            $('.recharge_rule').click(function(){
+                window.location.href="{:url('djycpgk/system/recharge_rule')}";
+            })
+        });
+    </script>
+
+    <script type="text/javascript">
+    </script>
+</head>
+<body>
+<div class="rightinfo">
+    <div class="formbody" style="padding: 0 0;">
+
+
+        <div id="usual1" class="usual">
+            <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                    <form  id="is_data"  method="post">
+                        {foreach $hb as $k=>$vo }
+                            {if $vo.name == '个人红包开关'}
+                                <li>
+                                    <label>{$vo.name}<b>*</b></label>
+                                    <div style=" line-height: 34px;font-size: 11pt;">
+                                        <input type="radio" name="{$k}" value="1"{if $vo.value == 1}checked="checked"{/if} />开
+                                        <input type="radio" name="{$k}" value="0" {if $vo.value == 0}checked="checked"{/if}/>关
+                                        <span>&nbsp;&nbsp;</span>
+                                    </div>
+                                </li>
+                            {else/}
+                                <li>
+                                    <label>{$vo.name}<b>*</b></label>
+                                    <div style=" line-height: 34px;font-size: 11pt;">
+                                        <input type="radio" name="{$k}[]" value="1"{if $vo.status == 1}checked="checked"{/if} />开
+                                        <input type="radio" name="{$k}[]" value="0" {if $vo.status == 0}checked="checked"{/if}/>关
+                                        <span>&nbsp;&nbsp;</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <label> 充值需要达到金额:</label>
+                                    <input type="text"   name="{$k}[]"  class="dfinput" required="required"  value="{$vo.where_money}" />
+                                </li>
+                                <li>
+                                    <label> 红包奖励金额:</label>
+                                    <input type="text"   name="{$k}[]"  class="dfinput" required="required"  value="{$vo.money}" />
+                                </li>
+                        {/if}
+                        {/foreach}
+
+
+                        <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="button" class="btn is_go" value="保存"/></li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $('.is_go').on('click',function(){
+            $.post('/djycpgk/system/user_hongbao',$('#is_data').serializeArray(),function(res){
+                layer.msg(res.msg);
+            });
+
+
+        });
+
+        $("#usual1 ul").idTabs();
+    </script>
+
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+
+
+
+
+
+    </script>
+
+
+
+
+
+</div>
+</body>
+</html>

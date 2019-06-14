@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    <style>
+    .rule input {
+    width: 129pt;
+    }
+    .rule span{
+    display: inline-block;
+    height: 34px;
+    text-align: center;
+    }
+    .rule span img{
+    vertical-align: middle;
+    }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+    $(".select1").uedSelect({
+    width : 345
+    });
+        $("input[name='baocun2']").click(function(){
+            var type_id = $("input[name='type_id']").val();
+            var kongzhi_switch = $("input[name='kongzhi_switch']:checked").val();
+            var kongzhi_val = $("input[name='kongzhi_val']").val();
+            var fanshui_switch = $("input[name='fanshui_switch']:checked").val();
+            var fanshui_val = $("input[name='fanshui_val']").val();
+            var array=$("[name='money']");//单引号 的name替换为相应的name
+            var begin_array = [];
+            var end_array = [];
+            for(var i=0;i<array.length;i++){
+                begin_array.push($(array[i]).val());
+            }
+            var array2=$("[name='percent']");
+            var percent_array = [];
+            for(var i=0;i<array2.length;i++){
+                percent_array.push($(array2[i]).val());
+            }
+            $.ajax({
+                url:"{:url('djycpgk/lottery/return_config_01')}",
+                data:{type_id:type_id,kongzhi_switch:kongzhi_switch,kongzhi_val:kongzhi_val,fanshui_switch:fanshui_switch,fanshui_val:fanshui_val},
+                type:"POST",
+                dataType:"JSON",
+                success: function(data){
+                    if(data.error == 0){
+                        layer.msg(data.msg,{icon:1,time:1000},function(){
+                            self.location.reload(); // 父页面刷新
+                            self.layer.close();
+                        });
+                    }else{
+                        layer.msg(data.msg, {icon: 5,time:2000});
+                    }
+                }
+            })
+        })
+    
+    
+    
+    $("input[name='baocun']").click(function(){
+    var  switch_id = $("input[name='switch']:checked").val();
+    var condition = $("input[name='chazhi']").val();
+    var type_id = $("input[name='type_id']").val();
+    var array=$("[name='money']");//单引号 的name替换为相应的name
+    var begin_array = [];
+    var end_array = [];
+    for(var i=0;i<array.length;i++){
+      begin_array.push($(array[i]).val());
+      }
+      var array2=$("[name='percent']");
+      var percent_array = [];
+      for(var i=0;i<array2.length;i++){
+        percent_array.push($(array2[i]).val());
+        }
+        $.ajax({
+        url:"{:url('djycpgk/lottery/return_config_01')}",
+        data:{switch:switch_id,chazhi:condition,type_id:type_id},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        if(data.error == 0){
+        layer.msg(data.msg,{icon:1,time:1000},function(){
+        self.location.reload(); // 父页面刷新
+        self.layer.close();
+        });
+        }else{
+        layer.msg(data.msg, {icon: 5,time:2000});
+        }
+        }
+        })
+        })
+        });
+        </script>
+        
+        <script type="text/javascript">
+        </script>
+      </head>
+      <body>
+
+          <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/lottery/statussetting')}?category={$cate}">彩种设置</a></li>
+                <li><a href="#">{$type_name}：反水设置</a></li>
+                </ul>
+                </div>
+            </div>
+        <div class="rightinfo">
+          <div style="margin-left: 22px;font-size: 15px;font-weight: bolder;">({$type_name})</div>
+          <div class="tools">
+            
+          
+          </div>
+          <div class="formbody" style="padding: 0 0;">
+            
+            
+            <div id="usual1" class="usual">
+              
+              <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                  <!--<form action="{:url('djycpgk/lottery/return_config_01')}" method="post">-->
+                    <input type="hidden" name="type_id" value="{$type_id}">
+                    {if $type_id == 0 || $type_id == 1 }
+                      <li ><label>是否开启控制开奖<b>*</b></label>
+                        <div style=" line-height: 34px;font-size: 13pt;">
+                          <input type="radio" name="kongzhi_switch" value="1" {if $return_config.kongzhi.switch == 1}checked='checked'{/if}/>开
+                          <input type="radio" name="kongzhi_switch" value="0" {if $return_config.kongzhi.switch == 0}checked='checked'{/if}/>关
+                          <span style="color: red;">(注释)</span>
+                        </div>
+                      </li>
+                      <li>
+                        <label>控制金额<b>*</b></label>
+                        <input name="kongzhi_val" type="text"  class="dfinput" value="{$return_config.kongzhi.val}" required="required"   style="width: 70px;" /><b>大于等于0</b>
+                      </li>
+                      <li ><label>是否开启反水<b>*</b></label>
+                        <div style=" line-height: 34px;font-size: 13pt;">
+                          <input type="radio" name="fanshui_switch" value="1" {if $return_config.fanshui.switch == 1}checked='checked'{/if}/>开
+                          <input type="radio" name="fanshui_switch" value="0" {if $return_config.fanshui.switch == 0}checked='checked'{/if}/>关
+                          <span style="color: red;">(注释)</span>
+                        </div>
+                      </li>
+                      <li>
+                        <label>反水百分百<b>*</b></label>
+                        <input name="fanshui_val" type="text"  class="dfinput" value="{$return_config.fanshui.val}" required="required"   style="width: 70px;" />%<b>最多输入2位小数</b>
+                      </li>
+                    <li  class="baocun" style="margin-top: 10px;"><label>&nbsp;</label><input name="baocun2" type="button" class="btn bcbt" value="保存"/></li>
+
+                    {else/}
+                    <li ><label>是否开启反水<b>*</b></label>
+                      <div style=" line-height: 34px;font-size: 13pt;">
+                        <input type="radio" name="switch" value="1" {if $return_config.switch == 1}checked='checked'{/if}/>开
+                        <input type="radio" name="switch" value="0" {if $return_config.switch == 0}checked='checked'{/if}/>关
+                        <span style="color: red;">(注释)</span>
+                      </div>
+                    </li>
+                    <li>
+                      <label>反水百分百<b>*</b></label>
+                      <input name="chazhi" type="text"  class="dfinput" value="{$return_config.chazhi}" required="required"   style="width: 70px;" />%<b>最多输入2位小数</b>
+                    </li>
+                    <li  class="baocun" style="margin-top: 10px;"><label>&nbsp;</label><input name="baocun" type="button" class="btn bcbt" value="保存"/></li>
+
+                    {/if}
+
+                
+                
+                
+              <!--</form>-->
+            </ul>
+          </div>
+        </div>
+      </div>
+      </div>
+      <script type="text/javascript">
+      $("#usual1 ul").idTabs();
+      </script>
+      
+      <script type="text/javascript">
+      $('.tablelist tbody tr:odd').addClass('odd');
+
+
+
+      </script>
+      
+      
+      
+      
+      
+    </div>
+  </body>
+</html>

@@ -1,0 +1,221 @@
+{js href="/static/admin/js/jquery-3.2.1.min.js" /}
+<style type="text/css">
+    @keyframes shan {
+        from {
+        }
+        45% {
+            color: #676a6c;
+        }
+        50% {
+            color: #fff;
+        }
+        55% {
+            color: #676a6c;
+        }
+        to {
+        }
+    }
+
+    #count {
+        animation-name: shan;
+        animation-duration: 5s;
+        animation-iteration-count: infinite;
+    }
+
+    .tp{
+        /*background-image:url(./static/admin/images/cz.png); background-repeat:no-repeat; background-size:100% 100%;-moz-background-size:100% 100%;*/
+    }
+</style>
+<div class="row border-bottom">
+    {if $Think.session.auth.type == 0}
+    <audio src="/static/admin/music/aa.mp3" controls id="news" loop="false;" style="display: none;"></audio>
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i
+                class="fa fa-bars"></i> </a>
+            <p style="font-size: 18px;font-weight: bolder;margin-top: 18px;margin-left: 10px;">当前在线人数:<b id="count">{$people_count}</b>
+            </p>
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+
+            <li class="">
+
+                <b>今日注册人数:</b>
+                <span class="label label-warning rs">{$zhuce}</span>
+            </li>
+            <li class="">
+
+                <b>今日提现人数:</b>
+                <span class="label label-primary tx">{$tx_rs}</span>
+            </li>
+            <li class="">
+
+                <b>今日充值人数:</b>
+                <span class="label label-warning cz">{$cz_rs}</span>
+            </li>
+            <li class="">
+                <a class="dropdown-toggle count-info J_menuItem " href="{:url('djycpgk/recharge/index')}" >
+                    <b style="display: none;">充值</b>
+                    <img src="/static/admin/images/cz.png" style="width: 50px;height: 50px;">
+                    <span class="label label-warning recharge_value">{$recharge}</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="dropdown-toggle count-info J_menuItem" href="{:url('djycpgk/cash/index')}">
+                    <b style="display: none;">提现</b>
+                    <img src="/static/admin/images/tx.png" style="width: 42px;height: 42px;">
+                    <span class="label label-primary cash_value" >{$cash}</span>
+                </a>
+            </li>
+            <li class="">
+                <a class="dropdown-toggle count-info J_menuItem" href="{:url('djycpgk/chess_game/upanddown')}">
+                    <b style="display: none;">上下分</b>
+                    <img src="/static/admin/images/tx.png" style="width: 42px;height: 42px;">
+                    <span class="label label-primary sxf" >{$sxf}</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {/if}
+</div>
+<div class="row content-tabs">
+    <button class="roll-nav roll-left J_tabLeft"><i class="fa fa-backward"></i>
+    </button>
+    <nav class="page-tabs J_menuTabs">
+        <div class="page-tabs-content">
+            <a href="javascript:history.go(-1);" class="active J_menuTab" data-id="index_v1.html"></a>
+        </div>
+    </nav>
+    <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
+    </button>
+    <div class="btn-group roll-nav roll-right">
+        <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
+        </button>
+        <ul role="menu" class="dropdown-menu dropdown-menu-right">
+            <li class="J_tabShowActive"><a>定位当前选项卡</a>
+            </li>
+            <li class="divider"></li>
+            <li class="J_tabCloseAll"><a>关闭全部选项卡</a>
+            </li>
+            <li class="J_tabCloseOther"><a>关闭其他选项卡</a>
+            </li>
+        </ul>
+    </div>
+    <!-- <a href="{:url('djycpgk/index/childindex')}" class="roll-nav roll-right J_tabExit" data-index="0"> 后台首页</a> -->
+    <a class="roll-nav roll-right J_menuItem " style="width: 60px;" href="{:url('djycpgk/index/childindex')}"
+       data-index="0">后台首页</a>
+</div>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        $('.J_menuItem').click(function () {
+            var id = $(this).attr('data-id');
+
+// console.log($(this));
+//alert(id);
+            if (id == '/djycpgk/recharge/index.html') {
+//$(this).attr('href','/djycpgk/recharge/index.html');
+// window.location.reload();
+// $(this).contentWindow.location.reload(true);
+// console.log($(this));
+// $(this).attr('id','dsadsa');
+//console.log($(this).attr('src'));
+// console
+//  console.log($(this).attr('id','abc'))
+//  $(this).attr('src', $(this).attr('www.baidu.com'));
+                var target = $('.J_iframe[data-id="' + id + '"]');
+                var url = target.attr('src');
+            }
+
+        })
+// function checknowpeople(){
+//
+// $.ajax({
+// url:"{:url('djycpgk/index/checknowpeople')}",//这里指向的就不再是页面了，而是一个方法。
+// data:{},
+// type:"POST",
+// dataType:"JSON",
+// success: function(data){
+//
+// $("#count").text(data);
+// if (data.code==0) {
+//     // console.log('ss');
+//     parent.location.reload();
+// }
+//
+//
+// }
+// })
+// }
+
+        // var data = [];
+        // data = {
+        //     pd: 0,
+        // };
+
+        var data_state = false;
+        var dsq;
+        function sy(data) {
+            if(data){
+                var audio = document.getElementById('news');
+                audio.loop = false;
+
+                    audio.play();
+                    dsq = setTimeout(function(){
+                        sy(data);
+                    },2000);
+            }
+
+        }
+
+        function checknewdata(data) {
+
+            var _data = {type: 'checknewdata'};
+            $.extend(true, _data, data);
+            $.ajax({
+                url: "{:url('djycpgk/index/changLunxun')}",//这里指向的就不再是页面了，而是一个方法。
+                data: _data,
+                type: "POST",
+                dataType: "JSON",
+                success: function (data) {
+
+                    if (Object.keys(data).length > 0) {
+                        checknewdata.data = data;
+                    }
+                    var dese  = checknewdata.data;
+                    if (dese.new_cash == 0 && dese.new_recharge == 0 && dese.sxf==0) {
+                        clearTimeout(dsq);
+                    }else {
+                        sy(dese);
+                    }
+
+                    setTimeout(checknewdata, 1000, checknewdata.data);
+
+                    $('.tx').text(data.tx); //今日提现人数
+
+                    $('.cz').text(data.cz); //今日充值人数
+
+                    $('.rs').text(data.rs); //今日注册人数
+
+                    $('.cash_value').text(data.new_cash);//充值
+
+                    $('.sxf').text(data.sxf);//上下分
+
+                    $('.recharge_value').text(data.new_recharge); //提现
+
+                    $("#count").text(data.data_count); //当前在线人数
+
+                }
+            })
+        }
+        checknewdata.data = {
+            pd: 0,
+        };
+        checknewdata(checknewdata.data);
+
+
+    })
+
+
+</script>

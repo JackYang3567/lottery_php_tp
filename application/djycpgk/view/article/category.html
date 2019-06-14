@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>文章分类</title>
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <script type="text/javascript">
+        $(document).ready(function(){
+        
+        
+        $(".tiptop a").click(function(){
+        $(".tip").fadeOut(200);
+        });
+        $(".dltCategory").click(function(){
+        var data_id = $(this).prev().attr('data-id');
+        layer.confirm('确定删除该分类吗?', {
+        btn: ['是','否'] //按钮
+        }, function(){
+        $.ajax({
+        url:"{:url(request()->module().'/article/dltCategory')}",//这里指向的就不再是页面了，而是一个方法。
+        data:{data_id:data_id},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        if(data.error == 0){
+        layer.msg('删除成功',{icon:1,time:1000},function(){
+        self.location.reload(); // 父页面刷新
+        self.layer.close();
+        });
+        }else{
+        layer.msg('删除失败', {icon: 5,time:2000});
+        }
+        }
+        })
+        }, function(){
+        
+        });
+        })
+        });
+        </script>
+    </head>
+    <body>
+           <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url(request()->module().'/article/category')}">文章分类   </a></li>
+                </ul>
+                </div>
+            </div>
+        <div class="rightinfo">
+            <div class="tools">
+                <ul class="toolbar">
+                    <li class="addCategory"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+                </ul>
+            </div>
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <th>编号<i class="sort"><img src="/static/admin/images/px.gif" /></i></th>
+                        <th>分类名</th>
+                        <th>操作 </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {volist name="list" id="vo"}
+                    <tr>
+                        <td>{$vo.id}</td>
+                        <td>{$vo.name}</td>
+                        <td><a href="#" class="tablelink editCategory" data-id="{$vo.id}">查看</a>&nbsp;
+                        <a href="#" class="tablelink dltCategory"> 删除</a>
+                    </td>
+                </tr>
+                {/volist}
+            </tbody>
+        </table>
+        <div class="tip">
+            <div class="tiptop"><span>提示信息</span><a></a></div>
+            <div class="tipinfo">
+                <span><img src="/static/admin/images/ticon.png" /></span>
+                <div class="tipright">
+                    <p>是否确定删除分类</p>
+                    <cite>如果是请点击确定按钮 ，否则请点取消。</cite>
+                </div>
+            </div>
+            <div class="tipbtn">
+                <input name="" type="button"  class="sure" value="确定" />&nbsp;
+                <input name="" type="button"  class="cancel" value="取消" />
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    <script type="text/javascript">
+    //$('.tablelist tbody tr:odd').addClass('odd');
+    $('.addCategory').click(function(){
+    window.location.href="{:url(request()->module().'/article/addCategory')}";
+    })
+    $('.editCategory').click(function(){
+    var cate_id = $(this).attr('data-id');
+    var url = "{:url(request()->module().'/article/editCategory')}?cate_id="+cate_id;
+    window.location.href=url;
+    })
+    </script>
+</body>
+</html>

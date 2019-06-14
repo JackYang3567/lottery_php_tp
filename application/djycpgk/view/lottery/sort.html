@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>排序设置</title>
+
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/vueJs/require.js" /}
+    {css href="/static/admin/css/style.css" /}
+    <!-- {css href="/static/admin/css/animate.css" /} -->
+    <!-- {js href="/static/admin/js/vueJs/vue.min.js" /} -->
+
+    <!-- {js href="/static/admin/js/vueJs/vue-slicksort.min.js" /} -->
+    <style>
+    body{
+    	font-family:'微软雅黑'
+    }
+    [v-cloak]{
+    	display:none;
+    }
+    #example{
+    	width:1000px;
+    	margin:0 auto;
+    }
+    .list-complete-item {
+      transition: all 1s;
+    	height:50px;
+    	line-height: 50px;
+    	background: #000;
+    	color:#fff;
+    	text-align: center;
+    	font-size:24px;
+    	margin-top:10px;
+    }
+    .styleclass{
+    	width:100px;
+    	float:left;
+    }
+    .list-complete-enter, .list-complete-leave-active {
+      opacity: 0;
+      height: 0px;
+      margin-top: 0px;
+      padding: 0px;
+      border: solid 0px;
+    }
+    .list-complete-sortable-chosen,.list-complete-sortable-ghost{
+     opacity: 0;
+      height: 0px;
+      margin-top: 0px;
+      padding: 0px;
+      border: solid 0px;
+    }
+    .dargDiv{
+    	cursor:move;
+    }
+    .wrods{
+    	margin-top:50px;
+    }
+    p{
+    	line-height:24px;
+    	text-align:center;
+    }
+
+    .tz_div{
+      width: 500px;
+      border:1px solid #aaa;
+      margin:0 auto;
+    }
+    .tz_div2{
+      width: 100%;
+    }
+    .tz_title{
+      transition: background 0.5s,color 0.5s;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      border:solid #aaa;
+      border-width:1px 0 1px 0 ;
+      padding:10px;
+      /* margin:10px; */
+    }
+    .tz_div_list{
+      transition: background 0.5s,color 0.5s;
+      float:left;
+      box-sizing: border-box;
+      width:50%;
+
+      border:solid #aaa;
+      border-width:0 1px 1px 0;
+      text-align: center;
+      padding:10px;
+    }
+    .tz_help{
+      transition: background 0.5s;
+      border:1px solid #555;
+      cursor:pointer;
+      text-align:center;
+      height:20px;
+      width:20px;
+      border-radius:50%;
+      margin:0 auto;
+      color:red;
+      font-weight:bold;
+    }
+    .tz_help:hover{
+      background: red;
+      color:#fff;
+    }
+    .tz_help:active{
+      background: none;
+      color:red;
+      border:none;
+    }
+    .tz_m:hover{
+      background: #3595CC;
+      color:#fff;
+    }
+
+    </style>
+</head>
+<body>
+  <div class="place">
+       <div class="ibox-content" style="margin-left: 30px;">
+           <div class="place">
+           <span>位置：</span>
+           <ul class="placeul">
+           <li><a href="{:url('/djycpgk/lottery/statussetting')}?category={$cate}">彩种设置</a></li>
+           <li><a href="javascript:;">内容排序</a></li>
+           </ul>
+           </div>
+       </div>
+  </div>
+    <div id="app" v-cloak>
+      <div style="margin:10px 0;">
+        <button class="btn btn-primary search" @click="submit">提交</button>
+        <div style="height:25px;"><div class="tz_help" @click="tips"> ? </div></div>
+      </div>
+
+      <div class="tz_div" v-if="Object.keys(data_sel).length">
+        <draggable :list="title" class="da"   :move="moveData" @update="datadragEndTil" :options="{animation: 300,handle:'.dargDiv'}">
+          <div v-for="(item,key) in title" style="overflow:hidden;" :key="key">
+            <div class="tz_title tz_m dargDiv"   @click="tar = !tar;">{{data_sel[item]['name']}}{{data_sel[item]['switch'] ==1 ? '':'(关闭)'}}</div>
+            <div class="tz_div2" v-show="!tar">
+              <draggable :list="sel[key]"    @update="datadragEnd" :options="{animation: 300,handle:'.dargDiv'}">
+                <div class="tz_div_list tz_m dargDiv" v-for="(vo,vok) in sel[key]" :key="vo">
+                  {{data_sel[item]['items'][vo]['name']}}
+                  <span  v-if="type == 21">  (A盘{{data_sel[item]['items'][vo]['odds'][0]}}) (B盘{{data_sel[item]['items'][vo]['odds'][1]}}) </span>
+                  <span style="display:inline;" v-else> {{data_sel[item]['items'][vo]['odds']}}</span>
+                  {{data_sel[item]['items'][vo]['switch'] ==1 ? '':'(关闭)'}}
+                  </div>
+              </draggable>
+            </div>
+          </div>
+        </draggable>
+      </div>
+    </div>
+</body>
+<script>
+require.config({
+	urlArgs: "ver=1.0_2",
+	paths:{
+		"vue":'/static/admin/js/vueJs/vue.min',
+		"sortablejs":'/static/admin/js/vueJs/Sortable',
+		"vuedraggable":'/static/admin/js/vueJs/vuedraggable'
+	},
+	shim:{
+		'vue':{
+        exports:'vue'
+    }
+	}
+}),
+
+require(['vue','vuedraggable'],function(Vue,draggable){
+	Vue.component('draggable', draggable);
+	 new Vue({
+        el: '#app',
+        mounted:function(){
+          this.getdata();
+        },
+        data:function() {
+          return {
+           data_sel:{},
+           title:[],//一级key
+           sel:[],//二级key
+           tar:false,
+           type:'{$Think.get.type}',
+           mouse_class:'',
+         }
+        },
+        methods:{
+          tips:function(){
+            let text = '请拖动排版!提交后同步至前端页面.<br/>1.标题和内容都可以拖拽<br/> 2.点击标题可收缩释放内容<br/>3.关闭的标签有提示（关闭）且一样可以排序,不会影响页面显示';
+            if(this.type == 21){
+              text = text + ',港彩ab盘统一排序';
+            }
+            layer.tips(text, '.tz_help',{tips: [2, '#3595CC'],time: 5000});
+          },
+
+          submit:function(){
+            let _this = this;
+            var return_data = {};
+            for(let i in _this.title){
+              return_data[_this.title[i]] = {
+                items:{},
+                name:_this.data_sel[_this.title[i]]['name'],
+                number:_this.data_sel[_this.title[i]]['number'],
+                'switch':_this.data_sel[_this.title[i]]['switch'],
+              };
+              for(let j of _this.sel[i]){
+                return_data[_this.title[i]]['items'][j] =  _this.data_sel[_this.title[i]]['items'][j];
+              }
+            }
+            $.post('/djycpgk/lottery/sort',{type:2,data:return_data,lottery:_this.type},function(res){
+              layer.msg(res.msg);
+            });
+          },
+          moveData:function(evt){
+            if(!this.tar){
+              this.tar = true;
+             }
+          },
+          //请求数据
+    			getdata: function(){
+            var _this = this;
+    				$.post('/djycpgk/lottery/sort',{type:1,data:_this.type},function(res){
+              var bit = Object.keys(res);
+               _this.$set(_this,'data_sel',res);
+               _this.$set(_this,'title',bit);
+               for(var i of bit){
+                 _this.sel.push(Object.keys(res[i]['items']));
+               }
+            })
+    			},
+          datadragEnd:function(evt){
+    				// console.log('拖动前的索引：'+evt.oldIndex);
+            // console.log('拖动后的索引：'+evt.newIndex);
+          },
+          datadragEndTil:function(evt){
+            var _this = this,rs = [];
+            _this.set = [];
+            for(let i of _this.title){
+              rs.push(Object.keys(_this.data_sel[i]['items']));
+            }
+            _this.$set(_this,'sel',rs);
+          }
+        }
+    })
+
+})
+</script>
+</html>

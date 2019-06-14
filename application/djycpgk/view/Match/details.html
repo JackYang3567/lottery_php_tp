@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+     {css href="/static/admin/css/style.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <style type="text/css">
+        td {text-align:center}
+        .tablelist th{
+            text-align:center
+        }
+    </style>
+
+</head>
+<body>
+<div class="rightinfo">
+    <br>
+    <p style="font-size: 20px">
+        联赛：{$arr.leagueName}联赛&nbsp&nbsp&nbsp&nbsp&nbsp<i style="font-size: 20px;color: red">封盘时间：</i>  {$arr.startTime/1000|date='Y-m-d H:i:s'}
+    </p>
+    <br>
+
+	<table class="tablelist">
+		<thead>
+          <tr>
+            <th>主队</th>
+            <th>主队排名</th>
+            <th>客队</th>
+            <th>客队排名</th>
+            <th>胜平负赔率</th>
+            <th>胜平负投注比例</th>
+            <th>让球胜平负投注比例</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+        	<tr>
+                <td> <a href="{:url('djycpgk/Match/search')}?content={$arr.hostName}" class="tablelink">{$arr.hostName}</a> </td>
+        		<td>
+                    {$arr['rankInfo'][0]}
+                </td>
+                <td>
+                    <a href="{:url('djycpgk/Match/search')}?content={$arr.guestName}" class="tablelink">{$arr.guestName}</a>
+                </td>
+                <td>{$arr['rankInfo'][1]}</td>
+                <td>
+                    <ul>
+                        <li>胜：{$arr['avgOdds']['s']}</li>
+                        <li>负：{$arr['avgOdds']['f']}</li>
+                        <li>平：{$arr['avgOdds']['p']}</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>胜：{$arr['bid']['spf']['0']}</li>
+                        <li>负：{$arr['bid']['spf']['1']}</li>
+                        <li>平：{$arr['bid']['spf']['2']}</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>胜：{$arr['bid']['rqspf']['0']}</li>
+                        <li>负：{$arr['bid']['rqspf']['1']}</li>
+                        <li>平：{$arr['bid']['rqspf']['2']}</li>
+                    </ul>
+                </td>
+        	</tr>
+        </tbody>
+	</table>
+    <br>
+    <p style="font-size: 20px">
+       {$arr.hostName}VS{$arr.guestName} 历史数据:
+    </p>
+    <br>
+    <table class="tablelist">
+        <thead>
+          <tr>
+            <th>历史交锋次数</th>
+            <th>历史交锋战绩</th>
+            <th>主队近期战绩</th>
+            <th>客队近期战绩</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    {if $arr['history']['num'] == 0}
+                        没有交锋记录
+                        {else/}
+                        {$arr['history']['num']}
+                    {/if}
+                </td>
+                <td>
+                    {if $arr['history']['score'] == 0}
+                        没有交锋战绩
+                        {else/}
+
+                        <?php    $ss = explode(',',$arr['history']['score'])  ?>
+                        <ul>
+                            <li>胜：{$ss[0]}</li>
+                            <li>平：{$ss[1]}</li>
+                            <li>负：{$ss[2]}</li>
+                        </ul>
+                    {/if}
+                </td>
+                <td>
+                    {if $arr['history']['score'] == 0}
+                        没有交锋战绩
+                    {else/}
+                     <?php    $cc = explode(',',$arr['history']['host'])  ?>
+                        <ul>
+                            <li>胜：{$cc[0]}</li>
+                            <li>平：{$cc[1]}</li>
+                            <li>负：{$cc[2]}</li>
+                        </ul>
+                    {/if} 
+                </td>
+                <td>
+                    {if $arr['history']['score'] == 0}
+                        没有交锋战绩
+                    {else/}
+                    <?php    $dd = explode(',',$arr['history']['guest'])  ?>
+                        <ul>
+                            <li>胜：{$dd[0]}</li>
+                            <li>平：{$dd[1]}</li>
+                            <li>负：{$dd[2]}</li>
+                        </ul>
+                    {/if} 
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <p style="font-size: 20px">{$arr.hostName}VS{$arr.guestName} 比分赔率:</p>
+    <br>
+     <table class="tablelist">
+        <thead>
+            <tr>
+                <th>{$arr.hostName}获胜比分</th>
+                <th>平局比分</th>
+                <th>{$arr.guestName}获胜比分</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            
+            <tr>
+               <td>
+                <table class="tablelist">
+                    <tbody>
+                        <tr>
+                            <td>1:0</td>
+                            <td>2:0</td>
+                            <td>2:1</td>
+                            <td>3:0</td>
+                            <td>3:1</td>
+                            <td>3:2</td>
+                            <td>4:0</td>
+                            <td>4:1</td>
+                            <td>4:2</td>
+                            <td>4:3</td>
+                        </tr>
+                    </tbody>
+                </table>
+               </td>
+               <td>
+                <table class="tablelist">
+                    <tbody>
+                        <tr>
+                            <td>0:0</td>
+                            <td>1:1</td>
+                            <td>2:2</td>
+                            <td>3:3</td>
+                        </tr>
+                    </tbody>
+                </table>
+               </td>
+               <td>
+                  <table class="tablelist">
+                    <tbody>
+                        <tr>
+                            <td>0:1</td>
+                            <td>0:2</td>
+                            <td>1:2</td>
+                            <td>0:3</td>
+                            <td>1:3</td>
+                            <td>2:3</td>
+                            <td>0:4</td>
+                            <td>1:4</td>
+                            <td>2:4</td>
+                            <td>3:4</td>
+                        </tr>
+                    </tbody>
+                </table>
+               </td>
+            </tr>
+            <tr>
+                <td>
+                <table class="tablelist">
+                    <tbody>
+                        <tr>
+                            <td>{$arr['odds']['bf']['0']}</td>
+                            <td>{$arr['odds']['bf']['1']}</td>
+                            <td>{$arr['odds']['bf']['2']}</td>
+                            <td>{$arr['odds']['bf']['3']}</td>
+                            <td>{$arr['odds']['bf']['4']}</td>
+                            <td>{$arr['odds']['bf']['5']}</td>
+                            <td>{$arr['odds']['bf']['6']}</td>
+                            <td>{$arr['odds']['bf']['7']}</td>
+                            <td>{$arr['odds']['bf']['8']}</td>
+                            <td>{$arr['odds']['bf']['9']}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                    
+                </td>
+                <td>
+                <table class="tablelist">
+                    <tbody>
+                        <tr>
+                            <td>{$arr['odds']['bf']['10']}</td>
+                            <td>{$arr['odds']['bf']['11']}</td>
+                            <td>{$arr['odds']['bf']['12']}</td>
+                            <td>{$arr['odds']['bf']['13']}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </td>
+                <td>
+                    <table class="tablelist">
+                    <tbody>
+                        <tr>
+                            <td>{$arr['odds']['bf']['14']}</td>
+                            <td>{$arr['odds']['bf']['15']}</td>
+                            <td>{$arr['odds']['bf']['16']}</td>
+                            <td>{$arr['odds']['bf']['17']}</td>
+                            <td>{$arr['odds']['bf']['18']}</td>
+                            <td>{$arr['odds']['bf']['19']}</td>
+                            <td>{$arr['odds']['bf']['20']}</td>
+                            <td>{$arr['odds']['bf']['21']}</td>
+                            <td>{$arr['odds']['bf']['22']}</td>
+                            <td>{$arr['odds']['bf']['23']}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <br>
+    <p style="font-size: 20px">{$arr.hostName}VS{$arr.guestName} 总进球赔率</p>
+    <br>
+    <table class="tablelist">
+        <thead>
+          <tr>
+            <th>进球个数：</th>
+            <th>0</th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7+</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>赔率：</td>
+                <td>{$arr['odds']['zjq'][0]}</td>
+                <td>{$arr['odds']['zjq'][1]}</td>
+                <td>{$arr['odds']['zjq'][2]}</td>
+                <td>{$arr['odds']['zjq'][3]}</td>
+                <td>{$arr['odds']['zjq'][4]}</td>
+                <td>{$arr['odds']['zjq'][5]}</td>
+                <td>{$arr['odds']['zjq'][6]}</td>
+                <td>{$arr['odds']['zjq'][7]}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+        <p style="font-size: 20px">{$arr.hostName}VS{$arr.guestName} 半全场赔率:</p>
+    <br>
+        <table class="tablelist">
+        <thead>
+          <tr>
+            <th>胜胜</th>
+            <th>胜平</th>
+            <th>胜负</th>
+            <th>平胜</th>
+            <th>平平</th>
+            <th>平负</th>
+            <th>负胜</th>
+            <th>负平</th>
+            <th>负负</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{$arr['odds']['bqc'][0]}</td>
+                <td>{$arr['odds']['bqc'][1]}</td>
+                <td>{$arr['odds']['bqc'][2]}</td>
+                <td>{$arr['odds']['bqc'][3]}</td>
+                <td>{$arr['odds']['bqc'][4]}</td>
+                <td>{$arr['odds']['bqc'][5]}</td>
+                <td>{$arr['odds']['bqc'][6]}</td>
+                <td>{$arr['odds']['bqc'][7]}</td>
+                <td>{$arr['odds']['bqc'][8]}</td>
+
+            </tr>
+        </tbody>
+    </table>
+    <br>
+        <p style="font-size: 20px">{$arr.hostName}VS{$arr.guestName} 让球胜平负赔率:</p>
+    <br>
+    <table class="tablelist">
+        <thead>
+          <tr>
+            <th>胜：</th>
+            <th>平：</th>
+            <th>负：</th>
+            <th>让球</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{$arr['odds']['rqspf'][0]}</td>
+                <td>{$arr['odds']['rqspf'][1]}</td>
+                <td>{$arr['odds']['rqspf'][2]}</td>
+                <td>{$arr['odds']['rqspf'][3]}</td>
+            </tr>
+        </tbody>
+    </table>
+      
+
+    <br>
+        <p style="font-size: 20px">{$arr.hostName}VS{$arr.guestName} 胜平负赔率:</p>
+    <br>   
+    <table class="tablelist">
+        <thead>
+          <tr>
+            <th>胜：</th>
+            <th>平：</th>
+            <th>负：</th>
+            <th>让球</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{$arr['odds']['spf'][0]}</td>
+                <td>{$arr['odds']['spf'][1]}</td>
+                <td>{$arr['odds']['spf'][2]}</td>
+                <td>{$arr['odds']['spf'][3]}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

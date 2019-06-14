@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    <style type="text/css">
+    .noshow{
+    display: none;
+    }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+    $(".select1").uedSelect({
+    width : 345
+    });
+    })
+    </script>
+    <script type="text/javascript">
+    
+    </script>
+    
+    <script type="text/javascript">
+    </script>
+  </head>
+  <body>
+      <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/system/hongbaowenti')}">红包问题设置  </a></li>
+                 <li><a href="#">问题修改 </a></li>
+                </ul>
+                </div>
+            </div>
+    
+    <div class="formbody">
+      
+      
+      <div id="usual1" class="usual">
+        
+        
+        <div id="tab1" class="tabson">
+          
+          
+          
+          <ul class="forminfo">
+            <form action="{:url('djycpgk/system/wentitianjia')}" method="post">
+              
+                        
+                  <li>
+                    <label>问题<b>*</b></label>
+                    <input name="problem" type="text" class="dfinput" value=""   required="required"  placeholder="如：1+1=？" />
+                  </li>
+
+                  <li>
+                    <label>答案<b>*</b></label>
+                    <input name="answer" type="text" class="dfinput" value=""   required="required" />
+                  </li>
+                
+                   <li>
+                    <label>红包标题<b>*</b></label>
+                    <input name="title" type="text" class="dfinput" value=""   required="required" />
+                  </li>
+                
+                
+
+              <li><label>&nbsp;</label><input name="" type="submit" class="btn" value="保存"/></li>
+          </form>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="text/javascript">
+$("#usual1 ul").idTabs();
+</script>
+
+<script type="text/javascript">
+$('.tablelist tbody tr:odd').addClass('odd');
+</script>
+
+
+
+
+
+</div>
+<script type="text/javascript">
+
+
+
+
+
+</script>
+</body>
+</html>

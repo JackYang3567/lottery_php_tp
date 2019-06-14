@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {css href="/static/admin/css/style.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        <style type="text/css">
+        .sort{
+        cursor: pointer;
+        }
+        </style>
+        
+        <script type="text/javascript">
+        $(document).ready(function(){
+        
+        $('.rank_add').click(function(){
+        window.location.href="/djycpgk/user/rank_add";
+        })
+        
+        });
+        </script>
+    </head>
+    <body>
+         <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('djycpgk/user/ranklist')}">等级设置列表</a></li>
+                </ul>
+                </div>
+            </div>
+        <div class="rightinfo">
+            
+            <div class="tools">
+                <ul class="toolbar">
+                    <li class="click rank_add"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+                </ul>
+                
+                
+            </div>
+            
+            
+            <table class="tablelist">
+                <thead>
+                    <tr>
+                        <th>等级名称</th>
+                        <th>等级图标</th>
+                        <th>条件</th>
+                        <!-- <th>单注最小金额</th> -->
+                        <!-- <th>单注最大金额</th> -->
+                        <th>操作</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {if count($list) != 0}
+                    {volist name="list" id='vo'}
+                    <tr>
+                        
+                        <td>{$vo.name}</td>
+                        <td>{if $vo.logo !=''}<img src="{$vo.logo}" style="width: 110px;height: 20px;" />{else/}暂无{/if}</td>
+                        <td><span>充值达到{$vo.condition.recharge}&nbsp;&nbsp;&nbsp;
+                        流水达到{$vo.condition.account}</span></td>
+                       <!--  <td>
+                            {$vo.right.betting_min}
+                        </td>
+                        <td>
+                            {$vo.right.betting_max}
+                            
+                        </td> -->
+                        <td> <a href="{:url('djycpgk/user/rank_edit',array('rank'=>$vo.rank))}" class="tablelink" >修改</a>
+                        &nbsp;
+                        <a href="{:url('djycpgk/user/rank_del',array('rank'=>$vo.rank))}" class="tablelink" >删除</a></td>
+                    </tr>
+                    {/volist}
+                    {/if}
+                </tbody>
+            </table>
+            
+            
+            </div>
+            
+            
+        </div>
+        
+        <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+        $('.browser').click(function(){
+        var browser = $(this).attr('data-browser');
+        layer.tips(browser, $(this), {
+        tips: [4, '#106BA4']
+        });
+        })
+        
+        $('.dellog').click(function(){
+        var days = $(this).parent().prev().children().val();
+        if(days == ''){
+        layer.msg("请输入天数");
+        return;
+        }
+        layer.confirm('确定删除该时间段的日志吗?', {
+        btn: ['是','否'] //按钮
+        }, function(){
+        $.ajax({
+        url:"{:url('djycpgk/user/dellog')}",//这里指向的就不再是页面了，而是一个方法。
+        data:{days:days},
+        type:"POST",
+        dataType:"JSON",
+        success: function(data){
+        if(data.error == 0){
+        layer.msg(data.msg,{icon:1,time:1000},function(){
+        self.location.reload(); // 父页面刷新
+        self.layer.close();
+        });
+        }else{
+        layer.msg(data.msg, {icon: 5,time:2000});
+        }
+        }
+        })
+        }, function(){
+        
+        });
+        })
+        </script>
+    </body>
+</html>

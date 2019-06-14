@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {js href="/static/admin/js/jquery-1.11.3.min.js" /}
+    {js href="/static/admin/js/boot/bootstrap.min.js" /}
+</head>
+<body>
+<div class="container">
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active">
+            <a href="#home" data-toggle="tab">
+                菜鸟教程
+            </a>
+        </li>
+        <li><a href="#ios" data-toggle="tab">iOS</a></li>
+
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="home">
+            <p>菜鸟教程是一个提供最新的web技术站点，本站免费提供了建站相关的技术文档，帮助广大web技术爱好者快速入门并建立自己的网站。菜鸟先飞早入行——学的不仅是技术，更是梦想。</p>
+        </div>
+        <div class="tab-pane fade" id="ios">
+            <p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple
+                TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。</p>
+        </div>
+    </div>
+
+
+
+    <h2>创建模态框（Modal）</h2>
+    <!-- 按钮触发模态框 -->
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+        开始演示模态框
+    </button>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        模态框（Modal）标题
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    在这里添加一些文本
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                    <button type="button" class="btn btn-primary">
+                        提交更改
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="alert alert-warning">
+        <a href="#" class="close" data-dismiss="alert">
+            &times;
+        </a>
+        <strong>警告！</strong>您的网络连接有问题。
+    </div>
+</div>
+
+</body>
+</html>

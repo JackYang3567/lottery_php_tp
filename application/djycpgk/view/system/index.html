@@ -1,0 +1,448 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    {js href="/static/admin/ueditor/ueditor.config.js" /}
+    {js href="/static/admin/ueditor/ueditor.all.min.js" /}
+    <style>
+    .forminfo span{
+    display: inline-block;
+    height: 34px;
+    
+    line-height: 34px;
+    padding-left: 5px;
+    }
+    .img_url{
+    height: 30px;
+    width: 150px;
+    
+    }
+    .img_url input{
+    height: 30px;
+    width: 100%;
+    margin-top: 3px;
+    border-top: solid 1px #a7b5bc;
+    border-left: solid 1px #a7b5bc;
+    border-right: solid 1px #ced9df;
+    border-bottom: solid 1px #ced9df;
+    }
+    .del{
+    margin-top: 10px;
+    }
+    .sm{
+    height: 35px;
+    line-height: 35px;
+    }
+    .p_link{
+    position: relative;
+    top: 13px;
+    left: 15px;
+    }
+    .forminfo li label{
+    width: 106px;
+    }
+    </style>
+
+    
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+
+    $(".select1").uedSelect({
+    width : 345
+    });
+    $(".select2").uedSelect({
+    width : 167
+    });
+    $(".select3").uedSelect({
+    width : 100
+    });
+    var ue = UE.getEditor('container', {
+    wordCount:false, //关闭字数统计
+    elementPathEnabled:false//关闭elementPath
+    });
+    var ue = UE.getEditor('container1', {
+    wordCount:false, //关闭字数统计
+    elementPathEnabled:false//关闭elementPath
+    });
+    $(".select1").uedSelect({
+    width : 345
+    });
+    });
+    </script>
+  </head>
+  <body>
+  <template id="transfer">
+    <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+      <div class="col-sm-12">
+        <div class="input-group">
+          <label>推广二维码域名:</label>
+          <input id="rebate_rate2"  name ="name" type="text" class="dfinput" placeholder="">
+        </div>
+      </div>
+    </div>
+  </template>
+     <div class="place">
+            <div class="ibox-content" style="margin-left: 30px;">
+                <div class="place">
+                <span>位置：</span>
+                <ul class="placeul">
+                <li><a href="{:url('/djycpgk/system/index')}">网站系统设置</a></li>
+                </ul>
+                </div>
+            </div>
+      </div>
+    
+    <div class="formbody">
+      
+      
+      <div id="usual1" class="usual">
+        
+        <div class="itab">
+          <ul>
+            <li><a href="#tab1"  {if isset($tab) && $tab == 1}class="selected"{/if}
+            >基本信息</a></li>
+            <li><a href="#tab2" {if isset($tab) && $tab == 2}class="selected"{/if}>首页幻灯片</a></li>
+            <li><a href="#tab3" {if isset($tab) && $tab == 3}class="selected"{/if}>客服设置</a></li>
+            <li><a href="#tab4" {if isset($tab) && $tab == 4}class="selected"{/if}>开户条约</a></li>
+            <li><a href="{:url('djycpgk/system/notice')}" >弹窗公告</a></li>
+            <!--<li><a href="#tab5" {if isset($tab) && $tab == 5}class="selected"{/if}>弹窗公告</a></li>-->
+            <li><a href="{:url('djycpgk/system/qiangtai_ys')}">前台页面颜色更换</a></li>
+            <li><a href="{:url('djycpgk/system/labagogao')}">喇叭公告发布</a></li>
+            <li><a href="{:url('djycpgk/system/app_Download')}">APP下载开关</a></li>
+            <li><a href="#tab5" {if isset($tab) && $tab == 5}class="selected"{/if}>棋牌占成比例</a></li>
+          </ul>
+        </div>
+        <div id="tab5" class="tabson">
+          <form action="{:url('djycpgk/Wqxfw/zhancheng')}" method="post">
+            <li><label>占成比例<b>*</b></label><input name="zhancheng" type="number" class="dfinput" value="{$zhancheng}" />%</li>
+            <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="保存"/></li>
+          </form>
+        </div>
+        <div id="tab1" class="tabson">
+          
+          <ul class="forminfo">
+            <form action="{:url('djycpgk/system/setting')}" method="post">
+              <li ><label>是否开启网站<b>*</b></label>
+              <div style=" line-height: 34px;font-size: 11pt;">
+                <input type="radio" name="web_open" value="1" {if $systemInfo[2]['value'] == 1}checked="checked"{/if}/>开
+                <input type="radio" name="web_open" value="0" {if $systemInfo[2]['value'] == 0}checked="checked"{/if} />关
+                <span>(关闭后,网站将无法访问)</span>
+              </div>
+            </li>
+            <li ><label >默认进入登录页面<b>*</b></label>
+            <div style=" line-height: 34px;font-size: 11pt;">
+              <input type="radio" name="web_login" value="1" {if $systemInfo[12]['value'] == 1}checked="checked"{/if}/>开
+              <input type="radio" name="web_login" value="0" {if $systemInfo[12]['value'] == 0}checked="checked"{/if} />关
+              <span>(打开网站是否默认进入登录页面)</span>
+            </div>
+          </li>
+          <li ><label >启用登录验证码<b>*</b></label>
+          <div style=" line-height: 34px;font-size: 11pt;">
+            <input type="radio" name="login_verify" value="1" {if $systemInfo[14]['value'] == 1}checked="checked"{/if}/>开
+            <input type="radio" name="login_verify" value="0" {if $systemInfo[14]['value'] == 0}checked="checked"{/if} />关
+            <span>(是否启用登录验证码)</span>
+          </div>
+        </li>
+        <li><label>后台域名<b>*</b></label><input name="domain_name" type="text" class="dfinput" value="{$systemInfo[5]['value']}" required="required"   /><span>(本网站的后台域名)</span></li>
+        <li><label>前台域名<b>*</b></label><input name="home_url" type="text" class="dfinput" value="{$systemInfo[13]['value']}" required="required"   /><span>(本网站的前台域名)</span></li>
+        <li><label>网站标题<b>*</b></label><input name="web_title" type="text" class="dfinput" value="{$systemInfo[1]['value']}" required="required"   /><span>(本网站的title)</span></li>
+        <!-- <li><label>网站线路<b>*</b></label><input name="web_line" type="text" class="dfinput" value="{$lines}" /><span>(本网站的线路,请以英文逗号隔开)</span></li> -->
+        <li><label>登录安全码<b>*</b></label><input name="safecode" type="password" class="dfinput" value="" /><span>(后台登录安全码)</span></li>
+        <li><label>允许登录后台IP<b>*</b></label><input name="allow_login_ip" type="text" class="dfinput" value="{$systemInfo[11]['value']}" /><span>(允许登录后台的ip,请以英文逗号隔开)</span></li>
+        <li><label>网站Logo<b>*</b></label><a href="javascript:;" class="logo"><img   src="{$systemInfo[4]['value']}" style="width: 60px;height: 50px;background-color: #b8ceda;"/> </a><input type="file" style="display: none;" class="form-control "  name="fileupload" data-id="1">
+        <h2 style="display: none;"><a ></a></h2>
+        <span class="img_url" style="height:50px;display: none;"><label>图片地址</label><input type="text"  name="logo" value="{$systemInfo[4]['value']}" readonly=""></span>
+        <span>(本网站的Logo)</span>
+      </li>
+      <li><label>App二维码<b>*</b></label><a href="javascript:;" class="logo"><img   src="{$systemInfo[8]['value']}" style="width: 60px;height: 50px;background-color: #b8ceda;"/> </a><input type="file" style="display: none;" class="form-control "  name="fileupload" data-id="1">
+      <h2 style="display: none;"><a ></a></h2>
+      <span class="img_url" style="height:50px;display: none;"><label>图片地址</label><input type="text"  name="app_qrcode" value="{$systemInfo[8]['value']}" readonly=""></span>
+      <span>(扫码下载App的二维码)</span>
+    </li>
+     <label><a class="ewmym" style="color: #00bb00">推广二维码域名添加</a></label>
+     {volist name="$systemInfo[15]['value']['content']" id="vo"}
+          <li><label>推广二维码域名{$key+1}<b>*</b></label>
+            <input type="radio" name="type" value="{$key}" {if $key == $systemInfo[15]['value']['type']}checked="checked"{/if}/>
+            <input name="content[]" type="text" class="dfinput" value="{$vo}" required="required"   /><span>(推广二维码的根域名)</span>
+            <a class="scx" style="color: #00bb00" data-id="{$key}">删除</a>
+          </li>
+      {/volist}
+       <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="保存"/></li>
+
+  </form>
+</ul>
+
+</div>
+
+
+<div id="tab2" class="tabson">
+<div class="tools">
+  <ul class="toolbar">
+    <li class="click add_img"><span><img src="/static/admin/images/t01.png" /></span>添加</li>
+  </ul>
+  <p class="sm">(点击图片进行上传，进行保存)</p>
+</div>
+
+<ul class="imglist">
+  <form action="{:url('djycpgk/system/ppt_update')}" method="post" id="img_form">
+    {volist name="ppts" id="vo"}
+    <li  style="width: 267px;height: 400px;">
+      <span class="fancybox"><img src="{$vo.img_url}" style="width: 100%;height: 126px;"/></span>
+      <input type="file" style="display: none;" class="form-control "  name="fileupload" data-id="1">
+      <h2><a >图片{$key+1}</a></h2>
+      <span class="img_url" style="height:50px;"><label>图片地址</label><input type="text"  name="img_url[]" value="{$vo.img_url}" readonly=""></span>
+      <span class="img_url" style="height:50px;"><label>图片链接(输入相关优惠活动编号)</label><input type="text" name="img_href[]" style="width: 80%;" value="{$vo.img_href}"><img src="/static/admin/images/ico06.png" alt=""  class="p_link"/></span>
+      <span class="img_url" style="height:50px;"><label>图片排序编号</label><input type="text" name="paixu[]" style="width: 80%;" value="{$vo.paixu}"></span>
+
+      <p class="del" style="padding-top: 9px;"><a >删除</a></p>
+    </li>
+    {/volist}
+  </form>
+</ul>
+
+
+<ul> <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="button" class="btn save_btn" value="保存"/></li></ul>
+
+
+
+</div>
+
+<div id="tab3" class="tabson">
+
+
+<ul class="forminfo">
+  <form action="{:url('djycpgk/system/serviceconfig')}" method="post">
+    <li ><label>在线客服<b>*</b></label>
+    <div >
+      <input type="text" name="online_service" class="dfinput" value="{php}echo implode(',',$service['online_service']){/php}"><span>(多个客服，请以英文逗号隔开)</span>
+    </div>
+  </li>
+  <li ><label>QQ客服<b>*</b></label>
+  <div >
+    <input type="text" name="qq_service" class="dfinput" value="{php}echo implode(',',$service['qq_service']){/php}"><span>(多个客服，请以英文逗号隔开)</span>
+  </div>
+</li>
+<li  class="wxtp"><label>微信客服<b>*</b></label>
+   <div >
+    {if empty($service['wx_service'])}
+    <input type="text" name="wx_service" class="dfinput" value=" "><span>(多个客服，请以英文逗号隔开)
+    {else/}
+    <input type="text" name="wx_service" class="dfinput" value="{php}echo implode(',',$service['wx_service']){/php}"><span>(多个客服，请以英文逗号隔开)
+    {/if}
+    </span>
+  </div>
+
+
+</li>
+<li></li>
+<li></li>
+<li></li>
+<li   style="margin-top: 20px;"><label>&nbsp;</label><input  type="submit" class="btn" value="保存"/></li>
+</form>
+</ul>
+</div>
+<div id="tab4" class="tabson">
+
+<ul class="forminfo">
+<form action="{:url('djycpgk/system/tychange')}" method="post">
+<li>
+  <label>开户条约<b>*</b></label>
+  <script id="container" type="text/plain" name="content" style="width:700px;height:250px;float: left;padding-bottom : 20px;">{$ty|raw}</script>
+</li>
+<li   style="margin-top: 20px;"><label>&nbsp;</label><input  type="submit" class="btn" value="保存"/></li>
+</form>
+</div>
+
+</div>
+
+<script type="text/javascript">
+
+$("#usual1 ul").idTabs();
+$(document).on('click','.add_img1', function(){
+var html ='';
+html+='<li style="width: 300px;height: 400px;"><span class="fancybox"><img src="/static/admin/images/img01.png" style="width: 150px;height: 150px;position: relative;left: 70px;"/>';
+html+= '</span>';
+html+=' <input type="file" style="display: none;" class="form-control "  name="fileupload" data-id="1">';
+html+='  <h2 style="margin-top: 28px;"><a >新增图片</a></h2>';
+html+=' <span class="img_url" style="height:50px;"><label>图片地址</label><input type="text"  name="img_url[]" ';
+html+=' value="" readonly=""></span>';
+html+='<span class="img_url" style="height:50px;text-align:center;">';
+html+='支付宝<input type="radio" name="cat[]" value="1" checked="checked" style="width: 8%;position: relative;top:12px;">';
+html+='微信<input type="radio" name="cat[]"  value="2"  style="width: 8%;position: relative;top:12px;">';
+html+='<p class="del" style="padding-top:9px;"><a >删除</a></p></li>';
+$("#img_form1").append(html);
+})
+$(document).on('click','.add_img', function(){
+var html ='';
+html+='<li style="width: 267px;height: 400px;"><span class="fancybox"><img src="/static/admin/images/img01.png" style="width: 100%;height: 126px;"/>';
+html+= '</span>';
+html+=' <input type="file" style="display: none;" class="form-control "  name="fileupload" data-id="1">';
+html+='  <h2><a >新增图片</a></h2>';
+html+=' <span class="img_url" style="height:50px;"><label>图片地址</label><input type="text"  name="img_url[]" ';
+html+=' value="" readonly=""></span>';
+html+='<span class="img_url" style="height:50px;"><label>图片链接</label>';
+html+='<input type="text" name="img_href[]" style="width: 80%;">';
+html+='<img src="/static/admin/images/ico06.png" alt=""  class="p_link"/></span>';
+html+=' <span class="img_url" style="height:50px;"><label>图片排序编号</label><input type="text" name="paixu[]" style="width: 80%;" value=""></span>';
+html+='<p class="del" style="padding-top:9px;"><a >删除</a></p></li>';
+$("#img_form").append(html);
+})
+//微信客服上传
+// $(document).on('click','.add_wx',function(){ 
+// var html='';
+
+// html+='<div  class="wxservice" style="float: left;margin-left: 10px"><p class="fancybox"><img src="/uploads/20180426/72791829bc259f5d2d8b29692e6b92e8.jpg" style="width: ';
+// html+='150px;height:150px;"></p>';
+// html+='<input type="file" style="display: none;" class="form-control "  name="fileupload" data-id="1">';
+// html+='<h2 style="display: none;"><a ></a></h2>';
+// html+='<span class="img_url" style="display: none"><label>图片地址</label>';
+// html+='<input type="text"  name="wx_service[]" value=""> </span> ';
+// html+='<input type="text" name="wx_service[]" class="dfinput" style="width:150px;">';
+// html+='  <p class="del" style="padding-top:9px;text-align: center;"><a class="tablelink" >删除</a></p></div>';
+// $('.wxtp').append(html);
+// })
+$(document).on('click','.p_link',function(){
+var img_href = $(this).prev();
+layer.open({
+type: 2,
+area: ['700px', '450px'],
+fixed: false, //不固定
+maxmin: true,
+content: "{:url('djycpgk/system/newslist')}",
+btn: ['确定','关闭'],
+yes: function(index){
+//当点击‘确定’按钮的时候，获取弹出层返回的值
+var res = window["layui-layer-iframe" + index].callbackdata();
+//打印返回的值，看是否有我们想返回的值。
+console.log(res);
+if(res != undefined){
+img_href.val(res);
+}
+//最后关闭弹出层
+layer.close(index);
+},
+cancel: function(){
+//右上角关闭回调
+}
+});
+})
+$(document).on('click','.del', function(){
+$(this).parent().remove();
+})
+$(document).on('click','.fancybox', function(){
+$(this).next().click();
+})
+$(document).on('click','.logo', function(){
+$(this).next().click();
+})
+$(document).on('click','.save_btn', function(){
+$ ("#img_form").submit();
+})
+$(document).on('click','.save_btn1', function(){
+$ ("#img_form1").submit();
+})
+$(document).on('change',"input[name='fileupload']", function(){
+// $("input[name='fileupload']").change(function(){
+f=this.files[0];
+var reader = new FileReader();
+reader.readAsDataURL(f);
+reader.onload = function(e){
+// $('#index_ppt').attr('src',e.target.result);
+img  = e.target.result;
+}
+var fd = new FormData();
+var img = $(this).prev().children();
+var imgpath = $(this).next().next().children();
+
+fd.append("file", f);
+$.ajax({
+url: "{:url('djycpgk/system/imgupload')}" ,
+type: 'POST',
+data: fd,
+async: false,
+cache: false,
+contentType: false,
+processData: false,
+success: function (data) {
+if(data.error == 0){
+layer.msg('上传成功');
+img.attr('src',data.msg);
+imgpath.val(data.msg);
+}else{
+layer.msg(data.msg);
+}
+},
+error: function (data) {
+
+}
+});
+})
+
+</script>
+  <script type="text/javascript">
+    //添加推广二维码域名
+      $('.ewmym').click(function(){
+          var bool = false;
+          layer.open({
+              type: 1,
+              title:'推广二维码域名添加',
+              area:['450px', '200px'],
+              content: $('#transfer').html(),
+              btn:['保存','取消'],
+              btn1: function (index,layero) {
+                  if(!bool) {
+                      bool = true;//锁住
+                      var name = $(layero).find("input[name='name']").val();
+                      if (name == '') {
+                          layer.msg('推广二维码域名不能为空');
+                          return;
+                      }
+                      $.post('{:url("ewmym")}', {name: name}, function (res) {
+                          if (res.error == 0) {
+                              layer.msg(res.msg, false, function () {
+                                  window.location.reload()
+                              });
+                          } else {
+                              layer.msg(res.msg);
+                          }
+                      });
+                  }
+              },
+              btn2:function (index,layero) {}
+          });
+      });
+    $('.scx').on('click',function(){
+        var $this = $(this);
+        layer.confirm('您确定要删除吗？', {
+            title: $this.text(),
+        }, function(){
+            $.post('{:url("Domaindeletion")}',{ key: $this.data('id')},function(res){
+                if (res.error > 0) {
+                    layer.msg(res.msg, false, function () {
+                        window.location.reload()
+                    });
+                } else {
+                    layer.msg(res.msg);
+                }
+
+            });
+        }, function(){
+        });
+    });
+  </script>
+<script type="text/javascript">
+
+$('.tablelist tbody tr:odd').addClass('odd');
+</script>
+
+
+</div>
+</body>
+</html>

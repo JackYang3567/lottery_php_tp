@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>无标题文档</title>
+    {css href="/static/admin/css/style.css" /}
+    {css href="/static/admin/css/select.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/js/jquery.idTabs.min.js" /}
+    {js href="/static/admin/js/select-ui.min.js" /}
+    <style>
+    .rulelist{
+    float: left;
+    line-height: 34px;
+    }
+    .forminfo label{
+    width: 150px !important;
+    }
+    </style>
+    
+    <script type="text/javascript">
+    $(document).ready(function(e) {
+    $("input[name='type[]']").click(function(){
+    var CheckBox = $(this).parent().next().next().children();
+    if($(this).is(':checked') ==false){
+    for(i=0;i<CheckBox.length;i++){
+    CheckBox[i].checked=false;
+    };
+    }else{
+    for(i=0;i<CheckBox.length;i++){
+    CheckBox[i].checked=true;
+    };
+    }
+    })
+    })
+    </script>
+  </head>
+  <body>
+    
+    <div class="formbody">
+      
+      
+      <div id="usual1" class="usual" >
+        
+        
+        <div id="tab1" class="tabson" >
+          
+          
+          
+          <ul class="forminfo" >
+            <form action="{:url('djycpgk/lottery/room_add')}" method="post">
+              <li><label>房间名<b>*</b></label><input name="room_name" type="text" class="dfinput" value="" required="required"  /></li>
+              <li><label>最低进房金额<b>*</b></label><input name="room_min" type="text" class="dfinput" value="" required="required"  /></li>
+              <li><label>单人最低投注<b>*</b></label><input name="betting_min" type="text" class="dfinput" value="" required="required"  /></li>
+              <li><label>单人最高投注<b>*</b></label><input name="betting_max" type="text" class="dfinput" value="" required="required"  /></li>
+              <li><label>大小单双单注最高金额<b>*</b></label><input name="single_max" type="text" class="dfinput" value="" required="required"  /></li>
+              <li><label>组合单注最高金额<b>*</b></label><input name="double_max" type="text" class="dfinput" value="" required="required"  /></li>
+              <li><label>特码单注最高金额<b>*</b></label><input name="special_max" type="text" class="dfinput" value="" required="required"  /></li>
+              <li style="margin-top: 10px;"><label>&nbsp;</label><input name="" type="submit" class="btn" value="添加"/></li>
+            </form>
+          </ul>
+          
+        </div>
+        
+        
+        
+      </div>
+      
+      <script type="text/javascript">
+      $("#usual1 ul").idTabs();
+      </script>
+      
+      <script type="text/javascript">
+      $('.tablelist tbody tr:odd').addClass('odd');
+      </script>
+      
+      
+      
+      
+      
+    </div>
+  </body>
+</html>

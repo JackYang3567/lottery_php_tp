@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        {css href="/static/admin/css/bootstrap.min.css" /}
+        {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+        {js href="/static/admin/layer/layer.js" /}
+        {js href="/static/admin/js/vueJs/vue.min.js" /}
+    </head>
+    <style type="text/css">
+        .red{
+            color: red;
+        }
+        .green{
+            color: green;
+        }
+    </style>
+<body>
+<ul class="breadcrumb">
+    <li><span href="#">位置</span></li>
+    <li><a href="{:url('gk/proxy/yg_tj')}">代理统计</a></li>
+</ul>
+<div id="app">
+    <div class="container" >
+        <form class="form-inline">
+            <div class="form-group">
+                <input type="text" v-model="name" class="form-control" id="exampleInputName2" placeholder="会员名称">
+            </div>
+            <div class="form-group">
+                <label>时间搜索</label>
+                <input type="date" class="form-control" v-model="start_time"> --
+                <input type="date" class="form-control" v-model="end_time">
+            </div>
+            <button type="button" class="btn btn-success" @click="Searchx()"  >搜索</button>
+            <button type="button" class="btn btn-success" @click="reLoad()" >刷新</button><b class="red">(默认统计当天)</b>
+
+        </form>
+    </div>
+    <div class="table-responsive">
+        <table class="table" style=" margin-bottom: 20px;">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>代理名称</th>
+                <th>普通用户数量</th>
+                <th>在线人数</th>
+                <th>二维码</th>
+                <th>存款</th>
+                <th>取款</th>
+                <th>返水</th>
+                <th>返佣</th>
+                <th>彩金</th>
+                <th>下注</th>
+                <th>中奖</th>
+                <th>盈利</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody >
+            <template  v-if="data_list.length"  v-for="(vo,key) in data_list">
+                <tr>
+                    <td>{{vo.uid}}</td>
+                    <td>{{vo.username}}</td>
+                    <td>{{vo.YongHun}}  (<a  @click='chakan(vo.uid)'>点击查看</a>)</td>
+                    <td>
+                       <span class="red">{{vo.zx_zs}}</span>
+                    </td>
+                    <td><input type="button" class="btn btn-info" @click="erweima(vo.uid)" :data-id="vo.uid"   value="生成二维码"/> </td>
+                    <td>{{parseFloat(vo.statistics['2'])+parseFloat(vo.statistics['7'])}}</td>
+                    <td>{{vo.statistics[1]}}</td>
+                    <td>{{vo.statistics[11]}}</td>
+                    <td>{{vo.statistics[8]}}</td>
+                    <td>{{vo.statistics[5]}}</td>
+                    <td>{{Math.abs(vo.statistics[0])}}</td>
+                    <td>{{vo.statistics[3]}}</td>
+                    <td>{{Math.abs(vo.statistics[0])-Math.abs(vo.statistics[3])}}</td>
+                    <td><a href="javascript:;" @click="xiougai(vo.uid)">修改密码</a></td>
+                </tr>
+            </template>
+            <template  v-if="data_list==''">
+                <tr>
+                    <td colspan="11" style="text-align: center;">没有找到匹配的记录</td>
+                </tr>
+            </template>
+            </tbody>
+        </table>
+    </div>
+    <div class="pagin"  v-if="data_list.length" >
+        <div class="message" style="float:left">共<i class="blue"> {{all_list}}</i>条记录，共&nbsp;<i class="blue"> {{all_page}}</i>&nbsp;页，当前显示第&nbsp;<i class="blue"> {{page}}&nbsp;</i>页</div>
+        <ul v-if="all_page > 1" style="float:right" class="pagination">
+            <li><a v-if="pageList[0] == '...'" @click="pageNext(1)" class="syy">首页</a></li>
+            <li><a @click="pageNext('prve')" class="syy">上一页</a></li>
+            <li v-for="vo in pageList" @click="pageNext(vo)" :class="['syy_list',{'active':vo == page}]"><a >{{vo}}</a></li>
+            <li><a @click="pageNext('next')" class="syy"> 下一页 </a></li>
+            <li><a v-if="pageList[pageList.length-1] == '...'" @click="pageNext(all_page)" class="syy"> 尾页 </a></li>
+        </ul>
+    </div>
+</div>
+<!--修改密码弹出框-->
+<template id="actionMoney">
+    <div class="row" style="width: 100%;  margin-left:7px; margin-top:10px;">
+        <div class="col-sm-12">
+            <div class="input-group">
+                <span class="input-group-addon"> 输入新密码   :</span>
+                <input   name ="password" type="text" class="form-control" placeholder="输入新密码">
+            </div>
+        </div>
+    </div>
+</template>
+<script >
+
+
+    var vm = new Vue({
+        el:'#app',
+        mounted:function(){ //初始化调用
+            this.getData();
+        },
+
+        // 我们的数据对象
+        data:{
+            data_list:[], //请求返回的数据
+            //-----------分页----------
+            page:1, //当前页
+            all_page:1,//总页数
+            all_list:0,//总数据条数
+            //---------搜索条件--------
+            name:'',//用户名称
+            start_time:'',//开始时间
+            end_time:'',//结束时间
+            search:0,// 判断是否点击搜索
+        },
+        //自动加载
+        computed:{
+
+            //首页 和尾页
+            pageList:function(){
+                var _this = this;
+                if(_this.all_page <= 10){
+                    return _this.all_page;
+                }else{
+                    let bit = [_this.page],rs = _this.page;
+                    for(let i=1;i<=5;i++ ){
+                        if(parseInt(rs) - parseInt(i) <= 0){
+                            bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                        }else{
+                            bit.unshift( parseInt(bit[0]) - 1 );
+                        }
+                    }
+                    for( let i=1;i<=4;i++ ){
+                        if(parseInt(rs) + parseInt(i) <= _this.all_page){
+                            bit.push(parseInt(bit[ bit.length-1 ]) + 1);
+                        }else{
+                            bit.unshift( parseInt(bit[0]) - 1 );
+                        }
+                    }
+                    if(bit[bit.length - 1] != _this.all_page){
+                        bit.push('...');
+                    }
+                    if(bit[0] != 1){
+                        bit.unshift('...');
+                    }
+                    return bit;
+                }
+            }
+        },
+        filters: {
+            formatDate: function (value) {
+                let date = new Date(value);
+                let y = date.getFullYear();
+                let MM = date.getMonth() + 1;
+                MM = MM < 10 ? ('0' + MM) : MM;
+                let d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                let h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                let m = date.getMinutes();
+                m = m < 10 ? ('0' + m) : m;
+                let s = date.getSeconds();
+                s = s < 10 ? ('0' + s) : s;
+                return y + '-' + MM + '-' + d + ' ' + h + ':' + m + ':' + s;
+            }
+        },
+        methods:{
+            chakan:function (id) {
+                window.location.href="{:url('gk/proxy/ptyh')}?uid="+id;
+            },
+            xiougai:function (id) {
+                var _this = this;
+                layer.open({
+                    type: 1,
+                    title:'修改密码',
+                    area:['auto', '200px'],
+                    content: $('#actionMoney').html(),
+                    btn:['保存','取消'],
+                    btn1: function (index,layero) {
+                        var password = $(layero).find("input[name='password']").val();
+                        if(password == ''){ layer.msg('密码不能为空');return; }
+                        $.post('{:url("gk/Proxy/normal_tj")}',{ user_id:id,password:password },function(res){
+                            layer.close(index);
+                            layer.msg(res.msg);
+                        });
+                    },
+                });
+            },
+            erweima:function (id) {
+                    parent.layer.open({
+                        type: 2,
+                        title:'用户二维码',
+                        skin:'layui-layer-rim',
+                        area:['auto', '450px'],
+                        content: "{:url('gk/proxy/qrcode')}?id="+id,
+                        btn:['取消'],
+                    });
+            },
+            //搜索
+            Searchx:function () {
+                var _this = this;
+                if(_this.name ==''&& _this.start_time =='' && _this.end_time =='')
+                {
+                    _this.search = 0;
+                }else {
+                    _this.search = 1;
+                }
+                _this.page =  1;
+                _this.getData();
+            },
+            getData:function () {
+                layer.load(2);//开启加载动画
+                var _this = this;
+                var data_list = {
+                    page: _this.page,
+                    name: _this.name,
+                    start_time :_this.start_time,
+                    end_time:_this.end_time,
+                    search: _this.search,
+                }
+                $.post('/gk/Proxy/yg_tj',data_list,function(res){
+                    layer.closeAll('loading');//关闭加载动画
+                    if(res.data){
+                        _this.page = res.current_page;
+                        _this.all_page = res.last_page;
+                        _this.all_list = res.total;
+                        _this.$set(_this,'data_list',res.data);
+                    }
+                });
+            },
+            //下一页 上一页
+            pageNext:function(type){
+                if(!type){return false;}
+                var _this = this;
+                if(!isNaN(type)){
+                    _this.page = type;
+                }else{
+                    if(type == 'prve'){
+                        _this.page -= 1;
+                    }else if(type == 'next'){
+                        _this.page = parseInt(_this.page) + 1;
+                    }else{
+                        return false;
+                    }
+                    if(_this.page < 1 ){
+                        _this.page = 1;
+                        return false;
+                    }else if(_this.page > _this.all_page){
+                        _this.page = _this.all_page;
+                        return false;
+                    }
+                }
+                _this.getData();
+            },
+            reLoad:function(){
+                let _this = this;
+                _this.page = 1,
+                _this.name = '',
+                _this.start_time = '',
+                _this.end_time = '',
+                _this.search = 0;
+                _this.getData();
+
+            }
+        },
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {js href="/static/admin/layer/layer.js" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+</head>
+<body>
+<div>
+    <div style="margin-left: 25%;margin-top: 10%;">
+        <button class="btn btn-default tanchuceng" data-name="{$keywords}">投注明细</button>
+        <button class="btn btn-default chongzhi" data-name="{$keywords}">充值明细</button>
+        <button class="btn btn-default zhongjiang" data-name="{$keywords}">中奖明细</button>
+    </div>
+
+</div>
+<script>
+    $(document).on('click','.tanchuceng',function(){
+        var betting_name = $(this).attr('data-name');
+        parent.layer.open({
+            type: 2,
+            title: '投注详情',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['80%', '80%'],
+            content: "{:url(request()->module().'/user/bettingrecord')}?keywords="+betting_name
+        });
+    })
+    $(document).on('click','.chongzhi',function(){
+        var betting_name = $(this).attr('data-name');
+        parent.layer.open({
+            type: 2,
+            title: '充值详情',
+            shadeClose: true,
+            shade: false,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['80%', '80%'],
+            content: "{:url(request()->module().'/recharge/index')}?keywords="+betting_name
+        });
+    })
+
+		$(document).on('click','.zhongjiang',function(){
+			var betting_name = $(this).attr('data-name');
+			parent.layer.open({
+				type: 2,
+				title: '充值详情',
+				shadeClose: true,
+				shade: false,
+				maxmin: true, //开启最大化最小化按钮
+				area: ['80%', '80%'],
+				content: "{:url(request()->module().'/user/capitaldetail')}?keywords="+betting_name+"&type=3"
+			});
+		})
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    {css href="/static/admin/css/bootstrap.min.css" /}
+    {js href="/static/admin/js/jquery-3.2.1.min.js" /}
+    {js href="/static/admin/layer/layer.js" /}
+    <style>
+
+            .current a{
+                background-color: #4CAF50;
+            }
+         .paginList {
+             display: inline-block;
+             padding: 0;
+             margin: 0;
+         }
+
+         .paginList li {display: inline;}
+
+         .paginList li a {
+             color: black;
+             float: left;
+             padding: 8px 16px;
+             text-decoration: none;
+         }
+
+         .paginList li a.active {
+             background-color: #4CAF50;
+             color: white;
+         }
+
+
+         .paginList li a:hover:not(.active) {background-color: #ddd;}
+        .ys td{
+            color: red;
+
+        }
+    </style>
+</head>
+<body>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <select class="form-control " id="caizhong">
+                {volist name="caizhong" id='cz'}
+                <option value="{$cz['type']}" {if $type==$cz['type']}selected = "selected" {/if}>{$cz['name']}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="col-md-6 col-md-offset-3">
+
+            <div class="col-xs-3">开始-结束的期号</div>
+            <div class="col-xs-4"><input type="text" class="form-control" placeholder="开始" id="kaishi"></div>
+            <div class="col-xs-4"><input type="text" class="form-control" placeholder="结束" id="jieshu" ></div>
+            <div class="col-xs-1"id="ts"></div>
+        </div>
+
+        <div class="col-md-6 col-md-offset-3">
+            <span>出入预测号码 格式：每期号码以英文逗号 分割 如：123456,741580,741258</span>
+            <textarea class="form-control" rows="6" id="hm"></textarea>
+        </div>
+         <div class="col-md-6 col-md-offset-3" style="margin-top: 10px">
+            <button type="button" class="btn btn-info" id="tj">添加</button>
+            <button type="button" class="btn btn-info" style="float: right" id="shauxin">刷新</button>
+
+            <p><i style="color: red">红色</i>为预测号码，<b>黑色</b>为已经开奖的号码</p>
+        </div>
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <tr>
+                    <th>期号</th>
+                    <th>预测号码</th>
+                    <th>彩种</th>
+                    <th>开奖时间</th>
+                    <th>操作</th>
+                </tr>
+
+                {volist name="$yc" id='yuche'}
+                {if $yuche['judge']==0}
+                    <tr class="ys">
+                        <td>{$yuche['expect']}</td>
+                        <td>{$yuche['content']}</td>
+                        <td>{$yuche['type']}</td>
+                        <td>{$yuche['create_time']}</td>
+                        <td><a href="javascript:;" class="xg" data-expect="{$yuche['expect']}"  data-type="{$yuche['type']}" data-ts="1" style="float: left;">修改</a></td>
+                    </tr>
+                {else/}
+                    <tr >
+                        <td>{$yuche['expect']}</td>
+                        <td>{$yuche['content']}</td>
+                        <td>{$yuche['type']}</td>
+                        <td>{$yuche['create_time']}</td>
+                        <td>--</td>
+                    </tr>
+                {/if}
+
+                {/volist}
+
+
+            </table>
+        </div>
+    </div>
+
+</div>
+<template id="transfer">
+    <div class="row" style="width: 420px;  margin-left:7px; margin-top:10px;">
+        <div class="col-sm-12">
+            <div class="input-group">
+                <span class="input-group-addon"> 修改号码:</span>
+                <input id="rebate_rate2"  name ="content" type="text" class="form-control" placeholder="">
+            </div>
+            <span>号码 以英文逗号分割</span>
+        </div>
+    </div>
+</template>
+<script>
+   $("#shauxin").on('click',function () {
+        window.location.reload();
+    });
+    $("#jieshu").on('blur',function () {
+        var ks = $("#kaishi").val();
+        var js = $("#jieshu").val();
+        var sz = js-ks+1;
+        $('#ts').text(sz+'期');
+    });
+
+    // function jsqs() {
+    //     var ks = $("#kaishi").val();
+    //     var js = $("#jieshu").val();
+    //     console.log(ks);
+    //     console.log(js);
+    // }
+    $("#caizhong").on('change',function () {
+        var type = $("#caizhong").val();
+        window.location.href = "{:url(request()->module() . '/lottery/batch')}?type="+type;
+    });
+    $("#tj").on("click",function(){
+        var cz = $('#caizhong').val();
+        var hm = $('#hm').val();
+        var ks = $('#kaishi').val();
+        var js = $('#jieshu').val();
+        $.post("{:url(request()->module() . '/lottery/batch')}",{type:cz,content:hm,ks:ks,js:js} ,function(res){
+            if(res.error == 1){
+                layer.msg(res.msg,function(){
+                    window.location.reload()
+                });
+            }else {
+                layer.msg(res.msg);
+            }
+        });
+    });
+    $(".xg").on("click",function(){
+        var type = $(this).data('type');//彩票type
+        var ts = $(this).data('ts');//提示
+        var expect = $(this).data('expect'); //期号
+        layer.open({
+            type: 1,
+            title:'修改号码',
+            area:['450px', '200px'],
+            content: $('#transfer').html(),
+            btn:['保存','取消'],
+            btn1: function (index,layero) {
+                console.log('ss');
+                var content = $(layero).find("input[name='content']").val(); //号码
+                if(content == ''){ layer.msg('请输入修改的号码');return; }
+                $.post("{:url(request()->module() . '/lottery/batch')}",{ expect:expect,type:type,content:content,ts:ts},function(res){
+                    layer.msg(res.msg,false,function(){ window.location.reload() });
+                });
+            },
+            // btn2:function (index,layero) {}
+        });
+    });
+</script>
+
+
+</body>
+</html>

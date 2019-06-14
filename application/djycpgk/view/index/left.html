@@ -1,0 +1,295 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="nav-close"><i class="fa fa-times-circle"></i>
+    </div>
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <span><img alt="image" class="img-circle" src="/static/admin/images/profile_small.jpg" /></span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="clear">
+                            <span class="block m-t-xs"><strong class="font-bold">{$Think.session.admin.username}</strong></span>
+                            <span class="text-muted text-xs block">{$Think.session.admin.rolename}<b class="caret"></b></span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a class="" href="{:url(request()->module() . '/login/logout')}">安全退出</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            {if in_array(11,$Think.session.admin.access_array)}
+            <li class="active">
+                <a href="#">
+                    <i class="fa fa fa-user"></i>
+                    <span class="nav-label">会员</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/vue')}">会员优化</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/index')}">会员列表</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/index')}?type=2">试玩会员列表</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/proxylist')}">前台代理关系表</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/ranklist')}">等级设置</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/bettingRecord')}">投注明细(彩票)</a>
+                    </li>
+					 <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/plan')}">彩票投注计划</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/recharge/index')}">充值查询</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/recharge/line_pay')}">在线充值表</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/cash/index')}">提现查询</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/capitaldetail')}">资金明细</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/statement')}">结算报表</a>
+                    </li>
+					<li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/manualPayment')}">人工入款</a>
+                    </li>
+                </ul>
+            </li>
+            {/if}
+            {if in_array(16,$Think.session.admin.access_array)}
+            <li class="">
+                <a href="#">
+                    <i class="fa fa fa-user"></i>
+                    <span class="nav-label">棋牌游戏</span>
+                    <span class="fa arrow"></span>
+                </a>
+               <ul class="nav nav-second-level">
+
+                      <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/ChessGame/upAndDown')}">棋牌上下分查询</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/ChessGame/reportForm')}">输赢报表</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/ChessGame/agent')}">代理统计</a>
+                    </li>
+					<li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/ChessGame/index')}">游戏代理商</a>
+                    </li>
+
+                </ul>
+            </li>
+            {/if}
+            {if in_array(12,$Think.session.admin.access_array)}
+            <li class="">
+                <a href="#">
+                    <i class="fa fa fa-bar-chart-o"></i>
+                    <span class="nav-label">彩票</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+					<li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/lottery/batch')}">批量预设</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/lottery/room')}">28彩票房间管理</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/lottery/statusSetting')}">彩种设置</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/lottery/matching')}">彩票中奖匹配</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/lottery/defaultPrize')}">系统开奖彩票</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/lottery/showSetting')}">热门彩票设置</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/lottery/gcSetting')}">购彩大厅设置</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/lottery/lotteryMatch')}">彩票开奖记录</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/lottery/hmzh')}">(合买/追号)设置</a>
+                    </li>
+                </ul>
+            </li>
+            {/if}
+             <!--<li >-->
+
+
+            <!--<a href="#">-->
+                <!--<i class="fa fa-soccer-ball-o"></i>-->
+                <!--<span class="nav-label">足球</span>-->
+                <!--<span class="fa arrow"></span>-->
+            <!--</a>-->
+            <!--<ul class="nav nav-second-level">-->
+                <!--<li>-->
+                    <!--<a class="J_menuItem" href="{:url(request()->module() . '/football/index')}">联赛管理</a>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<a class="J_menuItem" href="{:url(request()->module() . '/team/index')}">球队管理</a>-->
+                <!--</li>-->
+                 <!--<li>-->
+                    <!--<a class="J_menuItem" href="{:url(request()->module() . '/Match/index')}">比赛查看</a>-->
+                <!--</li>-->
+            <!--</ul>-->
+        <!--</li> -->
+            {if in_array(14,$Think.session.admin.access_array)}
+            <li>
+                <a href="#">
+                    <i class="fa fa-wrench"></i>
+                    <span class="nav-label">系统</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/index/childindex')}" data-index="0">后台首页</a>
+                    </li>
+                    <li>
+                        <!-- <a class="J_menuItem" href="{:url(request()->module() . '/system/labagogao')}" data-index="0">喇叭公告</a> -->
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/system/index')}">网站系统设置</a>
+                    </li>
+                    <li>
+                        <a href="#">红包管理 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li>
+                                <a class="J_menuItem" href="{:url(request()->module() . '/system/hongbaoshezhi')}">聊天室红包设置</a>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="{:url(request()->module() . '/system/hongbaowenti')}">聊天室红包问题设置</a>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="{:url(request()->module() . '/system/user_hongbao')}">用户充值红包设置</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--<li>-->
+                        <!--<a class="J_menuItem" href="{:url(request()->module() . '/system/fanShui')}">返水设置</a>-->
+                    <!--</li>-->
+                    <li>
+                        <a href="#">反水设置 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li>
+                                <a class="J_menuItem" href="{:url(request()->module() . '/system/fanShui')}">返水设置</a>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="{:url(request()->module() . '/system/fanShui')}?type=2">28日负回水设置</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--<li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/system/jqrShezhi')}">机器人设置</a>
+                    </li>-->
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/system/recharge')}">充值提现设置</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/system/user')}">会员设置</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/system/lotto')}">抽奖设置</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/system/chatconfig')}">聊天室设置</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/user/messageManage')}">消息群发</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/system/bank_pay')}">收款银行设置</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/system/dataClean')}">数据清理</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-copyright"></i>权限管理 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li><a class="J_menuItem" href="{:url(request()->module() . '/authority/index')}">管理员列表</a>
+                            </li>
+                            <li><a class="J_menuItem" href="{:url(request()->module() . '/authority/grouplist')}">分组列表</a>
+                            </li>
+                            <li><a class="J_menuItem" href="{:url(request()->module() . '/authority/rulelist')}">节点列表</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-ellipsis-h"></i>其他系统管理 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li><a class="J_menuItem" href="{:url(request()->module() . '/system/bak')}">数据库备份恢复</a>
+                            </li>
+                            <li><a class="J_menuItem" href="{:url(request()->module() . '/user/loginlog')}">用户登录日志管理</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/XinshoujiaochengUpload/index')}" data-index="0">新手教程图片上传</a>
+                    </li>
+                    <li>
+                </ul>
+            </li>
+            {/if} {if in_array(15,$Think.session.admin.access_array)}
+            <li>
+                <!--   <a href="#"><i class="fa fa-gg-circle"></i>后台代理 <span class="fa arrow"></span></a> -->
+                <a href="#">
+                    <i class="fa  fa-gg-circle"></i>
+                    <span class="nav-label">后台代理</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-third-level">
+                    <li><a class="J_menuItem" href="{:url(request()->module() . '/authority/proxylist')}">代理列表</a>
+                    </li>
+                    <li><a class="J_menuItem" href="{:url(request()->module() . '/authority/proxylist_tj')}">代理统计</a>
+                    </li>
+                </ul>
+            </li>
+            <!--                      <li>
+<a class="J_menuItem" href="{:url(request()->module() . '/proxy/yg_tj')}">员工统计</a>
+</li>
+<li>
+<a class="J_menuItem" href="{:url(request()->module() . '/proxy/hy_tj')}">用户统计</a>
+</li>
+
+<li>
+<a class="J_menuItem" href="{:url(request()->module() . '/proxy/hy2_tj')}">二级代理用户统计</a>
+</li>
+-->
+            {/if} {if in_array(13,$Think.session.admin.access_array)}
+            <li>
+                <a href="#">
+                    <i class="fa fa-sticky-note-o"></i>
+                    <span class="nav-label">文章</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/article/index')}">文章列表</a>
+                    </li>
+                    <li>
+                        <a class="J_menuItem" href="{:url(request()->module() . '/article/category')}">文章分类</a>
+                    </li>
+                </ul>
+            </li>
+            {/if}
+        </ul>
+        <div style="text-align:center;margin-top: 30px;">&copy; 2017-2018 <a href="" target="_blank">GK娱乐</a></div>
+    </div>
+</nav>
